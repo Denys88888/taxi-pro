@@ -66,7 +66,6 @@ interface PiSDK {
 
 // ─── Constants ─────────────────────────────────────────────────
 
-const PI_APP_ID = 'piride';
 const SCOPES = ['username', 'payments'];
 
 // ─── Helper Functions ──────────────────────────────────────────

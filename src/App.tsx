@@ -1,7 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router';
 import { useAuth, hasSeenOnboarding } from '@/contexts/AuthContext';
-import { ToastContainer } from '@/components/Toast';
-
 // Pages
 import Onboarding from './pages/Onboarding';
 import Auth from './pages/Auth';

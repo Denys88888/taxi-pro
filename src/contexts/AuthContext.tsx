@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react';
 import { initPiSDK, authenticate, isPiBrowser as checkPiBrowser } from '@/lib/pi-sdk';
-import type { IncompletePayment } from '@/lib/pi-sdk';
 
 export type UserRole = 'passenger' | 'driver' | null;
 
@@ -73,11 +72,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.removeItem(STORAGE_KEY);
     }
   }, [user]);
-
-  const handleIncompletePayment = useCallback((payment: IncompletePayment) => {
-    console.log('[Auth] Incomplete payment found:', payment.identifier);
-    localStorage.setItem('pi_incomplete_payment', JSON.stringify(payment));
-  }, []);
 
   const login = useCallback(async () => {
     setIsLoading(true);

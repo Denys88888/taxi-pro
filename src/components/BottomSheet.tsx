@@ -28,7 +28,6 @@ export function BottomSheet({
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
   const dragY = useMotionValue(0);
   const sheetRef = useRef<HTMLDivElement>(null);
-  const startY = useRef(0);
 
   const backdropOpacity = useTransform(dragY, [0, 300], [1, 0]);
 

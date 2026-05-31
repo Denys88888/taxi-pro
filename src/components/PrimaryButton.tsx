@@ -1,11 +1,15 @@
 import { motion } from 'framer-motion';
-import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import type { ReactNode, MouseEventHandler } from 'react';
 
-interface PrimaryButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface PrimaryButtonProps {
   children: ReactNode;
   variant?: 'navy' | 'green';
   isLoading?: boolean;
   icon?: ReactNode;
+  className?: string;
+  disabled?: boolean;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+  type?: 'button' | 'submit' | 'reset';
 }
 
 export function PrimaryButton({
@@ -15,7 +19,8 @@ export function PrimaryButton({
   icon,
   className = '',
   disabled,
-  ...props
+  onClick,
+  type = 'button',
 }: PrimaryButtonProps) {
   const baseStyles = 'w-full h-[52px] rounded-piride-md font-medium text-base text-white flex items-center justify-center gap-2 transition-colors select-none';
   const variantStyles = variant === 'navy'
@@ -31,7 +36,8 @@ export function PrimaryButton({
       whileTap={!disabled && !isLoading ? { scale: 0.97 } : undefined}
       transition={{ type: 'spring', stiffness: 400, damping: 17 }}
       disabled={disabled || isLoading}
-      {...props}
+      onClick={onClick}
+      type={type}
     >
       {isLoading ? (
         <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
