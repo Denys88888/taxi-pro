@@ -1,0 +1,11 @@
+export { LogoPiRide } from './LogoPiRide';
+export { PickupPin } from './PickupPin';
+export { DestinationPin } from './DestinationPin';
+export { DriverCarIcon } from './DriverCarIcon';
+export { AvatarDefault } from './AvatarDefault';
+export { EmptyRides } from './EmptyRides';
+export { EmptyEarnings } from './EmptyEarnings';
+export { EscrowDiagram } from './EscrowDiagram';
+export { Onboarding1 } from './Onboarding1';
+export { Onboarding2 } from './Onboarding2';
+export { Onboarding3 } from './Onboarding3';
