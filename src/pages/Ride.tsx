@@ -21,7 +21,7 @@ interface LocationData {
 
 const DEFAULT_CENTER: LatLngTuple = [37.7749, -122.4194];
 
-const RECENT_SEARCHES_KEY = 'piride_recent_searches';
+const RECENT_SEARCHES_KEY = 'taxipro_recent_searches';
 
 // ─── Helper Functions ──────────────────────────────────────────
 
@@ -112,7 +112,7 @@ const PickupPinPulse = React.memo(function PickupPinPulse() {
         <circle cx="20" cy="20" r="8" fill="white" />
         <circle cx="20" cy="20" r="4" fill="#27ae60" />
       </svg>
-      <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-white rounded-piride-sm shadow-sm px-2 py-0.5 whitespace-nowrap">
+      <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-white rounded-taxipro-sm shadow-sm px-2 py-0.5 whitespace-nowrap">
         <span className="text-xs font-medium text-text-primary">Pickup</span>
       </div>
     </div>
@@ -151,12 +151,12 @@ export default function Ride() {
 
   // ── Check for destination from search ──
   useEffect(() => {
-    const destData = sessionStorage.getItem('piride_destination');
+    const destData = sessionStorage.getItem('taxipro_destination');
     if (destData) {
       try {
         const dest: LocationData = JSON.parse(destData);
         setDestination(dest);
-        sessionStorage.removeItem('piride_destination');
+        sessionStorage.removeItem('taxipro_destination');
         saveRecentSearch(dest);
       } catch { /* ignore */ }
     }
@@ -198,7 +198,7 @@ export default function Ride() {
   // ── Open search ──
   const openSearch = useCallback(() => {
     if (pickupLocation) {
-      sessionStorage.setItem('piride_pickup', JSON.stringify(pickupLocation));
+      sessionStorage.setItem('taxipro_pickup', JSON.stringify(pickupLocation));
     }
     navigate('/search');
   }, [navigate, pickupLocation]);
@@ -213,10 +213,10 @@ export default function Ride() {
   // ── Book ride → preview ──
   const goToPreview = useCallback(() => {
     if (pickupLocation && destination && routeInfo && priceBreakdown) {
-      sessionStorage.setItem('piride_preview_pickup', JSON.stringify(pickupLocation));
-      sessionStorage.setItem('piride_preview_destination', JSON.stringify(destination));
-      sessionStorage.setItem('piride_preview_route', JSON.stringify(routeInfo));
-      sessionStorage.setItem('piride_preview_price', JSON.stringify(priceBreakdown));
+      sessionStorage.setItem('taxipro_preview_pickup', JSON.stringify(pickupLocation));
+      sessionStorage.setItem('taxipro_preview_destination', JSON.stringify(destination));
+      sessionStorage.setItem('taxipro_preview_route', JSON.stringify(routeInfo));
+      sessionStorage.setItem('taxipro_preview_price', JSON.stringify(priceBreakdown));
       navigate('/preview');
     }
   }, [navigate, pickupLocation, destination, routeInfo, priceBreakdown]);
@@ -252,7 +252,7 @@ export default function Ride() {
         transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number], delay: 0.3 }}
       >
         <motion.button
-          className="w-full h-[52px] bg-white rounded-piride-lg shadow-md flex items-center gap-3 px-4 text-left"
+          className="w-full h-[52px] bg-white rounded-taxipro-lg shadow-md flex items-center gap-3 px-4 text-left"
           onClick={openSearch}
           whileTap={{ scale: 0.98 }}
         >
@@ -307,7 +307,7 @@ export default function Ride() {
           >
             <div className="absolute inset-0 bg-black/10 -top-[100dvh]" />
 
-            <div className="relative bg-white rounded-t-piride-xl shadow-lg">
+            <div className="relative bg-white rounded-t-taxipro-xl shadow-lg">
               <div className="flex justify-center pt-3 pb-2">
                 <div className="w-10 h-1 bg-midgray rounded-full" />
               </div>
@@ -361,7 +361,7 @@ export default function Ride() {
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 300, delay: 0.2 }}
           >
-            <div className="relative bg-white rounded-t-piride-xl shadow-lg">
+            <div className="relative bg-white rounded-t-taxipro-xl shadow-lg">
               <div className="flex justify-center pt-3 pb-2">
                 <div className="w-10 h-1 bg-midgray rounded-full" />
               </div>

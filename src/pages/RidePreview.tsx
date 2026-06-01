@@ -59,10 +59,10 @@ export default function RidePreview() {
 
   // ── Load data from sessionStorage ──
   useEffect(() => {
-    const pickupData = sessionStorage.getItem('piride_preview_pickup');
-    const destData = sessionStorage.getItem('piride_preview_destination');
-    const routeData = sessionStorage.getItem('piride_preview_route');
-    const priceData = sessionStorage.getItem('piride_preview_price');
+    const pickupData = sessionStorage.getItem('taxipro_preview_pickup');
+    const destData = sessionStorage.getItem('taxipro_preview_destination');
+    const routeData = sessionStorage.getItem('taxipro_preview_route');
+    const priceData = sessionStorage.getItem('taxipro_preview_price');
 
     if (!pickupData || !destData || !routeData || !priceData) {
       navigate('/ride');
@@ -97,8 +97,8 @@ export default function RidePreview() {
       },
     };
 
-    sessionStorage.setItem('piride_payment_data', JSON.stringify(paymentData));
-    sessionStorage.setItem('piride_payment_price', JSON.stringify(priceBreakdown));
+    sessionStorage.setItem('taxipro_payment_data', JSON.stringify(paymentData));
+    sessionStorage.setItem('taxipro_payment_price', JSON.stringify(priceBreakdown));
 
     // Small delay for button feedback
     setTimeout(() => {
@@ -143,7 +143,7 @@ export default function RidePreview() {
       <div className="flex-1 overflow-y-auto no-scrollbar pb-40">
         {/* ── Mini Route Map ── */}
         <motion.div
-          className="h-[200px] relative mx-4 mt-4 rounded-piride-lg overflow-hidden shadow-sm"
+          className="h-[200px] relative mx-4 mt-4 rounded-taxipro-lg overflow-hidden shadow-sm"
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.3, ease: easeOut, delay: 0.1 }}
@@ -167,7 +167,7 @@ export default function RidePreview() {
 
         {/* ── Addresses Card ── */}
         <motion.div
-          className="mx-4 mt-4 bg-white rounded-piride-lg shadow-sm p-4"
+          className="mx-4 mt-4 bg-white rounded-taxipro-lg shadow-sm p-4"
           {...stagger(2)}
         >
           {/* Pickup Row */}
@@ -198,7 +198,7 @@ export default function RidePreview() {
               </p>
             </div>
             {/* Distance badge */}
-            <span className="shrink-0 text-xs font-medium bg-navy/10 text-navy px-2 py-1 rounded-piride-sm">
+            <span className="shrink-0 text-xs font-medium bg-navy/10 text-navy px-2 py-1 rounded-taxipro-sm">
               {routeInfo.distance.toFixed(1)} km
             </span>
           </div>
@@ -206,7 +206,7 @@ export default function RidePreview() {
 
         {/* ── Price Breakdown Card ── */}
         <motion.div
-          className="mx-4 mt-3 bg-white rounded-piride-lg shadow-sm p-5"
+          className="mx-4 mt-3 bg-white rounded-taxipro-lg shadow-sm p-5"
           {...stagger(3)}
         >
           <h2 className="text-lg font-semibold text-text-primary mb-4">
@@ -262,13 +262,13 @@ export default function RidePreview() {
           {/* Tooltip */}
           {showTooltip && (
             <motion.div
-              className="mb-3 bg-white shadow-md rounded-piride-md p-3 border border-navy/10 relative"
+              className="mb-3 bg-white shadow-md rounded-taxipro-md p-3 border border-navy/10 relative"
               initial={{ opacity: 0, y: -5 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.2 }}
             >
               <p className="text-xs text-text-secondary max-w-[200px]">
-                This 2% fee helps maintain the PiRide platform and ensure secure
+                This 2% fee helps maintain the Taxi Pro platform and ensure secure
                 escrow payments.
               </p>
             </motion.div>
@@ -293,7 +293,7 @@ export default function RidePreview() {
 
         {/* ── Payment Method Card ── */}
         <motion.div
-          className="mx-4 mt-3 bg-white rounded-piride-lg shadow-sm p-4"
+          className="mx-4 mt-3 bg-white rounded-taxipro-lg shadow-sm p-4"
           {...stagger(4)}
         >
           <div className="flex items-center gap-3">
@@ -310,7 +310,7 @@ export default function RidePreview() {
 
         {/* ── Escrow Info Card ── */}
         <motion.div
-          className="mx-4 mt-3 bg-[#f8f9ff] border border-navy/15 rounded-piride-lg p-4"
+          className="mx-4 mt-3 bg-[#f8f9ff] border border-navy/15 rounded-taxipro-lg p-4"
           {...stagger(5)}
         >
           <div className="flex items-start gap-3">

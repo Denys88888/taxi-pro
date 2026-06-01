@@ -40,7 +40,7 @@ function ToastItemComponent({ toast, onDismiss }: { toast: ToastItem; onDismiss:
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: -20, scale: 0.95 }}
       transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] }}
-      className={`${config.bg} text-white rounded-piride-md shadow-lg px-4 py-3 flex items-center gap-3 min-w-0`}
+      className={`${config.bg} text-white rounded-taxipro-md shadow-lg px-4 py-3 flex items-center gap-3 min-w-0`}
     >
       <Icon size={18} className="shrink-0" />
       <span className="text-sm font-medium flex-1 truncate">{toast.message}</span>

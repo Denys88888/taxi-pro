@@ -1,4 +1,4 @@
-// Pi SDK TypeScript Wrapper for PiRide
+// Pi SDK TypeScript Wrapper for Taxi Pro
 // Provides typed access to the Pi Network SDK
 
 declare global {
@@ -162,7 +162,7 @@ export async function cancelPayment(paymentId: string): Promise<void> {
 // ─── Utility ───────────────────────────────────────────────────
 
 function generatePaymentUid(): string {
-  return `piride_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+  return `taxipro_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 }
 
 /**

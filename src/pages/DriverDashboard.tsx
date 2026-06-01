@@ -190,7 +190,7 @@ function RideRequestCard({
 }) {
   return (
     <motion.div
-      className="mx-4 mb-3 bg-white rounded-piride-lg shadow-sm overflow-hidden"
+      className="mx-4 mb-3 bg-white rounded-taxipro-lg shadow-sm overflow-hidden"
       style={{ borderLeft: '4px solid #27ae60' }}
       initial={{ x: '100%', opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
@@ -235,7 +235,7 @@ function RideRequestCard({
           {/* Distance Badge + Time */}
           <div className="flex items-center gap-2">
             <span
-              className="inline-flex items-center px-2 py-0.5 rounded-piride-sm text-xs font-medium"
+              className="inline-flex items-center px-2 py-0.5 rounded-taxipro-sm text-xs font-medium"
               style={{ backgroundColor: 'rgba(44, 62, 80, 0.1)', color: '#2c3e50' }}
             >
               <Navigation size={10} className="mr-1" />
@@ -403,12 +403,12 @@ export default function DriverDashboard() {
 
   // If navigating back with completed ride, add to earnings
   useEffect(() => {
-    const stored = localStorage.getItem('piride_last_ride_earnings');
+    const stored = localStorage.getItem('taxipro_last_ride_earnings');
     if (stored) {
       try {
         const { amount } = JSON.parse(stored);
         setTodayEarnings((prev) => Number((prev + amount).toFixed(2)));
-        localStorage.removeItem('piride_last_ride_earnings');
+        localStorage.removeItem('taxipro_last_ride_earnings');
       } catch {
         // ignore
       }

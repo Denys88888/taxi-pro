@@ -1,4 +1,4 @@
-export { LogoPiRide } from './LogoPiRide';
+export { LogoTaxiPro } from './LogoTaxiPro';
 export { PickupPin } from './PickupPin';
 export { DestinationPin } from './DestinationPin';
 export { DriverCarIcon } from './DriverCarIcon';

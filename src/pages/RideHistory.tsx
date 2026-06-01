@@ -444,7 +444,7 @@ export default function RideHistory() {
           </p>
           <button
             onClick={() => navigate('/ride')}
-            className="w-[200px] h-[52px] rounded-piride-md bg-navy text-white font-medium text-base cursor-pointer"
+            className="w-[200px] h-[52px] rounded-taxipro-md bg-navy text-white font-medium text-base cursor-pointer"
           >
             Book your first ride
           </button>

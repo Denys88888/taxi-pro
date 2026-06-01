@@ -232,11 +232,11 @@ export default function RideStatus() {
 
   // ── Load ride data ──
   useEffect(() => {
-    const rideJson = sessionStorage.getItem('piride_ride_data');
-    const pickupJson = sessionStorage.getItem('piride_preview_pickup');
-    const destJson = sessionStorage.getItem('piride_preview_destination');
-    const routeJson = sessionStorage.getItem('piride_preview_route');
-    const priceJson = sessionStorage.getItem('piride_preview_price');
+    const rideJson = sessionStorage.getItem('taxipro_ride_data');
+    const pickupJson = sessionStorage.getItem('taxipro_preview_pickup');
+    const destJson = sessionStorage.getItem('taxipro_preview_destination');
+    const routeJson = sessionStorage.getItem('taxipro_preview_route');
+    const priceJson = sessionStorage.getItem('taxipro_preview_price');
 
     if (!rideJson) {
       navigate('/ride');
@@ -413,7 +413,7 @@ export default function RideStatus() {
       {/* ── Bottom Sheet ── */}
       <div className="flex-1 relative">
         <motion.div
-          className="absolute bottom-0 left-0 right-0 bg-white rounded-t-piride-xl shadow-lg"
+          className="absolute bottom-0 left-0 right-0 bg-white rounded-t-taxipro-xl shadow-lg"
           initial={{ y: '100%' }}
           animate={{ y: 0 }}
           transition={{ type: 'spring', damping: 30, stiffness: 300 }}
@@ -468,7 +468,7 @@ export default function RideStatus() {
 
                   {/* Cancel button */}
                   <motion.button
-                    className="w-full h-[52px] rounded-piride-md border-2 border-error text-error font-medium text-base mt-4 active:bg-error/5 transition-colors"
+                    className="w-full h-[52px] rounded-taxipro-md border-2 border-error text-error font-medium text-base mt-4 active:bg-error/5 transition-colors"
                     onClick={() => setShowCancelConfirm(true)}
                     whileTap={{ scale: 0.97 }}
                   >
@@ -521,7 +521,7 @@ export default function RideStatus() {
                   {/* Contact buttons */}
                   <div className="flex gap-3 mt-4">
                     <motion.button
-                      className="flex-1 h-12 rounded-piride-md border-2 border-navy text-navy font-medium text-sm flex items-center justify-center gap-2 active:bg-navy/5"
+                      className="flex-1 h-12 rounded-taxipro-md border-2 border-navy text-navy font-medium text-sm flex items-center justify-center gap-2 active:bg-navy/5"
                       whileTap={{ scale: 0.97 }}
                       onClick={() => alert('Messaging feature coming soon!')}
                     >
@@ -529,7 +529,7 @@ export default function RideStatus() {
                       Message
                     </motion.button>
                     <motion.button
-                      className="flex-1 h-12 rounded-piride-md border-2 border-navy text-navy font-medium text-sm flex items-center justify-center gap-2 active:bg-navy/5"
+                      className="flex-1 h-12 rounded-taxipro-md border-2 border-navy text-navy font-medium text-sm flex items-center justify-center gap-2 active:bg-navy/5"
                       whileTap={{ scale: 0.97 }}
                       onClick={() => alert('Calling feature coming soon!')}
                     >
@@ -550,7 +550,7 @@ export default function RideStatus() {
                   transition={{ duration: 0.2 }}
                 >
                   {/* Status Banner */}
-                  <div className="flex items-center gap-2 bg-emerald/10 rounded-piride-md p-3 mb-4">
+                  <div className="flex items-center gap-2 bg-emerald/10 rounded-taxipro-md p-3 mb-4">
                     <CheckCircle size={20} className="text-emerald" />
                     <span className="text-base font-medium text-emerald">
                       Ride in progress
@@ -585,7 +585,7 @@ export default function RideStatus() {
                         ★ {MOCK_DRIVER.rating}
                       </p>
                     </div>
-                    <span className="text-xs font-medium text-emerald bg-emerald/10 px-2 py-1 rounded-piride-sm">
+                    <span className="text-xs font-medium text-emerald bg-emerald/10 px-2 py-1 rounded-taxipro-sm">
                       En route
                     </span>
                   </div>
@@ -646,7 +646,7 @@ export default function RideStatus() {
 
                   {/* Ride Summary */}
                   <motion.div
-                    className="bg-white border border-midgray rounded-piride-lg p-4 mb-3"
+                    className="bg-white border border-midgray rounded-taxipro-lg p-4 mb-3"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
@@ -664,7 +664,7 @@ export default function RideStatus() {
 
                   {/* Payment Summary */}
                   <motion.div
-                    className="bg-white border border-midgray rounded-piride-lg p-4 mb-4"
+                    className="bg-white border border-midgray rounded-taxipro-lg p-4 mb-4"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }}
@@ -719,7 +719,7 @@ export default function RideStatus() {
                       value={comment}
                       onChange={(e) => setComment(e.target.value)}
                       placeholder="Leave a comment (optional)"
-                      className="w-full h-12 bg-lightgray rounded-piride-md px-4 text-base text-text-primary placeholder:text-text-tertiary outline-none mt-2"
+                      className="w-full h-12 bg-lightgray rounded-taxipro-md px-4 text-base text-text-primary placeholder:text-text-tertiary outline-none mt-2"
                     />
                   </motion.div>
 
@@ -749,7 +749,7 @@ export default function RideStatus() {
             onClick={() => setShowCancelConfirm(false)}
           >
             <motion.div
-              className="bg-white rounded-piride-xl p-6 w-full max-w-sm"
+              className="bg-white rounded-taxipro-xl p-6 w-full max-w-sm"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
@@ -768,13 +768,13 @@ export default function RideStatus() {
               <div className="flex gap-3">
                 <button
                   onClick={() => setShowCancelConfirm(false)}
-                  className="flex-1 h-12 rounded-piride-md border-2 border-midgray text-text-secondary font-medium"
+                  className="flex-1 h-12 rounded-taxipro-md border-2 border-midgray text-text-secondary font-medium"
                 >
                   Go Back
                 </button>
                 <button
                   onClick={handleCancel}
-                  className="flex-1 h-12 rounded-piride-md bg-error text-white font-medium"
+                  className="flex-1 h-12 rounded-taxipro-md bg-error text-white font-medium"
                 >
                   Cancel Ride
                 </button>

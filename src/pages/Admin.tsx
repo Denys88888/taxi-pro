@@ -381,7 +381,7 @@ export default function Admin() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.1, duration: 0.2 }}
-                className="bg-white/10 rounded-piride-md p-3 min-w-[110px] shrink-0"
+                className="bg-white/10 rounded-taxipro-md p-3 min-w-[110px] shrink-0"
               >
                 <p className={`text-xl font-bold ${stat.accent}`}>{stat.value}</p>
                 <p className="text-xs text-white/70 mt-0.5">{stat.label}</p>
@@ -425,7 +425,7 @@ export default function Admin() {
         </motion.div>
 
         {/* Info Banner */}
-        <div className="shrink-0 mx-4 mt-3 bg-info/10 rounded-piride-md px-4 py-3">
+        <div className="shrink-0 mx-4 mt-3 bg-info/10 rounded-taxipro-md px-4 py-3">
           <p className="text-xs text-info leading-relaxed">
             Payouts are sent manually via Pi Browser. 98% to driver, 2% platform fee.
           </p>
@@ -441,7 +441,7 @@ export default function Admin() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -16 }}
                 transition={{ delay: Math.min(idx * 0.06, 0.3), duration: 0.25 }}
-                className="bg-white rounded-piride-lg shadow-sm overflow-hidden"
+                className="bg-white rounded-taxipro-lg shadow-sm overflow-hidden"
               >
                 {/* Card Header */}
                 <button
@@ -511,7 +511,7 @@ export default function Admin() {
                           <motion.button
                             whileTap={{ scale: 0.97 }}
                             onClick={() => setModalDriver(payout)}
-                            className="px-4 py-2 rounded-piride-md bg-navy text-white text-sm font-medium cursor-pointer"
+                            className="px-4 py-2 rounded-taxipro-md bg-navy text-white text-sm font-medium cursor-pointer"
                           >
                             Confirm Payout
                           </motion.button>
@@ -520,7 +520,7 @@ export default function Admin() {
                           <motion.button
                             whileTap={{ scale: 0.97 }}
                             onClick={() => handleMarkReleased(payout.driverId)}
-                            className="px-4 py-2 rounded-piride-md bg-emerald text-white text-sm font-medium cursor-pointer"
+                            className="px-4 py-2 rounded-taxipro-md bg-emerald text-white text-sm font-medium cursor-pointer"
                           >
                             Mark Released
                           </motion.button>
@@ -562,7 +562,7 @@ export default function Admin() {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="fixed bottom-0 left-0 right-0 bg-white rounded-t-piride-xl z-modal-content p-6 max-h-[70dvh] overflow-y-auto"
+              className="fixed bottom-0 left-0 right-0 bg-white rounded-t-taxipro-xl z-modal-content p-6 max-h-[70dvh] overflow-y-auto"
               style={{ maxWidth: 430, margin: '0 auto' }}
             >
               {/* Drag handle */}
@@ -578,7 +578,7 @@ export default function Admin() {
               </div>
 
               {/* Wallet Address Card */}
-              <div className="bg-lightgray rounded-piride-md p-4 mb-4">
+              <div className="bg-lightgray rounded-taxipro-md p-4 mb-4">
                 <p className="text-xs text-text-secondary mb-1">Driver Wallet Address</p>
                 <div className="flex items-center gap-2">
                   <p className="text-sm text-text-primary break-all flex-1 font-mono">
@@ -602,7 +602,7 @@ export default function Admin() {
 
               {/* QR Code */}
               <div className="flex flex-col items-center mb-4">
-                <div className="bg-white p-4 rounded-piride-lg border border-midgray">
+                <div className="bg-white p-4 rounded-taxipro-lg border border-midgray">
                   <QRCodeSVG value={modalDriver.driverWallet} size={200} />
                 </div>
                 <p className="text-xs text-text-secondary mt-2">
@@ -611,7 +611,7 @@ export default function Admin() {
               </div>
 
               {/* Amount Display */}
-              <div className="bg-navy/5 rounded-piride-md p-4 mb-4 text-center">
+              <div className="bg-navy/5 rounded-taxipro-md p-4 mb-4 text-center">
                 <p className="text-xs text-text-secondary mb-1">Amount to Transfer</p>
                 <p className="text-3xl font-bold text-navy">
                   <span className="text-emerald">&#960;</span> {modalDriver.totalEarnings.toFixed(2)}
@@ -654,7 +654,7 @@ export default function Admin() {
               <div className="flex gap-3">
                 <button
                   onClick={() => setModalDriver(null)}
-                  className="flex-1 h-12 rounded-piride-md border-2 border-navy text-navy font-medium text-base cursor-pointer"
+                  className="flex-1 h-12 rounded-taxipro-md border-2 border-navy text-navy font-medium text-base cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -664,7 +664,7 @@ export default function Admin() {
                     handleConfirmPayout(modalDriver.driverId);
                     handleMarkReleased(modalDriver.driverId);
                   }}
-                  className="flex-1 h-12 rounded-piride-md bg-emerald text-white font-medium text-base cursor-pointer"
+                  className="flex-1 h-12 rounded-taxipro-md bg-emerald text-white font-medium text-base cursor-pointer"
                 >
                   Mark as Released
                 </motion.button>

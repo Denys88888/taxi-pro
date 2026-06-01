@@ -30,7 +30,7 @@ interface NominatimResult {
 
 // ─── Constants ─────────────────────────────────────────────────
 
-const RECENT_SEARCHES_KEY = 'piride_recent_searches';
+const RECENT_SEARCHES_KEY = 'taxipro_recent_searches';
 
 // ─── Helper Functions ──────────────────────────────────────────
 
@@ -184,7 +184,7 @@ export default function SearchLocation() {
   const selectLocation = useCallback(
     (location: LocationData) => {
       saveRecentSearch(location);
-      sessionStorage.setItem('piride_destination', JSON.stringify(location));
+      sessionStorage.setItem('taxipro_destination', JSON.stringify(location));
       navigate('/ride');
     },
     [navigate]
@@ -273,7 +273,7 @@ export default function SearchLocation() {
           </motion.button>
 
           {/* Search Input */}
-          <div className="flex-1 flex items-center gap-2 bg-lightgray rounded-piride-md px-3 h-10">
+          <div className="flex-1 flex items-center gap-2 bg-lightgray rounded-taxipro-md px-3 h-10">
             <Search size={18} className="text-text-tertiary shrink-0" />
             <input
               ref={inputRef}

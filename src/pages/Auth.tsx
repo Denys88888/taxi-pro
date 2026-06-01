@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import { motion, AnimatePresence } from 'framer-motion';
 import { User, Wallet, Shield, CheckCircle, AlertCircle, ChevronLeft, X } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { LogoPiRide } from '@/components/icons';
+import { LogoTaxi Pro } from '@/components/icons';
 import { getIncompletePayment, clearIncompletePayment } from '@/lib/pi-sdk';
 import type { IncompletePayment } from '@/lib/pi-sdk';
 
@@ -97,7 +97,7 @@ export default function Auth() {
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] as [number, number, number, number] }}
         >
-          <LogoPiRide className="w-[120px] h-[120px]" />
+          <LogoTaxi Pro className="w-[120px] h-[120px]" />
         </motion.div>
 
         <motion.h1
@@ -106,7 +106,7 @@ export default function Auth() {
           transition={{ delay: 0.2, duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] }}
           className="text-2xl font-bold text-text-primary mt-4"
         >
-          Welcome to PiRide
+          Welcome to Taxi Pro
         </motion.h1>
 
         <motion.p
@@ -126,10 +126,10 @@ export default function Auth() {
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.6, duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] }}
-          className="bg-lightgray rounded-piride-lg p-5 space-y-4"
+          className="bg-lightgray rounded-taxipro-lg p-5 space-y-4"
         >
           <p className="text-sm font-medium text-text-primary leading-relaxed">
-            PiRide uses Pi Network for secure authentication and payments. No passwords needed.
+            Taxi Pro uses Pi Network for secure authentication and payments. No passwords needed.
           </p>
 
           <div className="space-y-3">
@@ -163,7 +163,7 @@ export default function Auth() {
             whileTap={authState === 'default' ? { scale: 0.97 } : undefined}
             onClick={handleLogin}
             disabled={authState === 'loading' || authState === 'success'}
-            className={`w-full h-14 rounded-piride-md font-medium text-base text-white flex items-center justify-center gap-2 shadow-md transition-all duration-300 ${buttonBg} ${authState === 'loading' || authState === 'success' ? 'opacity-90 cursor-not-allowed' : 'cursor-pointer'}`}
+            className={`w-full h-14 rounded-taxipro-md font-medium text-base text-white flex items-center justify-center gap-2 shadow-md transition-all duration-300 ${buttonBg} ${authState === 'loading' || authState === 'success' ? 'opacity-90 cursor-not-allowed' : 'cursor-pointer'}`}
           >
             {authState === 'loading' && (
               <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -245,7 +245,7 @@ export default function Auth() {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="fixed bottom-0 left-0 right-0 bg-white rounded-t-piride-xl z-modal-content p-6"
+              className="fixed bottom-0 left-0 right-0 bg-white rounded-t-taxipro-xl z-modal-content p-6"
               style={{ maxWidth: 430, margin: '0 auto' }}
             >
               {/* Drag handle */}
@@ -266,7 +266,7 @@ export default function Auth() {
               </p>
 
               {incompletePayment && (
-                <div className="bg-lightgray rounded-piride-md p-4 mb-6">
+                <div className="bg-lightgray rounded-taxipro-md p-4 mb-6">
                   <p className="text-xs text-text-tertiary uppercase tracking-wide">Payment ID</p>
                   <p className="text-sm font-mono text-text-primary mt-1 break-all">
                     {incompletePayment.identifier}
@@ -280,14 +280,14 @@ export default function Auth() {
               <div className="flex gap-3">
                 <button
                   onClick={handleCancelIncomplete}
-                  className="flex-1 h-12 rounded-piride-md border-2 border-navy text-navy font-medium text-base cursor-pointer"
+                  className="flex-1 h-12 rounded-taxipro-md border-2 border-navy text-navy font-medium text-base cursor-pointer"
                 >
                   Cancel
                 </button>
                 <motion.button
                   whileTap={{ scale: 0.97 }}
                   onClick={handleResumeRide}
-                  className="flex-1 h-12 rounded-piride-md bg-navy text-white font-medium text-base cursor-pointer"
+                  className="flex-1 h-12 rounded-taxipro-md bg-navy text-white font-medium text-base cursor-pointer"
                 >
                   Resume Ride
                 </motion.button>

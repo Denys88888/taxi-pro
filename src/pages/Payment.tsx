@@ -33,7 +33,7 @@ const STEP_CONFIG = [
   },
   {
     title: 'Waiting for Approval...',
-    description: 'PiRide is verifying and approving your payment. This may take a few seconds.',
+    description: 'Taxi Pro is verifying and approving your payment. This may take a few seconds.',
     label: 'Approve',
   },
   {
@@ -192,8 +192,8 @@ export default function Payment() {
 
   // ── Load payment data ──
   useEffect(() => {
-    const paymentJson = sessionStorage.getItem('piride_payment_data');
-    const priceJson = sessionStorage.getItem('piride_payment_price');
+    const paymentJson = sessionStorage.getItem('taxipro_payment_data');
+    const priceJson = sessionStorage.getItem('taxipro_payment_price');
 
     if (!paymentJson || !priceJson) {
       navigate('/ride');
@@ -233,7 +233,7 @@ export default function Payment() {
               paymentId: `payment_${Date.now()}`,
               amount: paymentData.amount,
             };
-            sessionStorage.setItem('piride_ride_data', JSON.stringify(rideData));
+            sessionStorage.setItem('taxipro_ride_data', JSON.stringify(rideData));
             navigate('/status');
           }, 1500);
 
@@ -341,7 +341,7 @@ export default function Payment() {
         <AnimatePresence>
           {currentStep >= 1 && (
             <motion.div
-              className="mt-8 w-full mx-6 bg-[#f8f9ff] border border-navy/10 rounded-piride-lg p-4"
+              className="mt-8 w-full mx-6 bg-[#f8f9ff] border border-navy/10 rounded-taxipro-lg p-4"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
@@ -401,7 +401,7 @@ export default function Payment() {
         >
           <button
             onClick={() => setShowCancelConfirm(true)}
-            className="w-full h-[52px] rounded-piride-md border-2 border-navy text-navy font-medium text-base active:bg-navy/5 transition-colors"
+            className="w-full h-[52px] rounded-taxipro-md border-2 border-navy text-navy font-medium text-base active:bg-navy/5 transition-colors"
           >
             Cancel Payment
           </button>
@@ -419,7 +419,7 @@ export default function Payment() {
             onClick={() => setShowCancelConfirm(false)}
           >
             <motion.div
-              className="bg-white rounded-piride-xl p-6 w-full max-w-sm"
+              className="bg-white rounded-taxipro-xl p-6 w-full max-w-sm"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
@@ -435,13 +435,13 @@ export default function Payment() {
               <div className="flex gap-3">
                 <button
                   onClick={() => setShowCancelConfirm(false)}
-                  className="flex-1 h-12 rounded-piride-md border-2 border-midgray text-text-secondary font-medium"
+                  className="flex-1 h-12 rounded-taxipro-md border-2 border-midgray text-text-secondary font-medium"
                 >
                   No, Continue
                 </button>
                 <button
                   onClick={handleCancel}
-                  className="flex-1 h-12 rounded-piride-md bg-error text-white font-medium"
+                  className="flex-1 h-12 rounded-taxipro-md bg-error text-white font-medium"
                 >
                   Cancel
                 </button>

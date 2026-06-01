@@ -27,8 +27,8 @@ interface AuthContextType extends AuthState {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-const STORAGE_KEY = 'piride_auth';
-const ONBOARDING_KEY = 'piride_has_seen_onboarding';
+const STORAGE_KEY = 'taxipro_auth';
+const ONBOARDING_KEY = 'taxipro_has_seen_onboarding';
 
 function loadStoredUser(): User | null {
   try {

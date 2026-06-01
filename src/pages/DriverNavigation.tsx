@@ -93,7 +93,7 @@ function PassengerSheet({
 
   return (
     <motion.div
-      className="absolute bottom-0 left-0 right-0 bg-white rounded-t-piride-xl shadow-xl z-bottom-sheet"
+      className="absolute bottom-0 left-0 right-0 bg-white rounded-t-taxipro-xl shadow-xl z-bottom-sheet"
       style={{ maxWidth: 430, margin: '0 auto' }}
       initial={{ y: '100%' }}
       animate={{ y: 0 }}
@@ -205,11 +205,11 @@ function PassengerSheet({
 
             {/* Contact Buttons */}
             <div className="flex gap-3">
-              <button className="flex-1 h-12 rounded-piride-md border-[1.5px] border-navy text-navy font-medium text-sm flex items-center justify-center gap-2 active:bg-navy/5">
+              <button className="flex-1 h-12 rounded-taxipro-md border-[1.5px] border-navy text-navy font-medium text-sm flex items-center justify-center gap-2 active:bg-navy/5">
                 <MessageCircle size={18} />
                 Message
               </button>
-              <button className="flex-1 h-12 rounded-piride-md border-[1.5px] border-navy text-navy font-medium text-sm flex items-center justify-center gap-2 active:bg-navy/5">
+              <button className="flex-1 h-12 rounded-taxipro-md border-[1.5px] border-navy text-navy font-medium text-sm flex items-center justify-center gap-2 active:bg-navy/5">
                 <Phone size={18} />
                 Call
               </button>
@@ -246,7 +246,7 @@ function CompletionSummary({
 
   return (
     <motion.div
-      className="absolute bottom-0 left-0 right-0 bg-white rounded-t-piride-xl shadow-xl z-bottom-sheet"
+      className="absolute bottom-0 left-0 right-0 bg-white rounded-t-taxipro-xl shadow-xl z-bottom-sheet"
       style={{ maxWidth: 430, margin: '0 auto' }}
       initial={{ y: '100%' }}
       animate={{ y: 0 }}
@@ -297,7 +297,7 @@ function CompletionSummary({
         </div>
 
         {/* Route */}
-        <div className="w-full flex items-center gap-2 px-4 py-3 bg-offwhite rounded-piride-md mb-4">
+        <div className="w-full flex items-center gap-2 px-4 py-3 bg-offwhite rounded-taxipro-md mb-4">
           <div className="w-2 h-2 rounded-full bg-emerald flex-shrink-0" />
           <span className="text-xs text-text-primary truncate">
             {ride.pickup.address}
@@ -397,7 +397,7 @@ export default function DriverNavigation() {
     if (activeRide) {
       const earnings = Number((activeRide.price * 0.98).toFixed(2));
       localStorage.setItem(
-        'piride_last_ride_earnings',
+        'taxipro_last_ride_earnings',
         JSON.stringify({ amount: earnings, rideId: activeRide.id })
       );
 
@@ -451,7 +451,7 @@ export default function DriverNavigation() {
         </p>
         <button
           onClick={() => navigate('/driver')}
-          className="px-6 py-3 bg-emerald text-white rounded-piride-md font-medium"
+          className="px-6 py-3 bg-emerald text-white rounded-taxipro-md font-medium"
         >
           Go to Dashboard
         </button>
@@ -491,7 +491,7 @@ export default function DriverNavigation() {
 
       {/* Ride Info Card */}
       <motion.div
-        className="absolute top-16 left-4 right-4 z-floating bg-white rounded-piride-lg shadow-md px-4 py-3"
+        className="absolute top-16 left-4 right-4 z-floating bg-white rounded-taxipro-lg shadow-md px-4 py-3"
         style={{ maxWidth: 430, margin: '0 auto' }}
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -549,7 +549,7 @@ export default function DriverNavigation() {
       {/* Bottom Action Bar */}
       {phase !== 'completed' && (
         <motion.div
-          className="absolute bottom-0 left-0 right-0 bg-white rounded-t-piride-lg shadow-xl z-bottom-sheet"
+          className="absolute bottom-0 left-0 right-0 bg-white rounded-t-taxipro-lg shadow-xl z-bottom-sheet"
           style={{ maxWidth: 430, margin: '0 auto' }}
           initial={{ y: '100%' }}
           animate={{ y: 0 }}
@@ -572,7 +572,7 @@ export default function DriverNavigation() {
                   transition={{ duration: 0.2 }}
                 >
                   <motion.button
-                    className="w-full h-[52px] rounded-piride-md bg-emerald text-white font-medium text-base flex items-center justify-center gap-2 active:bg-emerald-light"
+                    className="w-full h-[52px] rounded-taxipro-md bg-emerald text-white font-medium text-base flex items-center justify-center gap-2 active:bg-emerald-light"
                     onClick={handleArrived}
                     whileTap={{ scale: 0.95 }}
                     transition={{ duration: 0.1 }}
@@ -596,7 +596,7 @@ export default function DriverNavigation() {
                   transition={{ duration: 0.2 }}
                 >
                   <motion.button
-                    className="w-full h-[52px] rounded-piride-md bg-navy text-white font-medium text-base flex items-center justify-center gap-2 active:bg-navy-light"
+                    className="w-full h-[52px] rounded-taxipro-md bg-navy text-white font-medium text-base flex items-center justify-center gap-2 active:bg-navy-light"
                     onClick={handleStartRide}
                     whileTap={{ scale: 0.95 }}
                     transition={{ duration: 0.1 }}
@@ -625,7 +625,7 @@ export default function DriverNavigation() {
                   transition={{ duration: 0.2 }}
                 >
                   <motion.button
-                    className="w-full h-[52px] rounded-piride-md bg-emerald text-white font-medium text-base flex items-center justify-center gap-2 active:bg-emerald-light"
+                    className="w-full h-[52px] rounded-taxipro-md bg-emerald text-white font-medium text-base flex items-center justify-center gap-2 active:bg-emerald-light"
                     onClick={handleCompleteRide}
                     whileTap={{ scale: 0.95 }}
                     transition={{ duration: 0.1 }}
@@ -675,7 +675,7 @@ export default function DriverNavigation() {
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="bg-white rounded-piride-xl p-6 w-full max-w-xs"
+              className="bg-white rounded-taxipro-xl p-6 w-full max-w-xs"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
@@ -689,13 +689,13 @@ export default function DriverNavigation() {
               <div className="flex gap-3">
                 <button
                   onClick={() => setShowBackConfirm(false)}
-                  className="flex-1 h-12 rounded-piride-md border-[1.5px] border-midgray text-text-primary font-medium text-sm"
+                  className="flex-1 h-12 rounded-taxipro-md border-[1.5px] border-midgray text-text-primary font-medium text-sm"
                 >
                   Keep Riding
                 </button>
                 <button
                   onClick={confirmCancel}
-                  className="flex-1 h-12 rounded-piride-md bg-error text-white font-medium text-sm"
+                  className="flex-1 h-12 rounded-taxipro-md bg-error text-white font-medium text-sm"
                 >
                   Cancel Ride
                 </button>

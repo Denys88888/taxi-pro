@@ -21,7 +21,7 @@ export default function RoleSelect() {
   const handleContinue = () => {
     if (!selectedRole) return;
     setRole(selectedRole);
-    localStorage.setItem('piride_role', selectedRole);
+    localStorage.setItem('taxipro_role', selectedRole);
 
     if (selectedRole === 'passenger') {
       navigate('/ride');
@@ -75,7 +75,7 @@ export default function RoleSelect() {
           transition={{ delay: 0.4, duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] }}
           whileTap={{ scale: 0.96 }}
           onClick={() => handleSelect('passenger')}
-          className={`relative w-full rounded-piride-lg p-6 flex flex-col items-center text-center transition-all duration-200 cursor-pointer ${
+          className={`relative w-full rounded-taxipro-lg p-6 flex flex-col items-center text-center transition-all duration-200 cursor-pointer ${
             selectedRole === 'passenger'
               ? 'bg-navy/[0.03] border-2 border-navy shadow-md'
               : 'bg-white border-2 border-transparent shadow-md'
@@ -120,7 +120,7 @@ export default function RoleSelect() {
           transition={{ delay: 0.55, duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] }}
           whileTap={{ scale: 0.96 }}
           onClick={() => handleSelect('driver')}
-          className={`relative w-full rounded-piride-lg p-6 flex flex-col items-center text-center transition-all duration-200 cursor-pointer ${
+          className={`relative w-full rounded-taxipro-lg p-6 flex flex-col items-center text-center transition-all duration-200 cursor-pointer ${
             selectedRole === 'driver'
               ? 'bg-emerald/[0.03] border-2 border-emerald shadow-md'
               : 'bg-white border-2 border-transparent shadow-md'
@@ -170,7 +170,7 @@ export default function RoleSelect() {
           whileTap={selectedRole ? { scale: 0.97 } : undefined}
           onClick={handleContinue}
           disabled={!selectedRole}
-          className={`w-full h-[52px] rounded-piride-md font-medium text-base text-white flex items-center justify-center transition-all duration-200 ${
+          className={`w-full h-[52px] rounded-taxipro-md font-medium text-base text-white flex items-center justify-center transition-all duration-200 ${
             selectedRole
               ? selectedRole === 'driver'
                 ? 'bg-emerald cursor-pointer'

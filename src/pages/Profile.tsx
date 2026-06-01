@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { Layout } from '@/components/Layout';
 import { useAuth } from '@/contexts/AuthContext';
-import { AvatarDefault, LogoPiRide } from '@/components/icons';
+import { AvatarDefault, LogoTaxi Pro } from '@/components/icons';
 import type { UserRole } from '@/contexts/AuthContext';
 
 type Language = 'en' | 'es' | 'pt' | 'ru';
@@ -51,7 +51,7 @@ export default function Profile() {
     (newRole: Exclude<UserRole, null>) => {
       setSwitchingRole(true);
       setRole(newRole);
-      localStorage.setItem('piride_role', newRole);
+      localStorage.setItem('taxipro_role', newRole);
 
       setTimeout(() => {
         setSwitchingRole(false);
@@ -101,7 +101,7 @@ export default function Profile() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number], delay: 0.1 }}
-          className="mx-4 mt-4 rounded-piride-xl p-6 shadow-md"
+          className="mx-4 mt-4 rounded-taxipro-xl p-6 shadow-md"
           style={{ background: 'linear-gradient(135deg, #2c3e50, #34495e)' }}
         >
           <div className="flex items-center gap-4">
@@ -126,7 +126,7 @@ export default function Profile() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.2 }}
-          className="mx-4 mt-3 bg-white rounded-piride-lg shadow-sm overflow-hidden"
+          className="mx-4 mt-3 bg-white rounded-taxipro-lg shadow-sm overflow-hidden"
         >
           <div className="px-4 pt-4 pb-2">
             <h3 className="text-lg font-semibold text-text-primary">Current Role</h3>
@@ -194,7 +194,7 @@ export default function Profile() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.3 }}
-          className="mx-4 mt-3 bg-white rounded-piride-lg shadow-sm p-4"
+          className="mx-4 mt-3 bg-white rounded-taxipro-lg shadow-sm p-4"
         >
           <h3 className="text-lg font-semibold text-text-primary mb-3">Your Stats</h3>
           <div className="grid grid-cols-2 gap-4">
@@ -224,7 +224,7 @@ export default function Profile() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.4 }}
-          className="mx-4 mt-3 bg-white rounded-piride-lg shadow-sm overflow-hidden"
+          className="mx-4 mt-3 bg-white rounded-taxipro-lg shadow-sm overflow-hidden"
         >
           <motion.div variants={listVariants} initial="hidden" animate="show">
             {/* Notifications Toggle */}
@@ -328,7 +328,7 @@ export default function Profile() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.5 }}
-            className="mx-4 mt-3 rounded-piride-lg p-4 border border-navy/[0.15] cursor-pointer"
+            className="mx-4 mt-3 rounded-taxipro-lg p-4 border border-navy/[0.15] cursor-pointer"
             style={{ backgroundColor: '#f8f9ff' }}
             onClick={() => navigate('/admin')}
           >
@@ -348,12 +348,12 @@ export default function Profile() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.6 }}
-          className="mx-4 mt-3 bg-white rounded-piride-lg shadow-sm p-4"
+          className="mx-4 mt-3 bg-white rounded-taxipro-lg shadow-sm p-4"
         >
           {/* Logo row */}
           <div className="flex items-center justify-center gap-2 mb-2">
-            <LogoPiRide className="w-8 h-8" />
-            <span className="text-base font-medium text-text-primary">PiRide</span>
+            <LogoTaxi Pro className="w-8 h-8" />
+            <span className="text-base font-medium text-text-primary">Taxi Pro</span>
           </div>
           <p className="text-center text-sm text-text-secondary">Version 1.0.0</p>
           <p className="text-center text-xs text-text-tertiary mt-1">Built for Pi Browser</p>
@@ -374,7 +374,7 @@ export default function Profile() {
           <motion.button
             whileTap={{ scale: 0.98 }}
             onClick={() => setShowLogoutConfirm(true)}
-            className="w-full h-12 rounded-piride-md bg-error/10 text-error font-medium text-base flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full h-12 rounded-taxipro-md bg-error/10 text-error font-medium text-base flex items-center justify-center gap-2 cursor-pointer"
           >
             <LogOut size={18} />
             Log Out
@@ -400,7 +400,7 @@ export default function Profile() {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="fixed bottom-0 left-0 right-0 bg-white rounded-t-piride-xl z-modal-content p-6"
+              className="fixed bottom-0 left-0 right-0 bg-white rounded-t-taxipro-xl z-modal-content p-6"
               style={{ maxWidth: 430, margin: '0 auto' }}
             >
               <div className="w-10 h-1 bg-midgray rounded-full mx-auto mb-5" />
@@ -420,14 +420,14 @@ export default function Profile() {
                 <div className="flex gap-3">
                   <button
                     onClick={() => setShowRoleConfirm(null)}
-                    className="flex-1 h-12 rounded-piride-md border-2 border-navy text-navy font-medium text-base cursor-pointer"
+                    className="flex-1 h-12 rounded-taxipro-md border-2 border-navy text-navy font-medium text-base cursor-pointer"
                   >
                     Cancel
                   </button>
                   <motion.button
                     whileTap={{ scale: 0.97 }}
                     onClick={() => handleRoleSwitch(showRoleConfirm)}
-                    className="flex-1 h-12 rounded-piride-md bg-navy text-white font-medium text-base cursor-pointer"
+                    className="flex-1 h-12 rounded-taxipro-md bg-navy text-white font-medium text-base cursor-pointer"
                   >
                     Switch
                   </motion.button>
@@ -456,7 +456,7 @@ export default function Profile() {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="fixed bottom-0 left-0 right-0 bg-white rounded-t-piride-xl z-modal-content p-6"
+              className="fixed bottom-0 left-0 right-0 bg-white rounded-t-taxipro-xl z-modal-content p-6"
               style={{ maxWidth: 430, margin: '0 auto' }}
             >
               <div className="w-10 h-1 bg-midgray rounded-full mx-auto mb-5" />
@@ -473,7 +473,7 @@ export default function Profile() {
                     setLanguage(code);
                     setShowLangPicker(false);
                   }}
-                  className={`w-full text-left flex items-center justify-between p-3 rounded-piride-md mb-1 cursor-pointer ${
+                  className={`w-full text-left flex items-center justify-between p-3 rounded-taxipro-md mb-1 cursor-pointer ${
                     language === code ? 'bg-navy/5' : ''
                   }`}
                 >
@@ -510,7 +510,7 @@ export default function Profile() {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="fixed bottom-0 left-0 right-0 bg-white rounded-t-piride-xl z-modal-content p-6"
+              className="fixed bottom-0 left-0 right-0 bg-white rounded-t-taxipro-xl z-modal-content p-6"
               style={{ maxWidth: 430, margin: '0 auto' }}
             >
               <div className="w-10 h-1 bg-midgray rounded-full mx-auto mb-5" />
@@ -520,20 +520,20 @@ export default function Profile() {
                 </div>
                 <h3 className="text-lg font-semibold text-text-primary mb-1">Log Out?</h3>
                 <p className="text-sm text-text-secondary text-center">
-                  You will need to authenticate again to use PiRide.
+                  You will need to authenticate again to use Taxi Pro.
                 </p>
               </div>
               <div className="flex gap-3">
                 <button
                   onClick={() => setShowLogoutConfirm(false)}
-                  className="flex-1 h-12 rounded-piride-md border-2 border-navy text-navy font-medium text-base cursor-pointer"
+                  className="flex-1 h-12 rounded-taxipro-md border-2 border-navy text-navy font-medium text-base cursor-pointer"
                 >
                   Cancel
                 </button>
                 <motion.button
                   whileTap={{ scale: 0.97 }}
                   onClick={handleLogout}
-                  className="flex-1 h-12 rounded-piride-md bg-error text-white font-medium text-base cursor-pointer"
+                  className="flex-1 h-12 rounded-taxipro-md bg-error text-white font-medium text-base cursor-pointer"
                 >
                   Log Out
                 </motion.button>

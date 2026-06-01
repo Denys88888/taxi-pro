@@ -22,7 +22,7 @@ export function PrimaryButton({
   onClick,
   type = 'button',
 }: PrimaryButtonProps) {
-  const baseStyles = 'w-full h-[52px] rounded-piride-md font-medium text-base text-white flex items-center justify-center gap-2 transition-colors select-none';
+  const baseStyles = 'w-full h-[52px] rounded-taxipro-md font-medium text-base text-white flex items-center justify-center gap-2 transition-colors select-none';
   const variantStyles = variant === 'navy'
     ? 'bg-navy active:bg-navy-light'
     : 'bg-emerald active:bg-emerald-light';

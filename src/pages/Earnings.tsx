@@ -308,7 +308,7 @@ function PeriodSelector({
           <>
             <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
             <motion.div
-              className="absolute right-0 top-10 bg-white rounded-piride-lg shadow-lg border border-midgray/50 overflow-hidden z-20"
+              className="absolute right-0 top-10 bg-white rounded-taxipro-lg shadow-lg border border-midgray/50 overflow-hidden z-20"
               initial={{ opacity: 0, y: -8, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -8, scale: 0.95 }}
@@ -406,7 +406,7 @@ function CompletedRideCard({
 }) {
   return (
     <motion.div
-      className="mx-4 mb-3 bg-white rounded-piride-lg shadow-sm p-4"
+      className="mx-4 mb-3 bg-white rounded-taxipro-lg shadow-sm p-4"
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.8 + index * 0.06, duration: 0.25 }}
@@ -460,7 +460,7 @@ function PayoutStatusSection({
 }) {
   return (
     <motion.div
-      className="mx-4 mb-4 p-4 rounded-piride-lg"
+      className="mx-4 mb-4 p-4 rounded-taxipro-lg"
       style={{ backgroundColor: '#f8f9ff', border: '1px solid rgba(44, 62, 80, 0.1)' }}
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
@@ -515,7 +515,7 @@ export default function Earnings() {
 
   // Load additional earnings from completed ride
   useEffect(() => {
-    const stored = localStorage.getItem('piride_last_ride_earnings');
+    const stored = localStorage.getItem('taxipro_last_ride_earnings');
     if (stored) {
       try {
         const { amount } = JSON.parse(stored);
@@ -554,7 +554,7 @@ export default function Earnings() {
       <div className="flex-1 overflow-y-auto no-scrollbar pb-6">
         {/* Total Earnings Card */}
         <motion.div
-          className="mx-4 mt-4 p-6 rounded-piride-xl shadow-lg"
+          className="mx-4 mt-4 p-6 rounded-taxipro-xl shadow-lg"
           style={{
             background: 'linear-gradient(135deg, #2c3e50 0%, #34495e 100%)',
           }}
@@ -648,7 +648,7 @@ export default function Earnings() {
 
         {/* Payout Info Card */}
         <motion.div
-          className="mx-4 mt-4 p-4 rounded-piride-lg bg-emerald/5 border border-emerald/20"
+          className="mx-4 mt-4 p-4 rounded-taxipro-lg bg-emerald/5 border border-emerald/20"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.1 }}

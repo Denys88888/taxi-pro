@@ -82,7 +82,7 @@ export function BottomSheet({
           {/* Sheet */}
           <motion.div
             ref={sheetRef}
-            className="fixed bottom-0 left-0 right-0 bg-white rounded-t-piride-xl z-bottom-sheet flex flex-col overflow-hidden"
+            className="fixed bottom-0 left-0 right-0 bg-white rounded-t-taxipro-xl z-bottom-sheet flex flex-col overflow-hidden"
             style={{
               y: dragY,
               maxWidth: 430,
