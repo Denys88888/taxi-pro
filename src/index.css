@@ -1,36 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 210 29% 24%;
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 7%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 146 100% 39%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 145 63% 42%;
+    --secondary: 0 0% 12%;
     --secondary-foreground: 0 0% 100%;
-    --muted: 210 20% 96%;
-    --muted-foreground: 220 9% 46%;
-    --accent: 210 20% 96%;
-    --accent-foreground: 210 29% 24%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 210 29% 24%;
-    --radius: 0.625rem;
-    --navy: #2c3e50;
-    --emerald: #27ae60;
-    --error: #e74c3c;
-    --warning: #f39c12;
-    --info: #3498db;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 63%;
+    --accent: 0 0% 12%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 100% 66%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 146 100% 39%;
+    --radius: 0.75rem;
   }
 
   * {
@@ -46,33 +39,34 @@
   html {
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
+    background: #000000;
   }
 
   body {
-    @apply bg-offwhite text-text-primary font-inter antialiased;
+    @apply bg-bg-body text-text-primary font-inter antialiased;
     overscroll-behavior-y: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background: #000000;
   }
 
-  /* Mobile container on desktop */
   #root {
     width: 100%;
     height: 100%;
     min-height: 100dvh;
     display: flex;
     justify-content: center;
+    background: #000000;
   }
 }
 
 @layer components {
-  /* Mobile app container */
   .mobile-container {
     width: 100%;
     max-width: 430px;
     min-height: 100dvh;
     position: relative;
-    background: #ffffff;
+    background: #000000;
     overflow-x: hidden;
   }
 
@@ -83,12 +77,11 @@
       margin-top: 2.5dvh;
       margin-bottom: 2.5dvh;
       border-radius: 24px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       overflow: hidden;
     }
   }
 
-  /* Safe area support */
   .safe-area-top {
     padding-top: env(safe-area-inset-top, 0px);
   }
@@ -102,32 +95,6 @@
     padding-right: env(safe-area-inset-right, 0px);
   }
 
-  /* Map styles */
-  .leaflet-container {
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-  }
-
-  /* Bottom sheet */
-  .bottom-sheet-backdrop {
-    @apply fixed inset-0 bg-black/50 z-modal-overlay;
-  }
-
-  .bottom-sheet-content {
-    @apply fixed bottom-0 left-0 right-0 bg-white rounded-t-taxipro-xl z-bottom-sheet;
-    max-width: 430px;
-    margin: 0 auto;
-  }
-
-  /* Toast */
-  .toast-container {
-    @apply fixed top-4 left-4 right-4 z-toast flex flex-col gap-2;
-    max-width: 430px;
-    margin: 0 auto;
-  }
-
-  /* No-scrollbar utility */
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -138,11 +105,122 @@
   }
 }
 
-/* Leaflet specific overrides */
+/* ─── Leaflet Dark Theme Overrides ─────────────────────────── */
+
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  z-index: 0 !important;
+  background: #1a1a2e !important;
+}
+
 .leaflet-control-container {
   display: none !important;
 }
 
 .leaflet-pane {
   z-index: 10 !important;
+}
+
+.leaflet-tile-pane {
+  filter: brightness(0.7) contrast(1.1) saturate(0.8);
+}
+
+/* ─── Custom Pin Animations ────────────────────────────────── */
+
+@keyframes pin-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 0.6;
+  }
+}
+
+.pin-pulse {
+  animation: pin-pulse 2s ease-in-out infinite;
+}
+
+.pin-pulse-delayed {
+  animation: pin-pulse 2s ease-in-out infinite 0.5s;
+}
+
+/* ─── Map Overlay Gradient ────────────────────────────────── */
+
+.map-overlay-gradient {
+  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 40%, transparent 100%);
+  pointer-events: none;
+}
+
+.map-overlay-gradient-top {
+  background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+/* ─── Range Slider Styling ───────────────────────────────── */
+
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: #1E1E1E;
+  outline: none;
+}
+
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #00C853;
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(0, 200, 83, 0.5);
+  border: 3px solid #FFFFFF;
+}
+
+input[type='range']::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #00C853;
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(0, 200, 83, 0.5);
+  border: 3px solid #FFFFFF;
+}
+
+/* ─── Star Rating Tap Animation ───────────────────────────── */
+
+@keyframes star-tap {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+.star-tap {
+  animation: star-tap 0.25s ease-out;
+}
+
+/* ─── Shimmer Loading ────────────────────────────────────── */
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #1E1E1E 25%, #2a2a2a 50%, #1E1E1E 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* ─── Progress Bar Animation ─────────────────────────────── */
+
+@keyframes progress-fill {
+  from { width: 0%; }
+  to { width: 100%; }
 }

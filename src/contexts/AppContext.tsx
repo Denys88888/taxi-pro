@@ -2,6 +2,24 @@ import { createContext, useContext, useState, useCallback, type ReactNode } from
 
 // ─── Types ─────────────────────────────────────────────────────
 
+export interface Location {
+  lat: number;
+  lng: number;
+  address: string;
+  name: string;
+}
+
+export type TariffType = 'standard' | 'comfort' | 'xl';
+
+export interface Tariff {
+  id: TariffType;
+  name: string;
+  description: string;
+  baseMultiplier: number;
+  eta: string;
+  icon: string;
+}
+
 export type RideStatus =
   | 'searching'
   | 'driver_found'
@@ -10,13 +28,15 @@ export type RideStatus =
   | 'completed'
   | 'cancelled';
 
-export type DriverStatus = 'offline' | 'online' | 'on_ride';
-
-export interface Location {
-  lat: number;
-  lng: number;
-  address?: string;
-  name?: string;
+export interface Driver {
+  id: string;
+  name: string;
+  rating: number;
+  trips: number;
+  car: string;
+  licensePlate: string;
+  avatar: string;
+  phone: string;
 }
 
 export interface Ride {
@@ -25,21 +45,14 @@ export interface Ride {
   passengerName: string;
   driverId?: string;
   driverName?: string;
+  driver?: Driver;
   pickup: Location;
   destination: Location;
   price: number;
   status: RideStatus;
   createdAt: string;
   completedAt?: string;
-}
-
-export interface Notification {
-  id: string;
-  title: string;
-  message: string;
-  type: 'info' | 'success' | 'warning' | 'error';
-  read: boolean;
-  createdAt: string;
+  tariff: TariffType;
 }
 
 export interface EarningRecord {
@@ -51,203 +64,115 @@ export interface EarningRecord {
   date: string;
 }
 
-interface AppState {
-  currentRide: Ride | null;
-  rideHistory: Ride[];
-  driverStatus: DriverStatus;
-  notifications: Notification[];
-  availableRides: Ride[];
-  earnings: EarningRecord[];
-  unreadNotificationsCount: number;
-}
-
-interface AppContextType extends AppState {
-  // Ride actions
-  setCurrentRide: (ride: Ride | null) => void;
-  updateRideStatus: (rideId: string, status: RideStatus) => void;
-  addRideToHistory: (ride: Ride) => void;
-  clearCurrentRide: () => void;
-
-  // Driver actions
-  setDriverStatus: (status: DriverStatus) => void;
-  acceptRide: (rideId: string) => void;
-
-  // Notification actions
-  addNotification: (notification: Omit<Notification, 'id' | 'createdAt'>) => void;
-  markNotificationRead: (id: string) => void;
-  markAllNotificationsRead: () => void;
-
-  // Mock data
-  generateMockRideHistory: () => Ride[];
-  generateMockEarnings: () => EarningRecord[];
-  generateMockAvailableRides: () => Ride[];
-}
-
-// ─── Mock Data Generators ──────────────────────────────────────
-
-const MOCK_PICKUP: Location = {
-  lat: 37.7749,
-  lng: -122.4194,
-  address: '123 Market St, San Francisco',
-  name: 'Market Street',
-};
-
-const MOCK_DESTINATIONS: Location[] = [
-  { lat: 37.7849, lng: -122.4094, address: '456 Mission St, San Francisco', name: 'Mission District' },
-  { lat: 37.7649, lng: -122.4294, address: '789 Castro St, San Francisco', name: 'Castro' },
-  { lat: 37.7949, lng: -122.3994, address: '321 Embarcadero, San Francisco', name: 'Embarcadero' },
-  { lat: 37.7549, lng: -122.4394, address: '654 Haight St, San Francisco', name: 'Haight-Ashbury' },
+const TARIFFS: Tariff[] = [
+  { id: 'standard', name: 'Standard', description: 'Affordable everyday rides', baseMultiplier: 1.0, eta: '3 min', icon: 'car' },
+  { id: 'comfort', name: 'Comfort', description: 'Newer cars with extra legroom', baseMultiplier: 1.3, eta: '5 min', icon: 'car-front' },
+  { id: 'xl', name: 'XL', description: 'Fits up to 6 passengers', baseMultiplier: 1.8, eta: '7 min', icon: 'truck' },
 ];
 
-function generateMockRide(id: string, status: RideStatus, index: number): Ride {
-  const dest = MOCK_DESTINATIONS[index % MOCK_DESTINATIONS.length];
-  return {
-    id,
-    passengerId: `passenger_${index}`,
-    passengerName: `Passenger ${index + 1}`,
-    driverId: `driver_${index}`,
-    driverName: `Driver ${index + 1}`,
-    pickup: MOCK_PICKUP,
-    destination: dest,
-    price: 2.5 + Math.random() * 8,
-    status,
-    createdAt: new Date(Date.now() - index * 86400000).toISOString(),
-    completedAt: status === 'completed' ? new Date(Date.now() - index * 86400000 + 1800000).toISOString() : undefined,
-  };
-}
+const MOCK_DRIVERS: Driver[] = [
+  { id: 'd1', name: 'Michael Chen', rating: 4.9, trips: 2847, car: 'Toyota Camry', licensePlate: 'SF 7X42', avatar: '', phone: '+1-555-0101' },
+  { id: 'd2', name: 'Sarah Johnson', rating: 4.8, trips: 1523, car: 'Honda Accord', licensePlate: 'SF 3K91', avatar: '', phone: '+1-555-0102' },
+  { id: 'd3', name: 'James Wilson', rating: 4.7, trips: 3981, car: 'Tesla Model 3', licensePlate: 'SF 2B77', avatar: '', phone: '+1-555-0103' },
+];
 
-// ─── Context ───────────────────────────────────────────────────
+const DEFAULT_PICKUP: Location = {
+  lat: 37.7749,
+  lng: -122.4194,
+  address: 'Current Location',
+  name: 'Union Square, San Francisco',
+};
+
+// ─── Context Type ──────────────────────────────────────────────
+
+interface AppContextType {
+  // Location state
+  pickup: Location;
+  destination: Location | null;
+  selectedTariff: TariffType;
+  price: number;
+  routeDistance: number;
+  routeDuration: number;
+
+  // Ride state
+  currentRide: Ride | null;
+  rideHistory: Ride[];
+  driverMode: boolean;
+  driverOnline: boolean;
+
+  // Tariffs
+  tariffs: Tariff[];
+
+  // Actions
+  setPickup: (loc: Location) => void;
+  setDestination: (loc: Location | null) => void;
+  setSelectedTariff: (t: TariffType) => void;
+  setPrice: (p: number) => void;
+  setRouteInfo: (distance: number, duration: number) => void;
+  setCurrentRide: (ride: Ride | null) => void;
+  addRideToHistory: (ride: Ride) => void;
+  setDriverMode: (v: boolean) => void;
+  setDriverOnline: (v: boolean) => void;
+  findMockDriver: () => Driver;
+}
 
 const AppContext = createContext<AppContextType | null>(null);
 
 export function AppProvider({ children }: { children: ReactNode }) {
+  const [pickup, setPickupState] = useState<Location>(DEFAULT_PICKUP);
+  const [destination, setDestinationState] = useState<Location | null>(null);
+  const [selectedTariff, setSelectedTariff] = useState<TariffType>('standard');
+  const [price, setPriceState] = useState(2.5);
+  const [routeDistance, setRouteDistance] = useState(0);
+  const [routeDuration, setRouteDuration] = useState(0);
   const [currentRide, setCurrentRideState] = useState<Ride | null>(null);
   const [rideHistory, setRideHistory] = useState<Ride[]>([]);
-  const [driverStatus, setDriverStatus] = useState<DriverStatus>('offline');
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [availableRides, setAvailableRides] = useState<Ride[]>([]);
-  const [earnings, setEarnings] = useState<EarningRecord[]>([]);
+  const [driverMode, setDriverMode] = useState(false);
+  const [driverOnline, setDriverOnline] = useState(false);
 
-  const unreadNotificationsCount = notifications.filter((n) => !n.read).length;
-
-  // Ride actions
-  const setCurrentRide = useCallback((ride: Ride | null) => {
-    setCurrentRideState(ride);
+  const setPickup = useCallback((loc: Location) => setPickupState(loc), []);
+  const setDestination = useCallback((loc: Location | null) => setDestinationState(loc), []);
+  const setPrice = useCallback((p: number) => setPriceState(p), []);
+  const setRouteInfo = useCallback((distance: number, duration: number) => {
+    setRouteDistance(distance);
+    setRouteDuration(duration);
   }, []);
-
-  const updateRideStatus = useCallback((rideId: string, status: RideStatus) => {
-    setCurrentRideState((prev) => {
-      if (prev?.id === rideId) {
-        return { ...prev, status };
-      }
-      return prev;
-    });
-    setRideHistory((prev) =>
-      prev.map((r) => (r.id === rideId ? { ...r, status } : r))
-    );
-  }, []);
-
+  const setCurrentRide = useCallback((ride: Ride | null) => setCurrentRideState(ride), []);
   const addRideToHistory = useCallback((ride: Ride) => {
     setRideHistory((prev) => [ride, ...prev]);
   }, []);
+  const setDriverModeState = useCallback((v: boolean) => setDriverMode(v), []);
+  const setDriverOnlineState = useCallback((v: boolean) => setDriverOnline(v), []);
 
-  const clearCurrentRide = useCallback(() => {
-    setCurrentRideState(null);
-  }, []);
-
-  // Driver actions
-  const acceptRide = useCallback((rideId: string) => {
-    setAvailableRides((prev) => prev.filter((r) => r.id !== rideId));
-    setCurrentRideState((prev) => {
-      if (prev?.id === rideId) {
-        return { ...prev, status: 'driver_found' as RideStatus };
-      }
-      return prev;
-    });
-  }, []);
-
-  // Notification actions
-  const addNotification = useCallback((notification: Omit<Notification, 'id' | 'createdAt'>) => {
-    const newNotification: Notification = {
-      ...notification,
-      id: `notif_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
-      createdAt: new Date().toISOString(),
-    };
-    setNotifications((prev) => [newNotification, ...prev]);
-  }, []);
-
-  const markNotificationRead = useCallback((id: string) => {
-    setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, read: true } : n))
-    );
-  }, []);
-
-  const markAllNotificationsRead = useCallback(() => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
-  }, []);
-
-  // Mock data generators
-  const generateMockRideHistory = useCallback((): Ride[] => {
-    const mock: Ride[] = [
-      generateMockRide('ride_1', 'completed', 0),
-      generateMockRide('ride_2', 'completed', 1),
-      generateMockRide('ride_3', 'completed', 2),
-      generateMockRide('ride_4', 'cancelled', 3),
-      generateMockRide('ride_5', 'completed', 0),
-    ];
-    setRideHistory(mock);
-    return mock;
-  }, []);
-
-  const generateMockEarnings = useCallback((): EarningRecord[] => {
-    const mock: EarningRecord[] = Array.from({ length: 10 }, (_, i) => {
-      const amount = 3 + Math.random() * 7;
-      const commission = amount * 0.02;
-      return {
-        id: `earning_${i}`,
-        rideId: `ride_${i}`,
-        amount: Number(amount.toFixed(2)),
-        commission: Number(commission.toFixed(2)),
-        netAmount: Number((amount - commission).toFixed(2)),
-        date: new Date(Date.now() - i * 86400000).toISOString(),
-      };
-    });
-    setEarnings(mock);
-    return mock;
-  }, []);
-
-  const generateMockAvailableRides = useCallback((): Ride[] => {
-    const mock: Ride[] = [
-      generateMockRide('avail_1', 'searching', 0),
-      generateMockRide('avail_2', 'searching', 1),
-      generateMockRide('avail_3', 'searching', 2),
-    ];
-    setAvailableRides(mock);
-    return mock;
+  const findMockDriver = useCallback(() => {
+    const idx = Math.floor(Math.random() * MOCK_DRIVERS.length);
+    return MOCK_DRIVERS[idx];
   }, []);
 
   return (
     <AppContext.Provider
       value={{
+        pickup,
+        destination,
+        selectedTariff,
+        price,
+        routeDistance,
+        routeDuration,
         currentRide,
         rideHistory,
-        driverStatus,
-        notifications,
-        availableRides,
-        earnings,
-        unreadNotificationsCount,
+        driverMode,
+        driverOnline,
+        tariffs: TARIFFS,
+        setPickup,
+        setDestination,
+        setSelectedTariff,
+        setPrice,
+        setRouteInfo,
         setCurrentRide,
-        updateRideStatus,
         addRideToHistory,
-        clearCurrentRide,
-        setDriverStatus,
-        acceptRide,
-        addNotification,
-        markNotificationRead,
-        markAllNotificationsRead,
-        generateMockRideHistory,
-        generateMockEarnings,
-        generateMockAvailableRides,
+        setDriverMode: setDriverModeState,
+        setDriverOnline: setDriverOnlineState,
+        findMockDriver,
       }}
     >
       {children}
@@ -257,8 +182,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
 export function useApp(): AppContextType {
   const ctx = useContext(AppContext);
-  if (!ctx) {
-    throw new Error('useApp must be used within an AppProvider');
-  }
+  if (!ctx) throw new Error('useApp must be used within AppProvider');
   return ctx;
 }

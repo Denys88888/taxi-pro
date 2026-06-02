@@ -11,16 +11,18 @@ module.exports = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: '#00C853',
+          dark: '#009E42',
+          light: '#E8F9EE',
+          foreground: '#FFFFFF',
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive) / <alpha-value>)",
-          foreground: "hsl(var(--destructive-foreground) / <alpha-value>)",
+          DEFAULT: '#FF5252',
+          foreground: '#FFFFFF',
         },
         muted: {
           DEFAULT: "hsl(var(--muted))",
@@ -38,30 +40,25 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // PiRide brand colors
-        navy: {
-          DEFAULT: '#2c3e50',
-          light: '#34495e',
+        bg: {
+          body: '#000000',
+          surface: '#121212',
+          elevated: '#1E1E1E',
         },
-        emerald: {
-          DEFAULT: '#27ae60',
-          light: '#2ecc71',
+        text: {
+          primary: '#FFFFFF',
+          secondary: '#A0A0A0',
+          tertiary: '#666666',
         },
-        error: '#e74c3c',
-        warning: '#f39c12',
-        info: '#3498db',
-        purple: '#9b59b6',
-        // Backgrounds
-        offwhite: '#f8f9fa',
-        lightgray: '#f0f2f5',
-        midgray: '#e1e4e8',
-        // Text
-        'text-primary': '#1a1a2e',
-        'text-secondary': '#6b7280',
-        'text-tertiary': '#9ca3af',
+        error: '#FF5252',
+        warning: '#FFB300',
+        info: '#448AFF',
+        piPurple: '#6700C2',
+        piGold: '#F5A623',
       },
       fontFamily: {
         inter: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
       },
       spacing: {
         'safe-top': 'env(safe-area-inset-top)',
@@ -70,11 +67,11 @@ module.exports = {
         'safe-right': 'env(safe-area-inset-right)',
       },
       borderRadius: {
-        xl: "calc(var(--radius) + 4px)",
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
-        xs: "calc(var(--radius) - 6px)",
+        xl: 'calc(var(--radius) + 4px)',
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
+        xs: 'calc(var(--radius) - 6px)',
         'piride-sm': '8px',
         'piride-md': '12px',
         'piride-lg': '16px',
@@ -82,13 +79,16 @@ module.exports = {
         'piride-full': '9999px',
       },
       boxShadow: {
-        xs: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
-        'sm': '0 1px 3px rgba(0,0,0,0.08)',
-        'md': '0 4px 12px rgba(0,0,0,0.1)',
-        'lg': '0 8px 24px rgba(0,0,0,0.12)',
-        'xl': '0 16px 48px rgba(0,0,0,0.15)',
-        'glow-green': '0 0 16px rgba(39, 174, 96, 0.3)',
-        'glow-blue': '0 0 16px rgba(44, 62, 80, 0.2)',
+        xs: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+        'sm': '0 1px 3px rgba(0,0,0,0.3)',
+        'md': '0 4px 12px rgba(0,0,0,0.4)',
+        'lg': '0 8px 24px rgba(0,0,0,0.5)',
+        'xl': '0 16px 48px rgba(0,0,0,0.6)',
+        'card': '0 4px 16px rgba(0, 0, 0, 0.4)',
+        'sheet': '0 -8px 32px rgba(0, 0, 0, 0.5)',
+        'glow': '0 0 20px rgba(0, 200, 83, 0.3)',
+        'glow-green': '0 0 20px rgba(0, 200, 83, 0.4)',
+        'glow-purple': '0 0 20px rgba(103, 0, 194, 0.3)',
       },
       zIndex: {
         'map': '0',
@@ -101,50 +101,55 @@ module.exports = {
         'loading': '70',
       },
       keyframes: {
-        "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
+        'accordion-down': {
+          from: { height: '0' },
+          to: { height: 'var(--radix-accordion-content-height)' },
         },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
+        'accordion-up': {
+          from: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: '0' },
         },
-        "caret-blink": {
-          "0%,70%,100%": { opacity: "1" },
-          "20%,50%": { opacity: "0" },
+        'caret-blink': {
+          '0%,70%,100%': { opacity: '1' },
+          '20%,50%': { opacity: '0' },
         },
-        "pulse-dot": {
-          "0%, 100%": { transform: "scale(1)", opacity: "1" },
-          "50%": { transform: "scale(1.4)", opacity: "0.7" },
+        'pulse-dot': {
+          '0%, 100%': { transform: 'scale(1)', opacity: '1' },
+          '50%': { transform: 'scale(1.6)', opacity: '0.5' },
         },
-        "slide-up": {
-          from: { transform: "translateY(100%)" },
-          to: { transform: "translateY(0)" },
+        'slide-up': {
+          from: { transform: 'translateY(100%)' },
+          to: { transform: 'translateY(0)' },
         },
-        "slide-down": {
-          from: { transform: "translateY(0)" },
-          to: { transform: "translateY(100%)" },
+        'slide-down': {
+          from: { transform: 'translateY(0)' },
+          to: { transform: 'translateY(100%)' },
         },
-        "fade-in": {
-          from: { opacity: "0" },
-          to: { opacity: "1" },
+        'fade-in': {
+          from: { opacity: '0' },
+          to: { opacity: '1' },
         },
-        "fade-out": {
-          from: { opacity: "1" },
-          to: { opacity: "0" },
+        'fade-out': {
+          from: { opacity: '1' },
+          to: { opacity: '0' },
+        },
+        'pulse-glow': {
+          '0%, 100%': { boxShadow: '0 0 8px rgba(0, 200, 83, 0.3)' },
+          '50%': { boxShadow: '0 0 24px rgba(0, 200, 83, 0.6)' },
         },
       },
       animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
-        "caret-blink": "caret-blink 1.25s ease-out infinite",
-        "pulse-dot": "pulse-dot 2s ease-in-out infinite",
-        "slide-up": "slide-up 0.3s ease-out",
-        "slide-down": "slide-down 0.3s ease-out",
-        "fade-in": "fade-in 0.3s ease-out",
-        "fade-out": "fade-out 0.3s ease-out",
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
+        'caret-blink': 'caret-blink 1.25s ease-out infinite',
+        'pulse-dot': 'pulse-dot 2s ease-in-out infinite',
+        'slide-up': 'slide-up 0.3s ease-out',
+        'slide-down': 'slide-down 0.3s ease-out',
+        'fade-in': 'fade-in 0.3s ease-out',
+        'fade-out': 'fade-out 0.3s ease-out',
+        'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require('tailwindcss-animate')],
 }

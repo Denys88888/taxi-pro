@@ -23,7 +23,7 @@ export interface PaymentDTO {
   amount: number;
   memo: string;
   metadata: Record<string, unknown>;
-  uid: string;
+  uid?: string;
 }
 
 export interface PaymentCallbacks {
@@ -67,6 +67,7 @@ interface PiSDK {
 // ─── Constants ─────────────────────────────────────────────────
 
 const SCOPES = ['username', 'payments'];
+export const PI_API_KEY = 'q4wx5fyaqppmnolphgtelucbpe7v3qwlkemqxcnzgmcva8mkbo5mkfdgqfwk4j63';
 
 // ─── Helper Functions ──────────────────────────────────────────
 
@@ -114,9 +115,7 @@ export async function authenticate(): Promise<AuthResult> {
 
   return new Promise((resolve, reject) => {
     pi.authenticate(SCOPES, (payment: IncompletePayment) => {
-      // Handle incomplete payment found during auth
       console.log('[PiSDK] Incomplete payment found:', payment.identifier);
-      // Store for later handling
       localStorage.setItem('pi_incomplete_payment', JSON.stringify(payment));
     })
       .then((auth: AuthResult) => {

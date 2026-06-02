@@ -1,133 +1,98 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
-import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
-import type { ReactNode } from 'react';
+import { useState, useRef, useCallback, type ReactNode } from 'react';
+import { motion, useMotionValue, animate, type PanInfo } from 'framer-motion';
 
 interface BottomSheetProps {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
-  title?: string;
-  showHandle?: boolean;
-  expandable?: boolean;
-  collapsedHeight?: string;
-  expandedHeight?: string;
-  defaultExpanded?: boolean;
+  snapPoints?: number[]; // percentages
+  initialSnap?: number;
 }
 
 export function BottomSheet({
   isOpen,
   onClose,
   children,
-  title,
-  showHandle = true,
-  expandable = true,
-  collapsedHeight = '30vh',
-  expandedHeight = '85vh',
-  defaultExpanded = false,
+  snapPoints = [25, 55, 90],
+  initialSnap = 0,
 }: BottomSheetProps) {
-  const [isExpanded, setIsExpanded] = useState(defaultExpanded);
-  const dragY = useMotionValue(0);
-  const sheetRef = useRef<HTMLDivElement>(null);
+  const [currentSnap, setCurrentSnap] = useState(initialSnap);
+  const y = useMotionValue(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const backdropOpacity = useTransform(dragY, [0, 300], [1, 0]);
-
-  const handleDragEnd = useCallback(
-    (_: unknown, info: { offset: { y: number }; velocity: { y: number } }) => {
-      const threshold = 80;
-      const velocityThreshold = 500;
-
-      if (info.offset.y > threshold || info.velocity.y > velocityThreshold) {
-        if (isExpanded && expandable) {
-          setIsExpanded(false);
-          dragY.set(0);
-        } else {
-          onClose();
-        }
-      } else if (info.offset.y < -threshold || info.velocity.y < -velocityThreshold) {
-        if (expandable && !isExpanded) {
-          setIsExpanded(true);
-          dragY.set(0);
-        }
-      } else {
-        dragY.set(0);
-      }
+  const snapToIndex = useCallback(
+    (index: number) => {
+      const clamped = Math.max(0, Math.min(snapPoints.length - 1, index));
+      setCurrentSnap(clamped);
+      animate(y, 0, { type: 'spring', stiffness: 300, damping: 30 });
     },
-    [isExpanded, expandable, onClose, dragY]
+    [snapPoints.length, y]
   );
 
-  useEffect(() => {
-    if (!isOpen) {
-      setIsExpanded(defaultExpanded);
-      dragY.set(0);
-    }
-  }, [isOpen, defaultExpanded, dragY]);
+  const handleDragEnd = useCallback(
+    (_: unknown, info: PanInfo) => {
+      const velocity = info.velocity.y;
+      const offset = info.offset.y;
 
-  const currentHeight = isExpanded ? expandedHeight : collapsedHeight;
+      if (velocity > 300 || offset > 80) {
+        if (currentSnap === 0) {
+          onClose();
+        } else {
+          snapToIndex(currentSnap - 1);
+        }
+      } else if (velocity < -300 || offset < -80) {
+        snapToIndex(currentSnap + 1);
+      } else {
+        snapToIndex(currentSnap);
+      }
+    },
+    [currentSnap, onClose, snapToIndex]
+  );
+
+  const heightPercent = snapPoints[currentSnap];
+
+  if (!isOpen) return null;
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          {/* Backdrop */}
-          <motion.div
-            className="fixed inset-0 bg-black/50 z-modal-overlay"
-            style={{ opacity: backdropOpacity }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] as [number, number, number, number] }}
-            onClick={onClose}
-          />
+    <>
+      {/* Backdrop */}
+      <motion.div
+        className="fixed inset-0 bg-black/50 z-modal-overlay"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={() => currentSnap === 0 ? onClose() : snapToIndex(0)}
+      />
 
-          {/* Sheet */}
-          <motion.div
-            ref={sheetRef}
-            className="fixed bottom-0 left-0 right-0 bg-white rounded-t-taxipro-xl z-bottom-sheet flex flex-col overflow-hidden"
-            style={{
-              y: dragY,
-              maxWidth: 430,
-              margin: '0 auto',
-              height: currentHeight,
-            }}
-            initial={{ y: '100%' }}
-            animate={{ y: 0 }}
-            exit={{ y: '100%' }}
-            transition={{
-              type: 'spring',
-              damping: 30,
-              stiffness: 300,
-            }}
-            drag={expandable ? 'y' : false}
-            dragConstraints={{ top: 0, bottom: 0 }}
-            dragElastic={0.15}
-            onDragEnd={handleDragEnd}
-            dragSnapToOrigin
-          >
-            {/* Drag Handle */}
-            {showHandle && (
-              <div className="w-full flex justify-center pt-3 pb-2 shrink-0">
-                <div
-                  className="w-10 h-1 bg-midgray rounded-full"
-                  onClick={() => expandable && setIsExpanded(!isExpanded)}
-                  style={{ cursor: expandable ? 'pointer' : 'default' }}
-                />
-              </div>
-            )}
+      {/* Sheet */}
+      <motion.div
+        ref={containerRef}
+        className="fixed bottom-0 left-0 right-0 bg-bg-elevated rounded-t-piride-xl z-bottom-sheet shadow-sheet border-t border-white/5"
+        style={{
+          maxWidth: 430,
+          margin: '0 auto',
+          height: `${heightPercent}vh`,
+          y,
+        }}
+        initial={{ y: '100%' }}
+        animate={{ y: 0 }}
+        exit={{ y: '100%' }}
+        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+        drag="y"
+        dragConstraints={{ top: 0, bottom: 0 }}
+        dragElastic={0.15}
+        onDragEnd={handleDragEnd}
+      >
+        {/* Grabber handle */}
+        <div className="flex justify-center pt-3 pb-2 cursor-grab active:cursor-grabbing">
+          <div className="w-10 h-1 rounded-full bg-white/20" />
+        </div>
 
-            {/* Title */}
-            {title && (
-              <div className="px-4 pb-3 shrink-0">
-                <h3 className="text-lg font-semibold text-text-primary">{title}</h3>
-              </div>
-            )}
-
-            {/* Content */}
-            <div className="flex-1 overflow-y-auto no-scrollbar px-4 pb-6">
-              {children}
-            </div>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+        {/* Content */}
+        <div className="overflow-y-auto h-full no-scrollbar px-4 pb-8">
+          {children}
+        </div>
+      </motion.div>
+    </>
   );
 }

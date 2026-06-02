@@ -1,184 +1,79 @@
-import { Routes, Route, Navigate } from 'react-router';
-import { useAuth, hasSeenOnboarding } from '@/contexts/AuthContext';
+import { Routes, Route, useLocation } from 'react-router';
+import { AnimatePresence, motion } from 'framer-motion';
+// Components
+import { BottomNav } from '@/components/BottomNav';
 // Pages
-import Onboarding from './pages/Onboarding';
-import Auth from './pages/Auth';
-import RoleSelect from './pages/RoleSelect';
-import Ride from './pages/Ride';
-import SearchLocation from './pages/SearchLocation';
-import RidePreview from './pages/RidePreview';
-import Payment from './pages/Payment';
-import RideStatus from './pages/RideStatus';
-import RideHistory from './pages/RideHistory';
-import DriverDashboard from './pages/DriverDashboard';
-import DriverNavigation from './pages/DriverNavigation';
-import Earnings from './pages/Earnings';
-import Admin from './pages/Admin';
-import Profile from './pages/Profile';
+import MapHome from '@/pages/MapHome';
+import SearchPage from '@/pages/SearchPage';
+import BookPage from '@/pages/BookPage';
+import PaymentPage from '@/pages/PaymentPage';
+import DriverFoundPage from '@/pages/DriverFoundPage';
+import RideProgressPage from '@/pages/RideProgressPage';
+import RideCompletePage from '@/pages/RideCompletePage';
+import RidesPage from '@/pages/RidesPage';
+import ProfilePage from '@/pages/ProfilePage';
+import DriverModePage from '@/pages/DriverModePage';
 
-function OnboardingGuard() {
-  const { isAuthenticated, user } = useAuth();
-  const seen = hasSeenOnboarding();
+function PageTransition({ children }: { children: React.ReactNode }) {
+  const location = useLocation();
+  const isOverlay = location.pathname.startsWith('/search') ||
+    location.pathname.startsWith('/book') ||
+    location.pathname.startsWith('/payment') ||
+    location.pathname.startsWith('/driver-found') ||
+    location.pathname.startsWith('/ride') ||
+    location.pathname.startsWith('/complete') ||
+    location.pathname.startsWith('/rides') ||
+    location.pathname.startsWith('/profile') ||
+    location.pathname.startsWith('/driver');
 
-  if (!seen) {
-    return <Onboarding />;
-  }
-
-  if (!isAuthenticated) {
-    return <Navigate to="/auth" replace />;
-  }
-
-  if (!user?.role) {
-    return <Navigate to="/role-select" replace />;
-  }
-
-  if (user.role === 'driver') {
-    return <Navigate to="/driver" replace />;
-  }
-
-  return <Navigate to="/ride" replace />;
-}
-
-function AuthGuard({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated } = useAuth();
-
-  if (!isAuthenticated) {
-    return <Navigate to="/auth" replace />;
+  if (isOverlay) {
+    return (
+      <motion.div
+        key={location.pathname}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        className="absolute inset-0 z-modal-content"
+      >
+        {children}
+      </motion.div>
+    );
   }
 
   return <>{children}</>;
 }
 
-function RoleGuard({
-  children,
-  allowedRole,
-}: {
-  children: React.ReactNode;
-  allowedRole: 'passenger' | 'driver';
-}) {
-  const { isAuthenticated, user } = useAuth();
-
-  if (!isAuthenticated) {
-    return <Navigate to="/auth" replace />;
-  }
-
-  if (!user?.role) {
-    return <Navigate to="/role-select" replace />;
-  }
-
-  if (user.role !== allowedRole) {
-    return <Navigate to={user.role === 'driver' ? '/driver' : '/ride'} replace />;
-  }
-
-  return <>{children}</>;
+function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="mobile-container bg-bg-body">
+      <div className="relative w-full h-full">
+        {children}
+      </div>
+      <BottomNav />
+    </div>
+  );
 }
 
 export default function App() {
+  const location = useLocation();
+
   return (
-    <>
-      <Routes>
-        {/* Root: onboarding or redirect */}
-        <Route path="/" element={<OnboardingGuard />} />
-
-        {/* Auth flow */}
-        <Route path="/auth" element={<Auth />} />
-        <Route path="/role-select" element={<AuthGuard><RoleSelect /></AuthGuard>} />
-
-        {/* Passenger routes */}
-        <Route
-          path="/ride"
-          element={
-            <RoleGuard allowedRole="passenger">
-              <Ride />
-            </RoleGuard>
-          }
-        />
-        <Route
-          path="/search"
-          element={
-            <RoleGuard allowedRole="passenger">
-              <SearchLocation />
-            </RoleGuard>
-          }
-        />
-        <Route
-          path="/preview"
-          element={
-            <RoleGuard allowedRole="passenger">
-              <RidePreview />
-            </RoleGuard>
-          }
-        />
-        <Route
-          path="/payment"
-          element={
-            <RoleGuard allowedRole="passenger">
-              <Payment />
-            </RoleGuard>
-          }
-        />
-        <Route
-          path="/status"
-          element={
-            <RoleGuard allowedRole="passenger">
-              <RideStatus />
-            </RoleGuard>
-          }
-        />
-        <Route
-          path="/history"
-          element={
-            <AuthGuard>
-              <RideHistory />
-            </AuthGuard>
-          }
-        />
-
-        {/* Driver routes */}
-        <Route
-          path="/driver"
-          element={
-            <RoleGuard allowedRole="driver">
-              <DriverDashboard />
-            </RoleGuard>
-          }
-        />
-        <Route
-          path="/driver-nav"
-          element={
-            <RoleGuard allowedRole="driver">
-              <DriverNavigation />
-            </RoleGuard>
-          }
-        />
-        <Route
-          path="/earnings"
-          element={
-            <RoleGuard allowedRole="driver">
-              <Earnings />
-            </RoleGuard>
-          }
-        />
-
-        {/* Shared routes */}
-        <Route
-          path="/profile"
-          element={
-            <AuthGuard>
-              <Profile />
-            </AuthGuard>
-          }
-        />
-
-        {/* Admin */}
-        <Route path="/admin" element={<Admin />} />
-
-        {/* Fallback */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-
-      {/* Global toast container - placeholder for future integration */}
-      <div id="toast-root" />
-    </>
+    <Layout>
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<PageTransition><MapHome /></PageTransition>} />
+          <Route path="/search" element={<PageTransition><SearchPage /></PageTransition>} />
+          <Route path="/book" element={<PageTransition><BookPage /></PageTransition>} />
+          <Route path="/payment" element={<PageTransition><PaymentPage /></PageTransition>} />
+          <Route path="/driver-found" element={<PageTransition><DriverFoundPage /></PageTransition>} />
+          <Route path="/ride" element={<PageTransition><RideProgressPage /></PageTransition>} />
+          <Route path="/complete" element={<PageTransition><RideCompletePage /></PageTransition>} />
+          <Route path="/rides" element={<PageTransition><RidesPage /></PageTransition>} />
+          <Route path="/profile" element={<PageTransition><ProfilePage /></PageTransition>} />
+          <Route path="/driver" element={<PageTransition><DriverModePage /></PageTransition>} />
+        </Routes>
+      </AnimatePresence>
+    </Layout>
   );
 }

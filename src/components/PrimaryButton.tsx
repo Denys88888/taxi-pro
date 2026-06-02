@@ -1,46 +1,44 @@
 import { motion } from 'framer-motion';
-import type { ReactNode, MouseEventHandler } from 'react';
+import { Loader2 } from 'lucide-react';
 
 interface PrimaryButtonProps {
-  children: ReactNode;
-  variant?: 'navy' | 'green';
-  isLoading?: boolean;
-  icon?: ReactNode;
-  className?: string;
+  children: React.ReactNode;
+  onClick?: () => void;
+  loading?: boolean;
   disabled?: boolean;
-  onClick?: MouseEventHandler<HTMLButtonElement>;
-  type?: 'button' | 'submit' | 'reset';
+  variant?: 'primary' | 'secondary' | 'danger';
+  icon?: React.ReactNode;
 }
 
 export function PrimaryButton({
   children,
-  variant = 'navy',
-  isLoading = false,
-  icon,
-  className = '',
-  disabled,
   onClick,
-  type = 'button',
+  loading = false,
+  disabled = false,
+  variant = 'primary',
+  icon,
 }: PrimaryButtonProps) {
-  const baseStyles = 'w-full h-[52px] rounded-taxipro-md font-medium text-base text-white flex items-center justify-center gap-2 transition-colors select-none';
-  const variantStyles = variant === 'navy'
-    ? 'bg-navy active:bg-navy-light'
-    : 'bg-emerald active:bg-emerald-light';
-  const disabledStyles = (disabled || isLoading)
-    ? 'opacity-40 cursor-not-allowed'
-    : 'cursor-pointer';
+  const baseStyles = 'w-full h-[52px] rounded-piride-lg font-semibold text-base flex items-center justify-center gap-2 select-none transition-colors';
+
+  const variantStyles = {
+    primary: 'bg-primary text-white shadow-glow active:bg-primary-dark',
+    secondary: 'bg-bg-elevated text-text-primary border border-white/10 active:bg-bg-surface',
+    danger: 'bg-error text-white active:bg-red-600',
+  };
+
+  const isDisabled = disabled || loading;
 
   return (
     <motion.button
-      className={`${baseStyles} ${variantStyles} ${disabledStyles} ${className}`}
-      whileTap={!disabled && !isLoading ? { scale: 0.97 } : undefined}
-      transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-      disabled={disabled || isLoading}
+      className={`${baseStyles} ${variantStyles[variant]} ${isDisabled ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}`}
       onClick={onClick}
-      type={type}
+      disabled={isDisabled}
+      whileTap={isDisabled ? {} : { scale: 0.97 }}
+      whileHover={isDisabled ? {} : { scale: 1.01 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 25 }}
     >
-      {isLoading ? (
-        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+      {loading ? (
+        <Loader2 size={20} className="animate-spin" />
       ) : (
         <>
           {icon}

@@ -10,15 +10,13 @@ export interface User {
   role: UserRole;
 }
 
-interface AuthState {
+interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isPiBrowser: boolean;
   isLoading: boolean;
   error: string | null;
-}
-
-interface AuthContextType extends AuthState {
+  role: UserRole;
   login: () => Promise<void>;
   logout: () => void;
   setRole: (role: Exclude<UserRole, null>) => void;
@@ -27,18 +25,13 @@ interface AuthContextType extends AuthState {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-const STORAGE_KEY = 'taxipro_auth';
-const ONBOARDING_KEY = 'taxipro_has_seen_onboarding';
+const STORAGE_KEY = 'taxipro_auth_v2';
 
 function loadStoredUser(): User | null {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      return JSON.parse(stored) as User;
-    }
-  } catch {
-    // ignore parse errors
-  }
+    if (stored) return JSON.parse(stored) as User;
+  } catch { /* ignore */ }
   return null;
 }
 
@@ -49,37 +42,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<string | null>(null);
 
   const isAuthenticated = !!user;
+  const role = user?.role ?? null;
 
   // Initialize Pi SDK on mount
   useEffect(() => {
     const piBrowser = checkPiBrowser();
     setIsPiBrowser(piBrowser);
-
     if (piBrowser) {
-      try {
-        initPiSDK(true);
-      } catch (err) {
-        console.warn('Pi SDK init failed:', err);
-      }
+      try { initPiSDK(true); } catch (err) { console.warn('Pi SDK init failed:', err); }
     }
   }, []);
 
-  // Persist user to localStorage
+  // Persist user
   useEffect(() => {
-    if (user) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
-    } else {
-      localStorage.removeItem(STORAGE_KEY);
-    }
+    if (user) localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+    else localStorage.removeItem(STORAGE_KEY);
   }, [user]);
 
   const login = useCallback(async () => {
     setIsLoading(true);
     setError(null);
-
     try {
       if (!checkPiBrowser()) {
-        // For development/demo: create a mock user
+        // Demo mode for non-Pi browsers
         const mockUser: User = {
           uid: `demo_${Date.now()}`,
           username: 'demo_user',
@@ -89,24 +74,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(mockUser);
         return;
       }
-
-      // Initialize SDK if needed
       initPiSDK(true);
-
       const result = await authenticate();
-
-      const newUser: User = {
+      setUser({
         uid: result.user.uid,
         username: result.user.username,
         accessToken: result.accessToken,
-        role: null, // Role selection comes after auth
-      };
-
-      setUser(newUser);
+        role: null,
+      });
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Authentication failed';
-      setError(message);
-      console.error('[Auth] Login error:', err);
+      setError(err instanceof Error ? err.message : 'Authentication failed');
     } finally {
       setIsLoading(false);
     }
@@ -115,35 +92,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = useCallback(() => {
     setUser(null);
     localStorage.removeItem(STORAGE_KEY);
-    localStorage.removeItem(ONBOARDING_KEY);
     localStorage.removeItem('pi_incomplete_payment');
   }, []);
 
-  const setRole = useCallback((role: Exclude<UserRole, null>) => {
-    setUser((prev) => {
-      if (!prev) return null;
-      return { ...prev, role };
-    });
+  const setRole = useCallback((newRole: Exclude<UserRole, null>) => {
+    setUser((prev) => prev ? { ...prev, role: newRole } : null);
   }, []);
 
-  const clearError = useCallback(() => {
-    setError(null);
-  }, []);
+  const clearError = useCallback(() => setError(null), []);
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        isAuthenticated,
-        isPiBrowser,
-        isLoading,
-        error,
-        login,
-        logout,
-        setRole,
-        clearError,
-      }}
-    >
+    <AuthContext.Provider value={{ user, isAuthenticated, isPiBrowser, isLoading, error, role, login, logout, setRole, clearError }}>
       {children}
     </AuthContext.Provider>
   );
@@ -151,16 +110,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 export function useAuth(): AuthContextType {
   const ctx = useContext(AuthContext);
-  if (!ctx) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
+  if (!ctx) throw new Error('useAuth must be used within AuthProvider');
   return ctx;
-}
-
-export function hasSeenOnboarding(): boolean {
-  return localStorage.getItem(ONBOARDING_KEY) === 'true';
-}
-
-export function markOnboardingComplete(): void {
-  localStorage.setItem(ONBOARDING_KEY, 'true');
 }
