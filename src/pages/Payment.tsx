@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Lock, X, Check } from 'lucide-react';
+import { Lock, X, Check, AlertTriangle } from 'lucide-react';
+import { createPayment } from '@/lib/pi-sdk';
+import { approvePayment, completePayment } from '@/lib/payment-service';
 
 // ─── Types ─────────────────────────────────────────────────────
 
@@ -62,14 +64,14 @@ function PiAnimation({ status, step }: { status: PaymentStatus; step: PaymentSte
         transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
         style={{
           borderStyle: step === 3 ? 'solid' : 'dashed',
-          borderColor: step === 3 ? '#27ae60' : 'rgba(44, 62, 80, 0.4)',
+          borderColor: step === 3 ? '#27ae60' : status === 'error' ? '#e74c3c' : 'rgba(44, 62, 80, 0.4)',
         }}
       />
 
       {/* Pi symbol */}
       <motion.span
         className="text-6xl font-bold select-none"
-        style={{ color: step === 3 ? '#27ae60' : '#2c3e50' }}
+        style={{ color: step === 3 ? '#27ae60' : status === 'error' ? '#e74c3c' : '#2c3e50' }}
         animate={
           status === 'processing'
             ? { scale: [1, 1.05, 1] }
@@ -87,13 +89,15 @@ function PiAnimation({ status, step }: { status: PaymentStatus; step: PaymentSte
           >
             <Check size={48} strokeWidth={3} />
           </motion.span>
+        ) : status === 'error' ? (
+          <AlertTriangle size={48} strokeWidth={3} />
         ) : (
           'π'
         )}
       </motion.span>
 
       {/* Green dot */}
-      {step >= 1 && (
+      {step >= 1 && status !== 'error' && (
         <motion.div
           className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald"
           initial={{ scale: 0 }}
@@ -188,7 +192,8 @@ export default function Payment() {
   const [currentStep, setCurrentStep] = useState<PaymentStep>(0);
   const [status, setStatus] = useState<PaymentStatus>('processing');
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const paymentInitiatedRef = useRef(false);
 
   // ── Load payment data ──
   useEffect(() => {
@@ -208,56 +213,156 @@ export default function Payment() {
     }
   }, [navigate]);
 
-  // ── Simulate payment flow ──
+  // ── Initiate REAL Pi payment ──
   useEffect(() => {
-    if (!paymentData) return;
+    if (!paymentData || paymentInitiatedRef.current) return;
 
-    // Step 1: Initiating (already active)
-    const t1 = setTimeout(() => {
-      setCurrentStep(1);
+    paymentInitiatedRef.current = true;
 
-      // Step 2: Approval
-      const t2 = setTimeout(() => {
-        setCurrentStep(2);
+    const { amount, memo, metadata } = paymentData;
 
-        // Step 3: Blockchain confirmation
-        const t3 = setTimeout(() => {
-          setCurrentStep(3);
-          setStatus('completed');
+    createPayment(
+      amount,
+      memo,
+      metadata,
+      {
+        onReadyForServerApproval: async (paymentId: string) => {
+          console.log('[Payment] Ready for server approval:', paymentId);
+          setCurrentStep(1);
+          try {
+            await approvePayment(paymentId);
+            console.log('[Payment] Server approval successful');
+          } catch (err) {
+            console.error('[Payment] Server approval failed:', err);
+            setStatus('error');
+            setErrorMessage(err instanceof Error ? err.message : 'Payment approval failed');
+          }
+        },
+        onReadyForServerCompletion: async (paymentId: string, txid: string) => {
+          console.log('[Payment] Ready for server completion:', paymentId, 'txid:', txid);
+          setCurrentStep(2);
+          try {
+            await completePayment(paymentId, txid);
+            console.log('[Payment] Server completion successful');
+            setCurrentStep(3);
+            setStatus('completed');
 
-          // Auto-navigate to Ride Status
-          const t4 = setTimeout(() => {
             // Store ride data for status screen
             const rideData = {
-              rideId: paymentData.metadata.rideId as string,
-              paymentId: `payment_${Date.now()}`,
-              amount: paymentData.amount,
+              rideId: metadata.rideId as string,
+              paymentId,
+              txid,
+              amount,
             };
             sessionStorage.setItem('taxipro_ride_data', JSON.stringify(rideData));
-            navigate('/status');
-          }, 1500);
 
-          timerRef.current = t4;
-        }, 2500);
-
-        timerRef.current = t3;
-      }, 2500);
-
-      timerRef.current = t2;
-    }, 2000);
-
-    timerRef.current = t1;
-
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
+            // Auto-navigate to Ride Status after showing completion
+            setTimeout(() => {
+              navigate('/status');
+            }, 1500);
+          } catch (err) {
+            console.error('[Payment] Server completion failed:', err);
+            setStatus('error');
+            setErrorMessage(err instanceof Error ? err.message : 'Payment completion failed');
+          }
+        },
+        onCancel: (paymentId: string) => {
+          console.log('[Payment] Payment cancelled by user:', paymentId);
+          navigate('/preview');
+        },
+        onError: (paymentId: string, error: Error) => {
+          console.error('[Payment] Payment error:', paymentId, error);
+          setStatus('error');
+          setErrorMessage(error.message || 'Payment failed. Please try again.');
+        },
+      }
+    ).catch((err) => {
+      console.error('[Payment] Failed to initiate payment:', err);
+      setStatus('error');
+      setErrorMessage(
+        err instanceof Error
+          ? err.message
+          : 'Failed to start payment. Make sure you are in the Pi Browser.'
+      );
+    });
   }, [paymentData, navigate]);
 
   // ── Handle cancel ──
   const handleCancel = useCallback(() => {
-    if (timerRef.current) clearTimeout(timerRef.current);
     navigate('/preview');
   }, [navigate]);
+
+  // ── Handle retry ──
+  const handleRetry = useCallback(() => {
+    paymentInitiatedRef.current = false;
+    setStatus('processing');
+    setErrorMessage(null);
+    setCurrentStep(0);
+    // Re-trigger the payment effect
+    const { amount, memo, metadata } = paymentData!;
+    createPayment(
+      amount,
+      memo,
+      metadata,
+      {
+        onReadyForServerApproval: async (paymentId: string) => {
+          console.log('[Payment] Ready for server approval:', paymentId);
+          setCurrentStep(1);
+          try {
+            await approvePayment(paymentId);
+            console.log('[Payment] Server approval successful');
+          } catch (err) {
+            console.error('[Payment] Server approval failed:', err);
+            setStatus('error');
+            setErrorMessage(err instanceof Error ? err.message : 'Payment approval failed');
+          }
+        },
+        onReadyForServerCompletion: async (paymentId: string, txid: string) => {
+          console.log('[Payment] Ready for server completion:', paymentId, 'txid:', txid);
+          setCurrentStep(2);
+          try {
+            await completePayment(paymentId, txid);
+            console.log('[Payment] Server completion successful');
+            setCurrentStep(3);
+            setStatus('completed');
+
+            const rideData = {
+              rideId: metadata.rideId as string,
+              paymentId,
+              txid,
+              amount,
+            };
+            sessionStorage.setItem('taxipro_ride_data', JSON.stringify(rideData));
+
+            setTimeout(() => {
+              navigate('/status');
+            }, 1500);
+          } catch (err) {
+            console.error('[Payment] Server completion failed:', err);
+            setStatus('error');
+            setErrorMessage(err instanceof Error ? err.message : 'Payment completion failed');
+          }
+        },
+        onCancel: (paymentId: string) => {
+          console.log('[Payment] Payment cancelled by user:', paymentId);
+          navigate('/preview');
+        },
+        onError: (paymentId: string, error: Error) => {
+          console.error('[Payment] Payment error:', paymentId, error);
+          setStatus('error');
+          setErrorMessage(error.message || 'Payment failed. Please try again.');
+        },
+      }
+    ).catch((err) => {
+      console.error('[Payment] Failed to initiate payment:', err);
+      setStatus('error');
+      setErrorMessage(
+        err instanceof Error
+          ? err.message
+          : 'Failed to start payment. Make sure you are in the Pi Browser.'
+      );
+    });
+  }, [paymentData, navigate]);
 
   // ── Close / cancel button ──
   const isCancellable = currentStep <= 1 && status === 'processing';
@@ -271,7 +376,7 @@ export default function Payment() {
       {/* ── Header ── */}
       <div className="shrink-0 flex items-center justify-center h-14 px-4 relative">
         <h1 className="text-lg font-semibold text-text-primary">
-          Processing Payment
+          {status === 'error' ? 'Payment Failed' : 'Processing Payment'}
         </h1>
         {isCancellable && (
           <motion.button
@@ -299,30 +404,32 @@ export default function Payment() {
         <div className="mt-8 text-center min-h-[60px]">
           <AnimatePresence mode="wait">
             <motion.h2
-              key={currentStep}
+              key={currentStep + (status === 'error' ? '-error' : '')}
               className="text-xl font-semibold text-text-primary"
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.15 }}
             >
-              {STEP_CONFIG[currentStep].title}
+              {status === 'error' ? 'Payment Error' : STEP_CONFIG[currentStep].title}
             </motion.h2>
           </AnimatePresence>
 
           <AnimatePresence mode="wait">
             <motion.p
-              key={`desc-${currentStep}`}
+              key={`desc-${currentStep}-${status}`}
               className="text-base text-text-secondary mt-2 max-w-[300px] mx-auto"
               initial={{ opacity: 0, y: 5 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -5 }}
               transition={{ duration: 0.15 }}
             >
-              {STEP_CONFIG[currentStep].description.replace(
-                '{amount}',
-                paymentData.amount.toFixed(2)
-              )}
+              {status === 'error'
+                ? errorMessage || 'Something went wrong. Please try again.'
+                : STEP_CONFIG[currentStep].description.replace(
+                    '{amount}',
+                    paymentData.amount.toFixed(2)
+                  )}
             </motion.p>
           </AnimatePresence>
         </div>
@@ -337,9 +444,32 @@ export default function Payment() {
           <ProgressStepper currentStep={currentStep} status={status} />
         </motion.div>
 
-        {/* Escrow Banner (steps 2-4) */}
+        {/* Error: Retry / Go Back buttons */}
+        {status === 'error' && (
+          <motion.div
+            className="mt-8 w-full max-w-[280px] flex flex-col gap-3"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.2 }}
+          >
+            <button
+              onClick={handleRetry}
+              className="w-full h-[52px] rounded-taxipro-md bg-navy text-white font-medium text-base active:bg-navy/90 transition-colors"
+            >
+              Try Again
+            </button>
+            <button
+              onClick={handleCancel}
+              className="w-full h-[52px] rounded-taxipro-md border-2 border-midgray text-text-secondary font-medium text-base active:bg-gray-50 transition-colors"
+            >
+              Go Back
+            </button>
+          </motion.div>
+        )}
+
+        {/* Escrow Banner (steps 1-3, non-error) */}
         <AnimatePresence>
-          {currentStep >= 1 && (
+          {currentStep >= 1 && status !== 'error' && (
             <motion.div
               className="mt-8 w-full mx-6 bg-[#f8f9ff] border border-navy/10 rounded-taxipro-lg p-4"
               initial={{ opacity: 0, y: 10 }}
