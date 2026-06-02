@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, MapPin, Clock, ChevronDown, ChevronUp, Circle } from 'lucide-react';
 import { useApp } from '@/contexts/AppContext';
+import { t, getLang } from '@/lib/i18n';
 
 const STATUS_COLORS: Record<string, string> = {
   completed: '#00C853',
@@ -12,14 +13,6 @@ const STATUS_COLORS: Record<string, string> = {
   searching: '#A0A0A0',
 };
 
-const STATUS_LABELS: Record<string, string> = {
-  completed: 'Completed',
-  cancelled: 'Cancelled',
-  in_progress: 'In Progress',
-  driver_found: 'Driver Found',
-  searching: 'Searching',
-};
-
 export default function RidesPage() {
   const navigate = useNavigate();
   const { rideHistory } = useApp();
@@ -27,7 +20,7 @@ export default function RidesPage() {
 
   // Group rides by date
   const grouped = rideHistory.reduce<Record<string, typeof rideHistory>>((acc, ride) => {
-    const date = new Date(ride.createdAt).toLocaleDateString('en-US', {
+    const date = new Date(ride.createdAt).toLocaleDateString(getLang() === 'ru' ? 'ru-RU' : 'en-US', {
       weekday: 'short',
       month: 'short',
       day: 'numeric',
@@ -48,18 +41,29 @@ export default function RidesPage() {
   const displayRides = hasRides ? Object.entries(grouped) : [];
   const displayMock = !hasRides ? mockRides : [];
 
+  const getStatusLabel = (status: string): string => {
+    const labels: Record<string, string> = {
+      completed: t('completed'),
+      cancelled: t('cancelled'),
+      in_progress: t('inProgress'),
+      driver_found: t('driverFound'),
+      searching: t('searching'),
+    };
+    return labels[status] || status;
+  };
+
   return (
     <div className="absolute inset-0 z-modal-content bg-bg-body flex flex-col">
       {/* Header */}
       <div className="flex items-center gap-3 px-4 pt-5 pb-3 bg-bg-elevated/50 backdrop-blur-xl border-b border-white/5">
-        <motion.button
+        <button
           onClick={() => navigate('/')}
           className="w-10 h-10 flex items-center justify-center rounded-full bg-bg-surface active:bg-bg-elevated"
-          whileTap={{ scale: 0.9 }}
+          
         >
           <ArrowLeft size={20} color="#FFFFFF" />
-        </motion.button>
-        <h1 className="text-text-primary text-lg font-semibold">Ride History</h1>
+        </button>
+        <h1 className="text-text-primary text-lg font-semibold">{t('rideHistory')}</h1>
       </div>
 
       {/* Content */}
@@ -70,7 +74,7 @@ export default function RidesPage() {
               <h3 className="text-text-tertiary text-xs font-semibold uppercase tracking-wider mb-3">{date}</h3>
               <div className="space-y-2">
                 {rides.map((ride) => (
-                  <RideCard key={ride.id} ride={ride} isExpanded={expandedId === ride.id} onToggle={() => setExpandedId(expandedId === ride.id ? null : ride.id)} />
+                  <RideCard key={ride.id} ride={ride} isExpanded={expandedId === ride.id} onToggle={() => setExpandedId(expandedId === ride.id ? null : ride.id)} statusLabel={getStatusLabel(ride.status)} />
                 ))}
               </div>
             </div>
@@ -79,11 +83,11 @@ export default function RidesPage() {
           <div className="space-y-6">
             <div>
               <h3 className="text-text-tertiary text-xs font-semibold uppercase tracking-wider mb-3">
-                {new Date(Date.now() - 86400000).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                {new Date(Date.now() - 86400000).toLocaleDateString(getLang() === 'ru' ? 'ru-RU' : 'en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
               </h3>
               <div className="space-y-2">
                 {displayMock.map((ride) => (
-                  <RideCard key={ride.id} ride={ride as unknown as typeof rideHistory[0]} isExpanded={expandedId === ride.id} onToggle={() => setExpandedId(expandedId === ride.id ? null : ride.id)} />
+                  <RideCard key={ride.id} ride={ride as unknown as typeof rideHistory[0]} isExpanded={expandedId === ride.id} onToggle={() => setExpandedId(expandedId === ride.id ? null : ride.id)} statusLabel={getStatusLabel(ride.status)} />
                 ))}
               </div>
             </div>
@@ -92,7 +96,7 @@ export default function RidesPage() {
 
         {!hasRides && (
           <div className="text-center py-8">
-            <p className="text-text-tertiary text-sm">No ride history yet. Your completed rides will appear here.</p>
+            <p className="text-text-tertiary text-sm">{t('noRides')}</p>
           </div>
         )}
       </div>
@@ -104,13 +108,14 @@ function RideCard({
   ride,
   isExpanded,
   onToggle,
+  statusLabel,
 }: {
   ride: { id: string; pickup: { name: string }; destination: { name: string }; price: number; status: string; createdAt: string };
   isExpanded: boolean;
   onToggle: () => void;
+  statusLabel: string;
 }) {
   const statusColor = STATUS_COLORS[ride.status] || '#A0A0A0';
-  const statusLabel = STATUS_LABELS[ride.status] || ride.status;
 
   return (
     <motion.div
@@ -146,19 +151,19 @@ function RideCard({
       <AnimatePresence>
         {isExpanded && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
+
+
+
+
             className="overflow-hidden"
           >
             <div className="px-4 pb-4 space-y-2 border-t border-white/5 pt-3">
               <div className="flex justify-between text-xs">
-                <span className="text-text-tertiary">Ride ID</span>
+                <span className="text-text-tertiary">ID</span>
                 <span className="text-text-secondary font-mono">{ride.id}</span>
               </div>
               <div className="flex justify-between text-xs">
-                <span className="text-text-tertiary">Time</span>
+                <span className="text-text-tertiary">{t('eta')}</span>
                 <span className="text-text-secondary flex items-center gap-1">
                   <Clock size={10} />
                   {new Date(ride.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}

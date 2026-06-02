@@ -1,4 +1,4 @@
-import { Navbar } from './Navbar';
+import { BottomNav } from './BottomNav';
 import { useAuth } from '@/contexts/AuthContext';
 import type { ReactNode } from 'react';
 
@@ -20,7 +20,7 @@ export function Layout({ children, showNav = true, className = '' }: LayoutProps
         {children}
       </div>
 
-      {shouldShowNav && <Navbar />}
+      {shouldShowNav && <BottomNav />}
     </div>
   );
 }

@@ -30,7 +30,7 @@ export interface PaymentCallbacks {
   onReadyForServerApproval: (paymentId: string) => void;
   onReadyForServerCompletion: (paymentId: string, txid: string) => void;
   onCancel: (paymentId: string) => void;
-  onError: (paymentId: string, error: Error) => void;
+  onError: (error: Error, payment?: unknown) => void;
 }
 
 export interface PaymentArgs {
@@ -94,16 +94,11 @@ function getPiSDK(): PiSDK {
  * Initialize the Pi SDK
  */
 export function initPiSDK(sandbox = true): void {
-  try {
-    const pi = getPiSDK();
-    pi.init({
-      version: '2.0',
-      sandbox,
-    });
+  if (window.Pi) {
+    window.Pi.init({ version: '2.0', sandbox });
     console.log('[PiSDK] Initialized (sandbox:', sandbox, ')');
-  } catch (error) {
-    console.error('[PiSDK] Failed to initialize:', error);
-    throw error;
+  } else {
+    console.log('[PiSDK] Pi SDK not yet available, will retry on demand');
   }
 }
 
@@ -131,23 +126,27 @@ export async function authenticate(): Promise<AuthResult> {
 
 /**
  * Create a Pi payment
+ * @param paymentData - Payment data object { amount, memo, metadata }
+ * @param callbacks - Payment callbacks
  */
 export async function createPayment(
-  amount: number,
-  memo: string,
-  metadata: Record<string, unknown>,
+  paymentData: PaymentDTO,
   callbacks: PaymentCallbacks
 ): Promise<void> {
-  const pi = getPiSDK();
+  // Try to get Pi SDK with retries (Pi Browser may inject it asynchronously)
+  let attempts = 0;
+  const maxAttempts = 50; // 5 seconds total (100ms * 50)
 
-  const paymentData: PaymentDTO = {
-    amount,
-    memo,
-    metadata,
-    uid: generatePaymentUid(),
-  };
+  while (!window.Pi && attempts < maxAttempts) {
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    attempts++;
+  }
 
-  await pi.createPayment(paymentData, callbacks);
+  if (!window.Pi) {
+    throw new Error('Pi SDK not available after 5s. Make sure you are in Pi Browser.');
+  }
+
+  window.Pi.createPayment(paymentData, callbacks);
 }
 
 /**
@@ -159,10 +158,6 @@ export async function cancelPayment(paymentId: string): Promise<void> {
 }
 
 // ─── Utility ───────────────────────────────────────────────────
-
-function generatePaymentUid(): string {
-  return `taxipro_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
-}
 
 /**
  * Get incomplete payment from localStorage if any

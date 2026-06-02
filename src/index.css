@@ -224,3 +224,19 @@ input[type='range']::-moz-range-thumb {
   from { width: 0%; }
   to { width: 100%; }
 }
+
+/* Mobile button fix */
+button {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+button:active {
+  transform: scale(0.97);
+}
+
+/* Safe area for bottom nav */
+.pb-safe {
+  padding-bottom: max(24px, env(safe-area-inset-bottom, 24px));
+}
+

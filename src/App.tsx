@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router';
 import { AnimatePresence, motion } from 'framer-motion';
+import { initPiSDK } from '@/lib/pi-sdk';
 // Components
 import { BottomNav } from '@/components/BottomNav';
 // Pages
@@ -13,6 +15,8 @@ import RideCompletePage from '@/pages/RideCompletePage';
 import RidesPage from '@/pages/RidesPage';
 import ProfilePage from '@/pages/ProfilePage';
 import DriverModePage from '@/pages/DriverModePage';
+import AdminPage from '@/pages/AdminPage';
+import ChatPage from '@/pages/ChatPage';
 
 function PageTransition({ children }: { children: React.ReactNode }) {
   const location = useLocation();
@@ -24,7 +28,9 @@ function PageTransition({ children }: { children: React.ReactNode }) {
     location.pathname.startsWith('/complete') ||
     location.pathname.startsWith('/rides') ||
     location.pathname.startsWith('/profile') ||
-    location.pathname.startsWith('/driver');
+    location.pathname.startsWith('/driver') ||
+    location.pathname.startsWith('/admin') ||
+    location.pathname.startsWith('/chat');
 
   if (isOverlay) {
     return (
@@ -58,6 +64,10 @@ function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   const location = useLocation();
 
+  useEffect(() => {
+    try { initPiSDK(false); } catch { /* Pi SDK not yet available */ }
+  }, []);
+
   return (
     <Layout>
       <AnimatePresence mode="wait">
@@ -72,6 +82,8 @@ export default function App() {
           <Route path="/rides" element={<PageTransition><RidesPage /></PageTransition>} />
           <Route path="/profile" element={<PageTransition><ProfilePage /></PageTransition>} />
           <Route path="/driver" element={<PageTransition><DriverModePage /></PageTransition>} />
+          <Route path="/admin" element={<PageTransition><AdminPage /></PageTransition>} />
+          <Route path="/chat" element={<PageTransition><ChatPage /></PageTransition>} />
         </Routes>
       </AnimatePresence>
     </Layout>

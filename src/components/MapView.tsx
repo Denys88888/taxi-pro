@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react';
-import { MapContainer, TileLayer, Marker, Polyline, useMap, CircleMarker } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Polyline, useMap, CircleMarker, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import type { LatLngExpression } from 'leaflet';
@@ -45,6 +45,17 @@ const driverIcon = L.divIcon({
   popupAnchor: [0, -16],
 });
 
+// ─── Map Click Handler ─────────────────────────────────────────
+
+function MapClickHandler({ onMapClick }: { onMapClick?: (lat: number, lng: number) => void }) {
+  useMapEvents({
+    click: (e) => {
+      onMapClick?.(e.latlng.lat, e.latlng.lng);
+    },
+  });
+  return null;
+}
+
 // ─── Map Recenter Component ───────────────────────────────────
 
 function MapController({ center, shouldCenter }: { center: LatLngExpression; shouldCenter: boolean }) {
@@ -67,6 +78,7 @@ interface MapViewProps {
   showRoute?: boolean;
   routeCoords?: [number, number][];
   driverLocation?: { lat: number; lng: number };
+  onMapClick?: (lat: number, lng: number) => void;
   // eslint-disable-next-line react/no-unused-prop-types
   showRecenterButton?: boolean; // available for future use
 }
@@ -75,6 +87,7 @@ export function MapView({
   showRoute = false,
   routeCoords = [],
   driverLocation,
+  onMapClick,
 }: MapViewProps) {
   const { pickup, destination, currentRide } = useApp();
 
@@ -98,11 +111,12 @@ export function MapView({
         style={{ width: '100%', height: '100%' }}
       >
         <TileLayer
-          attribution='&copy; <a href="https://carto.com/">CARTO</a>'
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          attribution='&copy; <a href="https://openstreetmap.org/">OSM</a>'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
         <MapController center={center} shouldCenter={!hasRoute} />
+        <MapClickHandler onMapClick={onMapClick} />
 
         {/* Pickup marker */}
         <Marker position={[pickup.lat, pickup.lng]} icon={pickupIcon} />

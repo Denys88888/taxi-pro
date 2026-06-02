@@ -12,22 +12,25 @@ import {
   ChevronRight,
   ToggleLeft,
   ToggleRight,
+  Globe,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useApp } from '@/contexts/AppContext';
 import { useState } from 'react';
+import { t, getLang, setLang, type Lang } from '@/lib/i18n';
 
 export default function ProfilePage() {
   const navigate = useNavigate();
-  const { user, logout, setRole } = useAuth();
+  const { user, isAuthenticated, login, logout, setRole, isLoading } = useAuth();
   const { driverMode, setDriverMode } = useApp();
   const [notifications, setNotifications] = useState(true);
+  const [lang, setLangState] = useState<Lang>(getLang());
 
   const menuItems = [
-    { icon: Wallet, label: 'Wallet', subtitle: 'Pi Network Wallet', action: () => {} },
-    { icon: Bell, label: 'Notifications', subtitle: notifications ? 'Enabled' : 'Disabled', action: () => setNotifications(!notifications), toggle: notifications },
-    { icon: Shield, label: 'Security', subtitle: '2FA, PIN', action: () => {} },
-    { icon: HelpCircle, label: 'Help & Support', subtitle: 'FAQ, Contact', action: () => {} },
+    { icon: Wallet, label: t('wallet'), subtitle: 'Pi Network Wallet', action: () => {} },
+    { icon: Bell, label: t('notifications'), subtitle: notifications ? t('enabled') : t('disabled'), action: () => setNotifications(!notifications), toggle: notifications },
+    { icon: Shield, label: t('security'), subtitle: '2FA, PIN', action: () => {} },
+    { icon: HelpCircle, label: t('helpSupport'), subtitle: t('faqContact'), action: () => {} },
   ];
 
   const handleRoleToggle = () => {
@@ -37,18 +40,25 @@ export default function ProfilePage() {
     if (newMode) navigate('/driver');
   };
 
+  const toggleLang = () => {
+    const newLang = lang === 'ru' ? 'en' : 'ru';
+    setLang(newLang);
+    setLangState(newLang);
+    window.location.reload();
+  };
+
   return (
     <div className="absolute inset-0 z-modal-content bg-bg-body flex flex-col">
       {/* Header */}
       <div className="flex items-center gap-3 px-4 pt-5 pb-3 bg-bg-elevated/50 backdrop-blur-xl border-b border-white/5">
-        <motion.button
+        <button
           onClick={() => navigate('/')}
           className="w-10 h-10 flex items-center justify-center rounded-full bg-bg-surface active:bg-bg-elevated"
-          whileTap={{ scale: 0.9 }}
+          
         >
           <ArrowLeft size={20} color="#FFFFFF" />
-        </motion.button>
-        <h1 className="text-text-primary text-lg font-semibold">Profile</h1>
+        </button>
+        <h1 className="text-text-primary text-lg font-semibold">{t('profile')}</h1>
       </div>
 
       {/* Content */}
@@ -56,22 +66,33 @@ export default function ProfilePage() {
         {/* User card */}
         <motion.div
           className="mx-4 mt-4 bg-bg-elevated rounded-piride-xl p-5 border border-white/5 shadow-card"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
         >
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/30 to-piPurple/30 flex items-center justify-center border-2 border-primary/20">
-              <User size={28} color="#00C853" />
+              {isAuthenticated ? (
+                <span className="text-2xl font-bold text-primary">{user?.username?.[0]?.toUpperCase() || 'U'}</span>
+              ) : (
+                <User size={28} color="#00C853" />
+              )}
             </div>
             <div className="flex-1">
-              <h2 className="text-text-primary font-semibold text-lg">{user?.username || 'Guest User'}</h2>
-              <p className="text-text-tertiary text-xs font-mono mt-0.5 truncate">
-                {user?.uid ? `${user.uid.slice(0, 12)}...` : 'Not connected'}
-              </p>
+              {isAuthenticated ? (
+                <>
+                  <h2 className="text-text-primary font-semibold text-lg">{user?.username}</h2>
+                  <p className="text-text-tertiary text-xs font-mono mt-0.5 truncate">
+                    {user?.uid ? `${user.uid.slice(0, 12)}...` : ''}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h2 className="text-text-primary font-semibold text-lg">{t('guestUser')}</h2>
+                  <p className="text-text-tertiary text-xs mt-0.5">{t('notConnected')}</p>
+                </>
+              )}
               {user?.accessToken && user.accessToken !== 'demo_token' && (
                 <div className="flex items-center gap-1 mt-1">
                   <div className="w-2 h-2 rounded-full bg-primary" />
-                  <span className="text-primary text-[10px] font-medium">Pi Authenticated</span>
+                  <span className="text-primary text-[10px] font-medium">{t('piAuthenticated')}</span>
                 </div>
               )}
             </div>
@@ -81,17 +102,17 @@ export default function ProfilePage() {
         {/* Wallet */}
         <motion.div
           className="mx-4 mt-4 bg-gradient-to-r from-piPurple/20 to-primary/20 rounded-piride-xl p-5 border border-piPurple/20"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
+
+
+
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-text-tertiary text-xs">Wallet Address</p>
+              <p className="text-text-tertiary text-xs">{t('wallet')}</p>
               <p className="text-text-primary font-mono text-sm mt-1">GAB63...9X2M</p>
             </div>
             <div className="text-right">
-              <p className="text-text-tertiary text-xs">Balance</p>
+              <p className="text-text-tertiary text-xs">{t('total')}</p>
               <p className="text-primary font-bold text-xl font-mono mt-1">124.50</p>
             </div>
           </div>
@@ -100,9 +121,9 @@ export default function ProfilePage() {
         {/* Driver mode toggle */}
         <motion.div
           className="mx-4 mt-4 bg-bg-elevated rounded-piride-xl p-4 border border-white/5"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15 }}
+
+
+
         >
           <button
             className="w-full flex items-center gap-3 text-left"
@@ -113,7 +134,7 @@ export default function ProfilePage() {
             </div>
             <div className="flex-1">
               <p className="text-text-primary text-sm font-medium">Driver Mode</p>
-              <p className="text-text-tertiary text-xs">{driverMode ? 'Online' : 'Offline'}</p>
+              <p className="text-text-tertiary text-xs">{driverMode ? t('online') : t('offline')}</p>
             </div>
             {driverMode ? (
               <ToggleRight size={28} color="#00C853" />
@@ -123,21 +144,43 @@ export default function ProfilePage() {
           </button>
         </motion.div>
 
+        {/* Language toggle */}
+        <motion.div
+          className="mx-4 mt-4 bg-bg-elevated rounded-piride-xl p-4 border border-white/5"
+
+
+
+        >
+          <button
+            className="w-full flex items-center gap-3 text-left"
+            onClick={toggleLang}
+          >
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <Globe size={18} color="#00C853" />
+            </div>
+            <div className="flex-1">
+              <p className="text-text-primary text-sm font-medium">{t('language')}</p>
+              <p className="text-text-tertiary text-xs">{lang === 'ru' ? 'Русский' : 'English'}</p>
+            </div>
+            <span className="text-primary text-sm font-medium">{lang === 'ru' ? 'RU' : 'EN'}</span>
+          </button>
+        </motion.div>
+
         {/* Menu items */}
         <div className="mx-4 mt-4 bg-bg-elevated rounded-piride-xl border border-white/5 overflow-hidden">
           {menuItems.map((item, idx) => {
             const Icon = item.icon;
             return (
-              <motion.button
+              <button
                 key={item.label}
                 className={`w-full flex items-center gap-3 p-4 text-left ${
                   idx < menuItems.length - 1 ? 'border-b border-white/5' : ''
                 }`}
                 onClick={item.action}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2 + idx * 0.05 }}
-                whileTap={{ scale: 0.98 }}
+
+
+
+                style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
               >
                 <div className="w-10 h-10 rounded-full bg-bg-surface flex items-center justify-center">
                   <Icon size={18} color="#A0A0A0" />
@@ -151,25 +194,42 @@ export default function ProfilePage() {
                 ) : (
                   <ChevronRight size={16} color="#666666" />
                 )}
-              </motion.button>
+              </button>
             );
           })}
         </div>
 
-        {/* Logout */}
-        <motion.button
-          className="w-full flex items-center gap-3 p-4 mx-4 mt-4 mb-8 text-left"
-          onClick={logout}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          whileTap={{ scale: 0.98 }}
-        >
-          <div className="w-10 h-10 rounded-full bg-error/10 flex items-center justify-center">
-            <LogOut size={18} color="#FF5252" />
-          </div>
-          <span className="text-error text-sm font-medium">Logout</span>
-        </motion.button>
+        {/* Login / Logout */}
+        {isAuthenticated ? (
+          <button
+            className="w-full flex items-center gap-3 p-4 mx-4 mt-4 mb-8 text-left"
+            onClick={logout}
+            style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
+          >
+            <div className="w-10 h-10 rounded-full bg-error/10 flex items-center justify-center">
+              <LogOut size={18} color="#FF5252" />
+            </div>
+            <span className="text-error text-sm font-medium">{t('logout')}</span>
+          </button>
+        ) : (
+          <button
+            className="w-full flex items-center gap-3 p-4 mx-4 mt-4 mb-8 bg-primary rounded-piride-xl text-left active:scale-[0.97] transition-transform"
+            onClick={login}
+            disabled={isLoading}
+            style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
+          >
+            <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+              {isLoading ? (
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <User size={18} color="#FFFFFF" />
+              )}
+            </div>
+            <span className="text-white text-sm font-semibold">
+              {isLoading ? t('connecting') : t('loginWithPi')}
+            </span>
+          </button>
+        )}
       </div>
     </div>
   );

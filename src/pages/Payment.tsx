@@ -50,8 +50,6 @@ const STEP_CONFIG = [
   },
 ];
 
-const easeOut = [0.25, 0.46, 0.45, 0.94] as [number, number, number, number];
-
 // ─── Animated Pi Symbol ────────────────────────────────────────
 
 function PiAnimation({ status, step }: { status: PaymentStatus; step: PaymentStep }) {
@@ -60,8 +58,8 @@ function PiAnimation({ status, step }: { status: PaymentStatus; step: PaymentSte
       {/* Rotating ring */}
       <motion.div
         className="absolute inset-0 rounded-full border-2 border-navy/40"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+
+
         style={{
           borderStyle: step === 3 ? 'solid' : 'dashed',
           borderColor: step === 3 ? '#27ae60' : status === 'error' ? '#e74c3c' : 'rgba(44, 62, 80, 0.4)',
@@ -79,13 +77,13 @@ function PiAnimation({ status, step }: { status: PaymentStatus; step: PaymentSte
               ? { scale: [1, 1.15, 1] }
               : {}
         }
-        transition={{ duration: 1.5, repeat: status === 'processing' ? Infinity : 0 }}
+
       >
         {step === 3 ? (
           <motion.span
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+
+
+
           >
             <Check size={48} strokeWidth={3} />
           </motion.span>
@@ -100,9 +98,9 @@ function PiAnimation({ status, step }: { status: PaymentStatus; step: PaymentSte
       {step >= 1 && status !== 'error' && (
         <motion.div
           className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald"
-          initial={{ scale: 0 }}
-          animate={{ scale: [1, 1.2, 1] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
+
+
+
         />
       )}
     </div>
@@ -128,11 +126,11 @@ function ProgressStepper({
         {/* Active connecting lines */}
         <motion.div
           className="absolute top-4 left-4 h-0.5 bg-navy -z-10"
-          initial={{ width: 0 }}
+
           animate={{
             width: `${(currentStep / 3) * 100}%`,
           }}
-          transition={{ duration: 0.4, ease: easeOut }}
+
         />
 
         {STEP_CONFIG.map((_, index) => {
@@ -155,7 +153,7 @@ function ProgressStepper({
                     ? { scale: [1, 1.15, 1] }
                     : {}
                 }
-                transition={{ duration: 1.5, repeat: Infinity }}
+
               >
                 {isCompleted ? (
                   <Check size={16} strokeWidth={3} />
@@ -222,9 +220,7 @@ export default function Payment() {
     const { amount, memo, metadata } = paymentData;
 
     createPayment(
-      amount,
-      memo,
-      metadata,
+      { amount, memo, metadata },
       {
         onReadyForServerApproval: async (paymentId: string) => {
           console.log('[Payment] Ready for server approval:', paymentId);
@@ -270,8 +266,8 @@ export default function Payment() {
           console.log('[Payment] Payment cancelled by user:', paymentId);
           navigate('/preview');
         },
-        onError: (paymentId: string, error: Error) => {
-          console.error('[Payment] Payment error:', paymentId, error);
+        onError: (error: Error, _payment?: unknown) => {
+          console.error('[Payment] Payment error:', error, _payment);
           setStatus('error');
           setErrorMessage(error.message || 'Payment failed. Please try again.');
         },
@@ -301,9 +297,7 @@ export default function Payment() {
     // Re-trigger the payment effect
     const { amount, memo, metadata } = paymentData!;
     createPayment(
-      amount,
-      memo,
-      metadata,
+      { amount, memo, metadata },
       {
         onReadyForServerApproval: async (paymentId: string) => {
           console.log('[Payment] Ready for server approval:', paymentId);
@@ -347,8 +341,8 @@ export default function Payment() {
           console.log('[Payment] Payment cancelled by user:', paymentId);
           navigate('/preview');
         },
-        onError: (paymentId: string, error: Error) => {
-          console.error('[Payment] Payment error:', paymentId, error);
+        onError: (error: Error, _payment?: unknown) => {
+          console.error('[Payment] Payment error:', error, _payment);
           setStatus('error');
           setErrorMessage(error.message || 'Payment failed. Please try again.');
         },
@@ -379,13 +373,13 @@ export default function Payment() {
           {status === 'error' ? 'Payment Failed' : 'Processing Payment'}
         </h1>
         {isCancellable && (
-          <motion.button
-            whileTap={{ scale: 0.9 }}
+          <button
+            
             className="absolute right-4"
             onClick={() => setShowCancelConfirm(true)}
           >
             <X size={24} className="text-text-secondary" />
-          </motion.button>
+          </button>
         )}
       </div>
 
@@ -393,9 +387,9 @@ export default function Payment() {
       <div className="flex-1 flex flex-col items-center justify-center px-6 -mt-20">
         {/* Pi Animation */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.3 }}
+
+
+
         >
           <PiAnimation status={status} step={currentStep} />
         </motion.div>
@@ -406,10 +400,10 @@ export default function Payment() {
             <motion.h2
               key={currentStep + (status === 'error' ? '-error' : '')}
               className="text-xl font-semibold text-text-primary"
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.15 }}
+
+
+
+
             >
               {status === 'error' ? 'Payment Error' : STEP_CONFIG[currentStep].title}
             </motion.h2>
@@ -419,10 +413,10 @@ export default function Payment() {
             <motion.p
               key={`desc-${currentStep}-${status}`}
               className="text-base text-text-secondary mt-2 max-w-[300px] mx-auto"
-              initial={{ opacity: 0, y: 5 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -5 }}
-              transition={{ duration: 0.15 }}
+
+
+
+
             >
               {status === 'error'
                 ? errorMessage || 'Something went wrong. Please try again.'
@@ -437,9 +431,9 @@ export default function Payment() {
         {/* Progress Stepper */}
         <motion.div
           className="mt-8 w-full"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
+
+
+
         >
           <ProgressStepper currentStep={currentStep} status={status} />
         </motion.div>
@@ -448,9 +442,9 @@ export default function Payment() {
         {status === 'error' && (
           <motion.div
             className="mt-8 w-full max-w-[280px] flex flex-col gap-3"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.2 }}
+
+
+
           >
             <button
               onClick={handleRetry}
@@ -472,10 +466,10 @@ export default function Payment() {
           {currentStep >= 1 && status !== 'error' && (
             <motion.div
               className="mt-8 w-full mx-6 bg-[#f8f9ff] border border-navy/10 rounded-taxipro-lg p-4"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
+
+
+
+
             >
               <div className="flex items-center gap-2 mb-2">
                 <Lock size={16} className="text-navy shrink-0" />
@@ -525,9 +519,9 @@ export default function Payment() {
       {isCancellable && (
         <motion.div
           className="shrink-0 p-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
+
+
+
         >
           <button
             onClick={() => setShowCancelConfirm(true)}
@@ -543,16 +537,16 @@ export default function Payment() {
         {showCancelConfirm && (
           <motion.div
             className="fixed inset-0 z-modal-overlay bg-black/50 flex items-center justify-center px-6"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+
+
+
             onClick={() => setShowCancelConfirm(false)}
           >
             <motion.div
               className="bg-white rounded-taxipro-xl p-6 w-full max-w-sm"
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
+
+
+
               onClick={(e) => e.stopPropagation()}
             >
               <h3 className="text-lg font-semibold text-text-primary mb-2">

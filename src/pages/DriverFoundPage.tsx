@@ -5,6 +5,7 @@ import { Phone, MessageCircle, X, Star, Shield, Car, ChevronRight, User } from '
 import { MapView } from '@/components/MapView';
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { useApp } from '@/contexts/AppContext';
+import { t } from '@/lib/i18n';
 
 export default function DriverFoundPage() {
   const navigate = useNavigate();
@@ -40,8 +41,8 @@ export default function DriverFoundPage() {
     return (
       <div className="absolute inset-0 z-modal-content bg-bg-body flex flex-col items-center justify-center">
         <Car size={48} color="#333333" />
-        <p className="text-text-secondary mt-4">No active ride</p>
-        <button onClick={() => navigate('/')} className="mt-4 text-primary text-sm">Go Home</button>
+        <p className="text-text-secondary mt-4">{t('noActiveRide')}</p>
+        <button onClick={() => navigate('/')} className="mt-4 text-primary text-sm">{t('goHome')}</button>
       </div>
     );
   }
@@ -58,39 +59,39 @@ export default function DriverFoundPage() {
         <div className="mx-4 mt-4 flex items-center justify-between">
           <motion.div
             className="bg-bg-elevated/90 backdrop-blur-xl px-4 py-2 rounded-full border border-primary/30 shadow-glow"
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
+
+
           >
-            <span className="text-primary text-sm font-semibold">Driver Assigned</span>
+            <span className="text-primary text-sm font-semibold">{t('driverAssigned')}</span>
           </motion.div>
-          <motion.button
+          <button
             onClick={handleCancel}
             className="w-10 h-10 flex items-center justify-center rounded-full bg-bg-elevated/90 backdrop-blur-xl border border-white/10"
-            whileTap={{ scale: 0.9 }}
+            
           >
             <X size={18} color={cancelConfirm ? '#FF5252' : '#FFFFFF'} />
-          </motion.button>
+          </button>
         </div>
       </div>
 
       {/* ETA banner */}
       <motion.div
         className="absolute top-20 left-0 right-0 z-floating flex justify-center"
-        initial={{ y: -10, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.2 }}
+
+
+
       >
         <div className="bg-primary/90 backdrop-blur-xl px-5 py-2 rounded-full shadow-glow">
-          <span className="text-white font-bold text-sm">{eta > 0 ? `${eta} min` : 'Arrived'}</span>
+          <span className="text-white font-bold text-sm">{eta > 0 ? `${eta} ${t('eta')}` : t('arrived')}</span>
         </div>
       </motion.div>
 
       {/* Bottom sheet - Driver Card */}
       <motion.div
         className="absolute bottom-0 left-0 right-0 bg-bg-elevated rounded-t-piride-xl z-bottom-sheet shadow-sheet border-t border-white/5 max-w-[430px] mx-auto"
-        initial={{ y: '100%' }}
-        animate={{ y: 0 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 30, delay: 0.3 }}
+
+
+
       >
         <div className="flex justify-center pt-3 pb-1">
           <div className="w-10 h-1 rounded-full bg-white/20" />
@@ -100,10 +101,10 @@ export default function DriverFoundPage() {
           {cancelConfirm && (
             <motion.div
               className="bg-error/10 border border-error/30 rounded-piride-md p-3 text-center"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
+
+
             >
-              <p className="text-error text-sm font-medium">Tap cancel again to confirm</p>
+              <p className="text-error text-sm font-medium">{t('tapCancelAgain')}</p>
             </motion.div>
           )}
 
@@ -119,7 +120,7 @@ export default function DriverFoundPage() {
                   <Star size={14} fill="#F5A623" color="#F5A623" />
                   <span className="text-piGold text-sm font-medium">{driver.rating}</span>
                 </div>
-                <span className="text-text-tertiary text-xs">({driver.trips.toLocaleString()} trips)</span>
+                <span className="text-text-tertiary text-xs">({driver.trips.toLocaleString()} {t('rides').toLowerCase()})</span>
               </div>
             </div>
           </div>
@@ -138,32 +139,32 @@ export default function DriverFoundPage() {
               </div>
               <div className="flex items-center gap-1 text-primary">
                 <Shield size={14} />
-                <span className="text-xs font-medium">Verified</span>
+                <span className="text-xs font-medium">{t('verified')}</span>
               </div>
             </div>
           </div>
 
           {/* Action buttons */}
           <div className="flex gap-3">
-            <motion.button
+            <button
               className="flex-1 h-12 bg-bg-surface rounded-piride-lg flex items-center justify-center gap-2 border border-white/5"
-              whileTap={{ scale: 0.95 }}
+              
             >
               <Phone size={18} color="#00C853" />
-              <span className="text-text-primary text-sm font-medium">Call</span>
-            </motion.button>
-            <motion.button
+              <span className="text-text-primary text-sm font-medium">{t('call')}</span>
+            </button>
+            <button
+              onClick={() => navigate('/chat')}
               className="flex-1 h-12 bg-bg-surface rounded-piride-lg flex items-center justify-center gap-2 border border-white/5"
-              whileTap={{ scale: 0.95 }}
             >
               <MessageCircle size={18} color="#448AFF" />
-              <span className="text-text-primary text-sm font-medium">Chat</span>
-            </motion.button>
+              <span className="text-text-primary text-sm font-medium">{t('chat')}</span>
+            </button>
           </div>
 
           {/* CTA */}
           <PrimaryButton onClick={handleInCar} icon={<ChevronRight size={18} />}>
-            I&apos;m in the car
+            {t('imInTheCar')}
           </PrimaryButton>
         </div>
       </motion.div>

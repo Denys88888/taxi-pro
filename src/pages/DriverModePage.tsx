@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import { MapView } from '@/components/MapView';
 import { useApp } from '@/contexts/AppContext';
-
+import { t } from '@/lib/i18n';
 
 const MOCK_REQUESTS = [
   {
@@ -76,27 +76,27 @@ export default function DriverModePage() {
       {/* Top header */}
       <div className="absolute top-0 left-0 right-0 z-floating safe-area-top">
         <div className="mx-4 mt-4 flex items-center justify-between">
-          <motion.button
+          <button
             onClick={() => navigate('/profile')}
             className="w-10 h-10 flex items-center justify-center rounded-full bg-bg-elevated/90 backdrop-blur-xl border border-white/10"
-            whileTap={{ scale: 0.9 }}
+            
           >
             <ArrowLeft size={20} color="#FFFFFF" />
-          </motion.button>
+          </button>
 
           {/* Online toggle */}
-          <motion.button
+          <button
             onClick={toggleOnline}
             className={`px-5 py-2.5 rounded-full font-semibold text-sm flex items-center gap-2 shadow-lg backdrop-blur-xl ${
               driverOnline
                 ? 'bg-primary text-white shadow-glow'
                 : 'bg-bg-elevated/90 text-text-secondary border border-white/10'
             }`}
-            whileTap={{ scale: 0.95 }}
+            
           >
             <Power size={16} />
-            {driverOnline ? 'Online' : 'Offline'}
-          </motion.button>
+            {driverOnline ? t('online') : t('offline')}
+          </button>
         </div>
       </div>
 
@@ -104,12 +104,12 @@ export default function DriverModePage() {
       {driverOnline && showEarnings && (
         <motion.div
           className="absolute top-20 left-4 right-4 z-floating"
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
+
+
         >
           <div className="bg-bg-elevated/95 backdrop-blur-xl rounded-piride-xl p-4 border border-white/5 shadow-card">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-text-primary text-sm font-semibold">Today&apos;s Earnings</h3>
+              <h3 className="text-text-primary text-sm font-semibold">{t('earnings')}</h3>
               <button onClick={() => setShowEarnings(false)} className="w-6 h-6 flex items-center justify-center">
                 <X size={14} color="#666666" />
               </button>
@@ -117,15 +117,15 @@ export default function DriverModePage() {
             <div className="grid grid-cols-3 gap-3">
               <div className="text-center">
                 <p className="text-primary text-lg font-bold font-mono">24.50</p>
-                <p className="text-text-tertiary text-[10px]">Earnings</p>
+                <p className="text-text-tertiary text-[10px]">{t('earnings')}</p>
               </div>
               <div className="text-center">
                 <p className="text-text-primary text-lg font-bold">8</p>
-                <p className="text-text-tertiary text-[10px]">Trips</p>
+                <p className="text-text-tertiary text-[10px]">{t('rides')}</p>
               </div>
               <div className="text-center">
                 <p className="text-text-primary text-lg font-bold">4.2h</p>
-                <p className="text-text-tertiary text-[10px]">Online</p>
+                <p className="text-text-tertiary text-[10px]">{t('online')}</p>
               </div>
             </div>
           </div>
@@ -136,8 +136,8 @@ export default function DriverModePage() {
       {driverOnline && !showEarnings && (
         <motion.div
           className="absolute top-20 left-4 z-floating"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+
+
         >
           <button
             onClick={() => setShowEarnings(true)}
@@ -152,9 +152,9 @@ export default function DriverModePage() {
       {/* Bottom sheet */}
       <motion.div
         className="absolute bottom-0 left-0 right-0 bg-bg-elevated rounded-t-piride-xl z-bottom-sheet shadow-sheet border-t border-white/5 max-w-[430px] mx-auto"
-        initial={{ y: '100%' }}
-        animate={{ y: 0 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+
+
+
       >
         <div className="flex justify-center pt-3 pb-1">
           <div className="w-10 h-1 rounded-full bg-white/20" />
@@ -164,51 +164,51 @@ export default function DriverModePage() {
           {!driverOnline ? (
             <div className="text-center py-8">
               <Power size={40} color="#444444" className="mx-auto mb-3" />
-              <p className="text-text-secondary text-sm">Go online to see ride requests</p>
+              <p className="text-text-secondary text-sm">{t('goOnline')}</p>
             </div>
           ) : acceptedRequest ? (
             /* Active ride navigation */
             <div className="space-y-4">
-              <h3 className="text-text-primary font-semibold">Active Ride</h3>
+              <h3 className="text-text-primary font-semibold">{t('inProgress')}</h3>
               <div className="bg-bg-surface rounded-piride-md p-4 border border-white/5 space-y-3">
                 <div className="flex items-center gap-3">
                   <Navigation size={14} color="#00C853" />
                   <div className="flex-1 min-w-0">
-                    <p className="text-text-tertiary text-[10px]">Pickup</p>
+                    <p className="text-text-tertiary text-[10px]">{t('pickup')}</p>
                     <p className="text-text-primary text-sm font-medium truncate">{acceptedRequest.pickup.name}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
                   <MapPin size={14} color="#FF5252" />
                   <div className="flex-1 min-w-0">
-                    <p className="text-text-tertiary text-[10px]">Destination</p>
+                    <p className="text-text-tertiary text-[10px]">{t('destination')}</p>
                     <p className="text-text-primary text-sm font-medium truncate">{acceptedRequest.destination.name}</p>
                   </div>
                 </div>
                 <div className="border-t border-white/5 pt-3 flex justify-between">
-                  <span className="text-text-secondary text-sm">Fare</span>
+                  <span className="text-text-secondary text-sm">{t('price')}</span>
                   <span className="text-primary font-bold font-mono">{acceptedRequest.price.toFixed(2)}</span>
                 </div>
               </div>
-              <motion.button
-                className="w-full h-12 bg-primary rounded-piride-lg font-semibold text-white"
-                whileTap={{ scale: 0.97 }}
+              <button
+                className="w-full h-12 bg-primary rounded-piride-lg font-semibold text-white -active:scale-[0.97] transition-transform"
+                style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
                 onClick={() => setAcceptedRequest(null)}
               >
-                Complete Ride
-              </motion.button>
+                {t('completeRide')}
+              </button>
             </div>
           ) : requests.length > 0 ? (
             /* Incoming requests */
             <div className="space-y-3">
-              <h3 className="text-text-primary font-semibold text-sm">Nearby Requests ({requests.length})</h3>
-              {requests.map((req, idx) => (
+              <h3 className="text-text-primary font-semibold text-sm">{t('nearbyRequests')} ({requests.length})</h3>
+              {requests.map((req) => (
                 <motion.div
                   key={req.id}
                   className="bg-bg-surface rounded-piride-md p-4 border border-white/5"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: idx * 0.1 }}
+
+
+
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
@@ -243,22 +243,22 @@ export default function DriverModePage() {
                   </div>
 
                   <div className="flex gap-2">
-                    <motion.button
+                    <button
                       className="flex-1 h-10 bg-error/10 rounded-piride-md flex items-center justify-center gap-1"
                       onClick={() => declineRequest(req.id)}
-                      whileTap={{ scale: 0.95 }}
+                      
                     >
                       <X size={14} color="#FF5252" />
-                      <span className="text-error text-sm font-medium">Decline</span>
-                    </motion.button>
-                    <motion.button
+                      <span className="text-error text-sm font-medium">{t('decline')}</span>
+                    </button>
+                    <button
                       className="flex-1 h-10 bg-primary rounded-piride-md flex items-center justify-center gap-1"
                       onClick={() => acceptRequest(req)}
-                      whileTap={{ scale: 0.95 }}
+                      
                     >
                       <Check size={14} color="#FFFFFF" />
-                      <span className="text-white text-sm font-medium">Accept</span>
-                    </motion.button>
+                      <span className="text-white text-sm font-medium">{t('accept')}</span>
+                    </button>
                   </div>
                 </motion.div>
               ))}
@@ -266,8 +266,8 @@ export default function DriverModePage() {
           ) : (
             <div className="text-center py-8">
               <Car size={40} color="#444444" className="mx-auto mb-3" />
-              <p className="text-text-secondary text-sm">No requests nearby</p>
-              <p className="text-text-tertiary text-xs mt-1">Stay online, requests will appear here</p>
+              <p className="text-text-secondary text-sm">{t('noRequestsNearby')}</p>
+              <p className="text-text-tertiary text-xs mt-1">{t('stayOnline')}</p>
             </div>
           )}
         </div>

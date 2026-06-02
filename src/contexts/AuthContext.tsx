@@ -1,5 +1,8 @@
 import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react';
 import { initPiSDK, authenticate, isPiBrowser as checkPiBrowser } from '@/lib/pi-sdk';
+import { saveUser } from '@/lib/firestore-service';
+import { initFirebase } from '@/lib/firebase-config';
+import { initNotifications } from '@/lib/notifications';
 
 export type UserRole = 'passenger' | 'driver' | null;
 
@@ -44,13 +47,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const isAuthenticated = !!user;
   const role = user?.role ?? null;
 
-  // Initialize Pi SDK on mount
+  // Initialize Pi SDK and auto-login on mount
   useEffect(() => {
     const piBrowser = checkPiBrowser();
     setIsPiBrowser(piBrowser);
     if (piBrowser) {
-      try { initPiSDK(true); } catch (err) { console.warn('Pi SDK init failed:', err); }
+      try { initPiSDK(true); } catch { /* Pi SDK not yet loaded */ }
+      // Auto-login if in Pi Browser and not authenticated
+      if (!loadStoredUser()) {
+        // Delay to let Pi SDK fully load
+        const timer = setTimeout(() => {
+          login().catch(() => { /* auto-login failed, user can tap button */ });
+        }, 1500);
+        return () => clearTimeout(timer);
+      }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Persist user
@@ -72,16 +84,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           role: null,
         };
         setUser(mockUser);
+
+        // Save demo user to Firestore (best effort)
+        await saveUser({
+          uid: mockUser.uid,
+          username: mockUser.username,
+          role: 'passenger',
+          rating: 5.0,
+        });
+
+        // Init Firebase notifications for demo user
+        if (initFirebase()) {
+          await initNotifications(mockUser.uid);
+        }
         return;
       }
       initPiSDK(true);
       const result = await authenticate();
-      setUser({
+      const newUser: User = {
         uid: result.user.uid,
         username: result.user.username,
         accessToken: result.accessToken,
         role: null,
+      };
+      setUser(newUser);
+
+      // Save user to Firestore after successful Pi login
+      await saveUser({
+        uid: result.user.uid,
+        username: result.user.username,
+        role: 'passenger',
+        rating: 5.0,
       });
+
+      // Init Firebase notifications
+      if (initFirebase()) {
+        await initNotifications(result.user.uid);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Authentication failed');
     } finally {

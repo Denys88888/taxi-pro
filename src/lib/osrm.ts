@@ -35,12 +35,19 @@ export async function getRoute(
 
     const route = data.routes[0];
     const encodedPolyline = route.geometry;
+    const distanceKm = route.distance / 1000;
+
+    // Reject cross-continent routes (likely wrong coordinates)
+    if (distanceKm > 5000) {
+      console.warn('[OSRM] Route too long, likely cross-continent');
+      return null;
+    }
 
     // Decode the polyline manually (fallback for when PolylineUtil is not available)
     const decodedCoords: [number, number][] = decodePolylineManual(encodedPolyline);
 
     return {
-      distance: route.distance / 1000, // convert meters to km
+      distance: distanceKm, // in km
       duration: Math.round(route.duration / 60), // convert seconds to minutes
       polyline: encodedPolyline,
       decodedPolyline: decodedCoords,

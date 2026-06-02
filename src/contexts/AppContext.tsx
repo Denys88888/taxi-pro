@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
+import { createRide, updateRideStatus, type RideDoc } from '@/lib/firestore-service';
 
 // ─── Types ─────────────────────────────────────────────────────
 
@@ -114,6 +115,17 @@ interface AppContextType {
   setDriverMode: (v: boolean) => void;
   setDriverOnline: (v: boolean) => void;
   findMockDriver: () => Driver;
+
+  // Firebase
+  saveRideToFirestore: (rideData: {
+    passengerUid: string;
+    pickup: Location;
+    destination: Location;
+    price: number;
+    paymentId?: string;
+  }) => Promise<string>;
+  updateRideInFirestore: (rideId: string, status: RideDoc['status'], updates?: Partial<RideDoc>) => Promise<void>;
+  firestoreRideId: string | null;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -129,6 +141,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [rideHistory, setRideHistory] = useState<Ride[]>([]);
   const [driverMode, setDriverMode] = useState(false);
   const [driverOnline, setDriverOnline] = useState(false);
+  const [firestoreRideId, setFirestoreRideId] = useState<string | null>(null);
 
   const setPickup = useCallback((loc: Location) => setPickupState(loc), []);
   const setDestination = useCallback((loc: Location | null) => setDestinationState(loc), []);
@@ -147,6 +160,34 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const findMockDriver = useCallback(() => {
     const idx = Math.floor(Math.random() * MOCK_DRIVERS.length);
     return MOCK_DRIVERS[idx];
+  }, []);
+
+  /** Save a new ride to Firestore */
+  const saveRideToFirestore = useCallback(async (rideData: {
+    passengerUid: string;
+    pickup: Location;
+    destination: Location;
+    price: number;
+    paymentId?: string;
+  }): Promise<string> => {
+    const rideId = await createRide({
+      passengerUid: rideData.passengerUid,
+      pickup: { name: rideData.pickup.name, lat: rideData.pickup.lat, lng: rideData.pickup.lng },
+      destination: { name: rideData.destination.name, lat: rideData.destination.lat, lng: rideData.destination.lng },
+      price: rideData.price,
+      status: 'pending',
+      paymentStatus: 'pending',
+      paymentId: rideData.paymentId,
+    });
+    setFirestoreRideId(rideId);
+    console.log('[AppContext] Ride saved to Firestore:', rideId);
+    return rideId;
+  }, []);
+
+  /** Update ride status in Firestore */
+  const updateRideInFirestore = useCallback(async (rideId: string, status: RideDoc['status'], updates?: Partial<RideDoc>): Promise<void> => {
+    await updateRideStatus(rideId, status, updates);
+    console.log('[AppContext] Ride status updated in Firestore:', rideId, '->', status);
   }, []);
 
   return (
@@ -173,6 +214,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
         setDriverMode: setDriverModeState,
         setDriverOnline: setDriverOnlineState,
         findMockDriver,
+        saveRideToFirestore,
+        updateRideInFirestore,
+        firestoreRideId,
       }}
     >
       {children}

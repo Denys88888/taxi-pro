@@ -1,24 +1,26 @@
 import { useLocation, useNavigate } from 'react-router';
 import { motion } from 'framer-motion';
 import { Home, Clock, User } from 'lucide-react';
+import { t } from '@/lib/i18n';
 
 interface NavItem {
   icon: typeof Home;
-  label: string;
+  labelKey: 'home' | 'rides' | 'profile';
   path: string;
 }
 
 const navItems: NavItem[] = [
-  { icon: Home, label: 'Home', path: '/' },
-  { icon: Clock, label: 'Rides', path: '/rides' },
-  { icon: User, label: 'Profile', path: '/profile' },
+  { icon: Home, labelKey: 'home', path: '/' },
+  { icon: Clock, labelKey: 'rides', path: '/rides' },
+  { icon: User, labelKey: 'profile', path: '/profile' },
 ];
 
 export function BottomNav() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const isHidden = location.pathname.startsWith('/search') ||
+  const isHidden =
+    location.pathname.startsWith('/search') ||
     location.pathname.startsWith('/book') ||
     location.pathname.startsWith('/payment') ||
     location.pathname.startsWith('/driver-found') ||
@@ -57,7 +59,7 @@ export function BottomNav() {
                 className="text-[11px] font-medium"
                 style={{ color: isActive ? '#00C853' : '#666666' }}
               >
-                {item.label}
+                {t(item.labelKey)}
               </span>
             </motion.button>
           );
