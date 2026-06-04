@@ -8,6 +8,7 @@ import { FloatingSearchBar } from '@/components/FloatingSearchBar';
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { BottomSheet } from '@/components/BottomSheet';
 import { SkeletonMap } from '@/components/Skeleton';
+import { LocateMeButton } from '@/components/LocateMeButton';
 import { useApp } from '@/contexts/AppContext';
 import { requestNotificationPermission } from '@/lib/notifications';
 import { useTranslation } from '@/lib/i18n';
@@ -163,6 +164,9 @@ export default function MapHome() {
           </span>
         </motion.div>
       </div>
+
+      {/* Locate me button */}
+      <LocateMeButton onLocate={(pos) => setPickup(pos)} />
 
       </>)}
 

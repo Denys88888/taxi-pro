@@ -29,6 +29,7 @@ import { useApp } from '@/contexts/AppContext';
 import { useTranslation } from '@/lib/i18n';
 import { wsClient } from '@/lib/api';
 import { StarRating } from '@/components/StarRating';
+import { LocateMeButton } from '@/components/LocateMeButton';
 
 // ─── Types ─────────────────────────────────────────────────────
 
@@ -190,6 +191,9 @@ export default function DriverModePage() {
   const [activeRide, setActiveRide] = useState<ActiveRide | null>(null);
   // Track request timestamps for animation delays
 
+  // Driver location state
+  const [driverLocation, setDriverLocation] = useState<{ lat: number; lng: number; address: string; name: string } | null>(null);
+
   // WebSocket is disabled for demo — rides are simulated locally
   useEffect(() => {
     const handleRideAvailable = (data: any) => {
@@ -279,13 +283,21 @@ export default function DriverModePage() {
   const renderHeader = () => (
     <div className="relative z-10 px-4 pt-4 pb-3">
       <div className="flex items-center justify-between">
-        <motion.button
-          onClick={() => navigate('/profile')}
-          className="w-10 h-10 flex items-center justify-center rounded-full bg-bg-elevated/90 backdrop-blur-xl border border-white/10"
-          whileTap={{ scale: 0.9 }}
-        >
-          <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm"><ArrowLeft size={18} color="#FFFFFF"/></div>
-        </motion.button>
+        <div className="flex items-center gap-2">
+          <motion.button
+            onClick={() => navigate('/profile')}
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-bg-elevated/90 backdrop-blur-xl border border-white/10"
+            whileTap={{ scale: 0.9 }}
+          >
+            <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm"><ArrowLeft size={18} color="#FFFFFF"/></div>
+          </motion.button>
+
+          {/* Locate me button for driver */}
+          <LocateMeButton
+            onLocate={(loc) => setDriverLocation(loc)}
+            className="static w-10 h-10"
+          />
+        </div>
 
         <div className="flex items-center gap-2">
           <span className="text-text-secondary text-xs font-medium">
@@ -308,6 +320,23 @@ export default function DriverModePage() {
           </motion.button>
         </div>
       </div>
+
+      {/* Driver location display */}
+      <AnimatePresence>
+        {driverLocation && (
+          <motion.div
+            className="mt-3 flex items-center gap-2 px-3 py-2 rounded-xl bg-primary/10 border border-primary/20"
+            initial={{ opacity: 0, y: -5 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+          >
+            <MapPin size={14} color="#00C853" />
+            <span className="text-primary text-xs font-medium truncate flex-1">
+              {driverLocation.address.length > 40 ? driverLocation.address.slice(0, 40) + '...' : driverLocation.address}
+            </span>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Mini Stats */}
       <AnimatePresence>
