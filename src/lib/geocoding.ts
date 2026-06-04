@@ -119,6 +119,16 @@ const LOCAL_ADDRESSES: GeocodingResult[] = [
 
 function normalize(str: string): string {
   return str.toLowerCase()
+    // Polish chars → ASCII
+    .replace(/ł/g, 'l').replace(/Ł/g, 'L')
+    .replace(/ą/g, 'a').replace(/Ą/g, 'A')
+    .replace(/ć/g, 'c').replace(/Ć/g, 'C')
+    .replace(/ę/g, 'e').replace(/Ę/g, 'E')
+    .replace(/ń/g, 'n').replace(/Ń/g, 'N')
+    .replace(/ó/g, 'o').replace(/Ó/g, 'O')
+    .replace(/ś/g, 's').replace(/Ś/g, 'S')
+    .replace(/ź/g, 'z').replace(/Ź/g, 'Z')
+    .replace(/ż/g, 'z').replace(/Ż/g, 'Z')
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9\u0400-\u04ff\s]/gi, '')
