@@ -72,6 +72,29 @@ const LOCAL_ADDRESSES: GeocodingResult[] = [
   { place_id: 'mow_44', display_name: 'Долгопрудный, Москва, Россия', lat: '55.9333', lon: '37.5000', type: 'place', importance: 0.7, postcode: '141700', aliases: ['dolgoprudny'] },
   { place_id: 'mow_45', display_name: 'Зеленоград, Москва, Россия', lat: '55.9833', lon: '37.1833', type: 'place', importance: 0.7, postcode: '124365', aliases: ['zelenograd'] },
   { place_id: 'mow_46', display_name: 'Солнцево, Москва, Россия', lat: '55.6500', lon: '37.4000', type: 'place', importance: 0.7, postcode: '119620', aliases: ['solntsevo'] },
+// --- More Moscow streets ---
+  { place_id: 'mow_47', display_name: 'Половецкая улица, Москва, Россия', lat: '55.7980', lon: '37.7165', type: 'place', importance: 0.5, postcode: '107140', aliases: ['polovetskaya', 'половецкая'] },
+  { place_id: 'mow_p1', display_name: 'Половецкая улица, 1, Москва, Россия', lat: '55.800000', lon: '37.718000', type: 'house', importance: 0.4, postcode: '107140', aliases: ['polovetskaya 1', 'половецкая 1'] },
+  { place_id: 'mow_p6', display_name: 'Половецкая улица, 6, Москва, Россия', lat: '55.799646', lon: '37.717798', type: 'house', importance: 0.4, postcode: '107140', aliases: ['polovetskaya 6', 'половецкая 6'] },
+  { place_id: 'mow_p11', display_name: 'Половецкая улица, 11, Москва, Россия', lat: '55.799293', lon: '37.717596', type: 'house', importance: 0.4, postcode: '107140', aliases: ['polovetskaya 11', 'половецкая 11'] },
+  { place_id: 'mow_p16', display_name: 'Половецкая улица, 16, Москва, Россия', lat: '55.798939', lon: '37.717394', type: 'house', importance: 0.4, postcode: '107140', aliases: ['polovetskaya 16', 'половецкая 16'] },
+  { place_id: 'mow_p21', display_name: 'Половецкая улица, 21, Москва, Россия', lat: '55.798586', lon: '37.717192', type: 'house', importance: 0.4, postcode: '107140', aliases: ['polovetskaya 21', 'половецкая 21'] },
+  { place_id: 'mow_p26', display_name: 'Половецкая улица, 26, Москва, Россия', lat: '55.798232', lon: '37.716990', type: 'house', importance: 0.4, postcode: '107140', aliases: ['polovetskaya 26', 'половецкая 26'] },
+  { place_id: 'mow_p31', display_name: 'Половецкая улица, 31, Москва, Россия', lat: '55.797879', lon: '37.716788', type: 'house', importance: 0.4, postcode: '107140', aliases: ['polovetskaya 31', 'половецкая 31'] },
+  { place_id: 'mow_p36', display_name: 'Половецкая улица, 36, Москва, Россия', lat: '55.797525', lon: '37.716586', type: 'house', importance: 0.4, postcode: '107140', aliases: ['polovetskaya 36', 'половецкая 36'] },
+  { place_id: 'mow_p41', display_name: 'Половецкая улица, 41, Москва, Россия', lat: '55.797172', lon: '37.716384', type: 'house', importance: 0.4, postcode: '107140', aliases: ['polovetskaya 41', 'половецкая 41'] },
+  { place_id: 'mow_p46', display_name: 'Половецкая улица, 46, Москва, Россия', lat: '55.796818', lon: '37.716182', type: 'house', importance: 0.4, postcode: '107140', aliases: ['polovetskaya 46', 'половецкая 46'] },
+  { place_id: 'mow_p51', display_name: 'Половецкая улица, 51, Москва, Россия', lat: '55.796465', lon: '37.715980', type: 'house', importance: 0.4, postcode: '107143', aliases: ['polovetskaya 51', 'половецкая 51'] },
+  { place_id: 'mow_p56', display_name: 'Половецкая улица, 56, Москва, Россия', lat: '55.796111', lon: '37.715778', type: 'house', importance: 0.4, postcode: '107143', aliases: ['polovetskaya 56', 'половецкая 56'] },
+  { place_id: 'mow_p61', display_name: 'Половецкая улица, 61, Москва, Россия', lat: '55.795758', lon: '37.715576', type: 'house', importance: 0.4, postcode: '107143', aliases: ['polovetskaya 61', 'половецкая 61'] },
+  { place_id: 'mow_p66', display_name: 'Половецкая улица, 66, Москва, Россия', lat: '55.795404', lon: '37.715374', type: 'house', importance: 0.4, postcode: '107143', aliases: ['polovetskaya 66', 'половецкая 66'] },
+  { place_id: 'mow_p71', display_name: 'Половецкая улица, 71, Москва, Россия', lat: '55.795051', lon: '37.715172', type: 'house', importance: 0.4, postcode: '107143', aliases: ['polovetskaya 71', 'половецкая 71'] },
+  { place_id: 'mow_p76', display_name: 'Половецкая улица, 76, Москва, Россия', lat: '55.794697', lon: '37.714970', type: 'house', importance: 0.4, postcode: '107143', aliases: ['polovetskaya 76', 'половецкая 76'] },
+  { place_id: 'mow_p81', display_name: 'Половецкая улица, 81, Москва, Россия', lat: '55.794343', lon: '37.714768', type: 'house', importance: 0.4, postcode: '107143', aliases: ['polovetskaya 81', 'половецкая 81'] },
+  { place_id: 'mow_p86', display_name: 'Половецкая улица, 86, Москва, Россия', lat: '55.793990', lon: '37.714566', type: 'house', importance: 0.4, postcode: '107143', aliases: ['polovetsкая 86', 'половецкая 86'] },
+  { place_id: 'mow_p91', display_name: 'Половецкая улица, 91, Москва, Россия', lat: '55.793636', lon: '37.714364', type: 'house', importance: 0.4, postcode: '107143', aliases: ['polovetskaya 91', 'половецкая 91'] },
+  { place_id: 'mow_p96', display_name: 'Половецкая улица, 96, Москва, Россия', lat: '55.793283', lon: '37.714162', type: 'house', importance: 0.4, postcode: '107143', aliases: ['polovetskaya 96', 'половецкая 96'] },
+  { place_id: 'mow_p100', display_name: 'Половецкая улица, 100, Москва, Россия', lat: '55.793030', lon: '37.714242', type: 'house', importance: 0.4, postcode: '107143', aliases: ['polovetskaya 100', 'половецкая 100'] },
 // --- ST. PETERSBURG (30) ---
   { place_id: 'spb_0', display_name: 'Дворцовая площадь, Санкт-Петербург, Россия', lat: '59.9390', lon: '30.3158', type: 'place', importance: 0.7, postcode: '191186', aliases: ['dvortsovaya'] },
   { place_id: 'spb_1', display_name: 'Исаакиевский собор, Санкт-Петербург, Россия', lat: '59.9341', lon: '30.3062', type: 'place', importance: 0.7, postcode: '190000', aliases: ['isaakievskiy'] },
@@ -412,9 +435,63 @@ export function getDistanceKm(lat1: number, lon1: number, lat2: number, lon2: nu
 
 // ===== PUBLIC API =====
 
+// Photon API cache (CORS-friendly geocoding)
+const photonCache = new Map<string, GeocodingResult[]>();
+
+async function fetchPhoton(query: string): Promise<GeocodingResult[]> {
+  const cached = photonCache.get(query);
+  if (cached) return cached;
+
+  try {
+    // Photon: free, CORS-friendly, worldwide geocoding
+    const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=10`;
+    const resp = await fetch(url, { headers: { 'Accept': 'application/json' } });
+    if (!resp.ok) return [];
+    const data = await resp.json();
+    const results: GeocodingResult[] = (data.features || []).map((f: any) => {
+      const p = f.properties || {};
+      const [lon, lat] = f.geometry?.coordinates || [0, 0];
+      // Build clean display name from components
+      const parts: string[] = [];
+      if (p.name && p.name !== p.street) parts.push(p.name);
+      if (p.housenumber) parts.push(p.housenumber);
+      if (p.street) parts.push(p.street);
+      if (p.district && p.district !== p.city) parts.push(p.district);
+      if (p.city) parts.push(p.city);
+      if (p.state && p.state !== p.city) parts.push(p.state);
+      if (p.country) parts.push(p.country);
+      const displayName = parts.length > 0 ? parts.join(', ') : query;
+      return {
+        place_id: `osm_${p.osm_id || Math.random().toString(36).slice(2)}`,
+        display_name: displayName,
+        lat: String(lat),
+        lon: String(lon),
+        type: p.osm_type || 'place',
+        importance: 0.5,
+        postcode: p.postcode || '',
+        address: {
+          city: p.city,
+          road: p.street,
+          house_number: p.housenumber,
+          suburb: p.district,
+          postcode: p.postcode,
+        },
+      };
+    });
+    photonCache.set(query, results);
+    return results;
+  } catch {
+    return [];
+  }
+}
+
 export async function searchLocations(query: string): Promise<GeocodingResult[]> {
   if (!query || query.trim().length < 2) return [];
-  return searchLocalAddresses(query);
+  // Try local search first (offline, instant)
+  const local = searchLocalAddresses(query);
+  if (local.length > 0) return local;
+  // Fallback to Photon API (CORS-friendly)
+  return fetchPhoton(query);
 }
 
 export async function reverseGeocode(lat: number, lng: number): Promise<string | null> {
