@@ -1,8 +1,8 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Search, MapPin, Clock, Star, Navigation } from 'lucide-react';
-import { autocompleteLocations } from '@/lib/geocoding';
+import { ArrowLeft, Search, MapPin, Star, Navigation, Clock } from 'lucide-react';
+import { autocompleteLocations, searchLocalAddresses, getDistanceKm } from '@/lib/geocoding';
 import { useApp } from '@/contexts/AppContext';
 import { useTranslation } from '@/lib/i18n';
 import type { GeocodingResult } from '@/lib/geocoding';
@@ -13,123 +13,40 @@ interface LocationItem {
   lat: string;
   lng: string;
   postcode?: string;
+  distance?: number;
 }
 
-// Haversine distance in km
-function getDistanceKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
-  const R = 6371;
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
-
-const LOCAL_FALLBACK: LocationItem[] = [
-  // Moscow (12)
+// Popular/saved locations shown when search is empty
+const POPULAR_PLACES: LocationItem[] = [
   { name: 'Красная площадь', address: 'Москва, Россия', lat: '55.7539', lng: '37.6208', postcode: '101000' },
   { name: 'Кремль', address: 'Москва, Россия', lat: '55.7520', lng: '37.6175', postcode: '101000' },
   { name: 'Москва-Сити', address: 'Москва, Россия', lat: '55.7495', lng: '37.5373', postcode: '123317' },
   { name: 'Аэропорт Шереметьево', address: 'Москва, Россия', lat: '55.9736', lng: '37.4125', postcode: '141400' },
   { name: 'Аэропорт Домодедово', address: 'Москва, Россия', lat: '55.4103', lng: '37.9023', postcode: '142015' },
   { name: 'ВДНХ', address: 'Москва, Россия', lat: '55.8261', lng: '37.6376', postcode: '129223' },
+];
+
+const SAVED_PLACES: LocationItem[] = [
   { name: 'Улица Арбат', address: 'Москва, Россия', lat: '55.7521', lng: '37.5952', postcode: '119019' },
   { name: 'Парк Горького', address: 'Москва, Россия', lat: '55.7314', lng: '37.6035', postcode: '119049' },
   { name: 'Стадион Лужники', address: 'Москва, Россия', lat: '55.7158', lng: '37.5536', postcode: '119048' },
   { name: 'Останкинская башня', address: 'Москва, Россия', lat: '55.8197', lng: '37.6119', postcode: '127427' },
   { name: 'Сокольники', address: 'Москва, Россия', lat: '55.7891', lng: '37.6797', postcode: '107014' },
   { name: 'Тверская улица', address: 'Москва, Россия', lat: '55.7648', lng: '37.6063', postcode: '125009' },
-  // Saint Petersburg (12)
-  { name: 'Дворцовая площадь', address: 'Санкт-Петербург, Россия', lat: '59.9402', lng: '30.3159', postcode: '191186' },
-  { name: 'Эрмитаж', address: 'Санкт-Петербург, Россия', lat: '59.9398', lng: '30.3146', postcode: '190000' },
-  { name: 'Невский проспект', address: 'Санкт-Петербург, Россия', lat: '59.9343', lng: '30.3351', postcode: '191025' },
-  { name: 'Петропавловская крепость', address: 'Санкт-Петербург, Россия', lat: '59.9500', lng: '30.3167', postcode: '197046' },
-  { name: 'Аэропорт Пулково', address: 'Санкт-Петербург, Россия', lat: '59.8003', lng: '30.2625', postcode: '196210' },
-  { name: 'Исаакиевский собор', address: 'Санкт-Петербург, Россия', lat: '59.9341', lng: '30.3062', postcode: '190000' },
-  { name: 'Казанский собор', address: 'Санкт-Петербург, Россия', lat: '59.9343', lng: '30.3245', postcode: '191186' },
-  { name: 'Храм Спаса на Крови', address: 'Санкт-Петербург, Россия', lat: '59.9400', lng: '30.3289', postcode: '191186' },
-  { name: 'Летний сад', address: 'Санкт-Петербург, Россия', lat: '59.9461', lng: '30.3364', postcode: '191186' },
-  { name: 'Мариинский театр', address: 'Санкт-Петербург, Россия', lat: '59.9258', lng: '30.2966', postcode: '190000' },
-  { name: 'Васильевский остров', address: 'Санкт-Петербург, Россия', lat: '59.9400', lng: '30.2900', postcode: '199034' },
-  { name: 'Финляндский вокзал', address: 'Санкт-Петербург, Россия', lat: '59.9553', lng: '30.3558', postcode: '194100' },
-  // Kyiv (12)
-  { name: 'Майдан Незалежности', address: 'Киев, Украина', lat: '50.4504', lng: '30.5245' },
-  { name: 'Киево-Печерская Лавра', address: 'Киев, Украина', lat: '50.4343', lng: '30.5592' },
-  { name: 'Аэропорт Борисполь', address: 'Киев, Украина', lat: '50.3450', lng: '30.8947' },
-  { name: 'Золотые ворота', address: 'Киев, Украина', lat: '50.4484', lng: '30.5133' },
-  { name: 'Улица Крещатик', address: 'Киев, Украина', lat: '50.4475', lng: '30.5221' },
-  { name: 'Софиевский собор', address: 'Киев, Украина', lat: '50.4531', lng: '30.5144' },
-  { name: 'Родина-мать', address: 'Киев, Украина', lat: '50.4266', lng: '30.5630' },
-  { name: 'Олимпийский стадион', address: 'Киев, Украина', lat: '50.4333', lng: '30.5217' },
-  { name: 'Подол', address: 'Киев, Украина', lat: '50.4667', lng: '30.5167' },
-  { name: 'Аэропорт Жуляны', address: 'Киев, Украина', lat: '50.4019', lng: '30.4497' },
-  { name: 'Андреевский спуск', address: 'Киев, Украина', lat: '50.4594', lng: '30.5179' },
-  { name: 'Оболонь', address: 'Киев, Украина', lat: '50.5050', lng: '30.4983' },
-  // Minsk (12)
-  { name: 'Площадь Независимости', address: 'Минск, Беларусь', lat: '53.8958', lng: '27.5478' },
-  { name: 'Площадь Победы', address: 'Минск, Беларусь', lat: '53.9081', lng: '27.5742' },
-  { name: 'Национальная библиотека', address: 'Минск, Беларусь', lat: '53.9216', lng: '27.6589' },
-  { name: 'Национальный аэропорт', address: 'Минск, Беларусь', lat: '53.8885', lng: '28.0445' },
-  { name: 'Парк Горького', address: 'Минск, Беларусь', lat: '53.9023', lng: '27.5736' },
-  { name: 'Улица Немига', address: 'Минск, Беларусь', lat: '53.9059', lng: '27.5545' },
-  { name: 'Стадион Динамо', address: 'Минск, Беларусь', lat: '53.8956', lng: '27.5605' },
-  { name: 'Троицкое предместье', address: 'Минск, Беларусь', lat: '53.9083', lng: '27.5563' },
-  { name: 'Дворец Республики', address: 'Минск, Беларусь', lat: '53.9028', lng: '27.5613' },
-  { name: 'Комаровский рынок', address: 'Минск, Беларусь', lat: '53.8892', lng: '27.5386' },
-  { name: 'Ботанический сад', address: 'Минск, Беларусь', lat: '53.9167', lng: '27.6167' },
-  { name: 'ТЦ Замок', address: 'Минск, Беларусь', lat: '53.9288', lng: '27.5826' },
-  // Almaty (12)
-  { name: 'Площадь Республики', address: 'Алматы, Казахстан', lat: '43.2380', lng: '76.9459' },
-  { name: 'Вознесенский собор', address: 'Алматы, Казахстан', lat: '43.2581', lng: '76.9530' },
-  { name: 'Кок-Тобе', address: 'Алматы, Казахстан', lat: '43.2346', lng: '76.9783' },
-  { name: 'Аэропорт Алматы', address: 'Алматы, Казахстан', lat: '43.3521', lng: '77.0405' },
-  { name: 'Каток Медеу', address: 'Алматы, Казахстан', lat: '43.2098', lng: '77.0861' },
-  { name: 'Шымбулак', address: 'Алматы, Казахстан', lat: '43.1283', lng: '77.0810' },
-  { name: 'Улица Арбат', address: 'Алматы, Казахстан', lat: '43.2567', lng: '76.9533' },
-  { name: 'Достык Плаза', address: 'Алматы, Казахстан', lat: '43.2408', lng: '76.9189' },
-  { name: 'Парк Первого Президента', address: 'Алматы, Казахстан', lat: '43.2267', lng: '76.9225' },
-  { name: 'Mega Park Алматы', address: 'Алматы, Казахстан', lat: '43.2028', lng: '76.8933' },
-  { name: 'Театр оперы имени Абая', address: 'Алматы, Казахстан', lat: '43.2414', lng: '76.9194' },
-  { name: 'Дворец Рахат', address: 'Алматы, Казахстан', lat: '43.2450', lng: '76.9167' },
-  // International (12+)
-  { name: 'Таймс-сквер', address: 'New York City, USA', lat: '40.7580', lng: '-73.9855' },
-  { name: 'Центральный парк', address: 'New York City, USA', lat: '40.7829', lng: '-73.9654' },
-  { name: 'Аэропорт JFK', address: 'Нью-Йорк, США', lat: '40.6413', lng: '-73.7781' },
-  { name: 'Биг-Бен', address: 'London, United Kingdom', lat: '51.4994', lng: '-0.1245' },
-  { name: 'Аэропорт Хитроу', address: 'Лондон, Великобритания', lat: '51.4700', lng: '-0.4543' },
-  { name: 'Эйфелева башня', address: 'Париж, Франция', lat: '48.8584', lng: '2.2945' },
-  { name: 'Аэропорт Шарль-де-Голль', address: 'Париж, Франция', lat: '49.0097', lng: '2.5479' },
-  { name: 'Токийская башня', address: 'Токио, Япония', lat: '35.6586', lng: '139.7454' },
-  { name: 'Аэропорт Нарита', address: 'Токио, Япония', lat: '35.7647', lng: '140.3864' },
-  { name: 'Бурдж-Халифа', address: 'Дубай, ОАЭ', lat: '25.1972', lng: '55.2744' },
-  { name: 'Аэропорт Дубай', address: 'Дубай, ОАЭ', lat: '25.2532', lng: '55.3657' },
-  { name: 'Аэропорт Чанги', address: 'Сингапур', lat: '1.3644', lng: '103.9915' },
-  { name: 'Сиднейский оперный театр', address: 'Сидней, Австралия', lat: '-33.8568', lng: '151.2153' },
-  { name: 'Центральный вокзал', address: 'Берлин, Германия', lat: '52.5251', lng: '13.3694' },
-  { name: 'Колизей', address: 'Рим, Италия', lat: '41.8902', lng: '12.4922' },
-  { name: 'Саграда Фамилия', address: 'Барселона, Испания', lat: '41.4036', lng: '2.1744' },
-  { name: 'Башня CN', address: 'Торонто, Канада', lat: '43.6426', lng: '-79.3871' },
-  // Warsaw (12)
-  { name: 'Замковая площадь', address: 'Варшава, Польша', lat: '52.2476', lng: '21.0142', postcode: '00-277' },
-  { name: 'Аэропорт Шопена', address: 'Варшава, Польша', lat: '52.1657', lng: '20.9671', postcode: '02-143' },
-  { name: 'Дворец культуры', address: 'Варшава, Польша', lat: '52.2318', lng: '21.0058', postcode: '00-901' },
-  { name: 'Улица Плёвецкая', address: 'Варшава, Польша', lat: '52.2370', lng: '21.1230', postcode: '04-567' },
-  { name: 'Национальный стадион', address: 'Варшава, Польша', lat: '52.2395', lng: '21.0456', postcode: '03-972' },
-  { name: 'Злоте Тарасы', address: 'Варшава, Польша', lat: '52.2303', lng: '21.0019', postcode: '00-906' },
-  { name: 'Лазенковский дворец', address: 'Варшава, Польша', lat: '52.2144', lng: '21.0354', postcode: '00-460' },
-  { name: 'Улица Новый Свет', address: 'Варшава, Польша', lat: '52.2352', lng: '21.0190', postcode: '00-372' },
-  { name: 'Мокотув', address: 'Варшава, Польша', lat: '52.1904', lng: '21.0038', postcode: '02-001' },
-  { name: 'Виланув', address: 'Варшава, Польша', lat: '52.1658', lng: '21.0906', postcode: '02-958' },
-  { name: 'Прага-Полудне', address: 'Варшава, Польша', lat: '52.2449', lng: '21.0845', postcode: '04-001' },
-  { name: 'Воля', address: 'Варшава, Польша', lat: '52.2370', lng: '20.9800', postcode: '01-001' },
 ];
 
-function convertGeocodingToItem(result: GeocodingResult): LocationItem {
+function convertToItem(result: GeocodingResult, refLat: number, refLng: number): LocationItem {
+  const parts = result.display_name.split(',');
+  const name = parts[0].trim();
+  const address = parts.slice(1).join(',').trim();
+  const dist = getDistanceKm(refLat, refLng, parseFloat(result.lat), parseFloat(result.lon));
   return {
-    name: result.display_name.split(',')[0],
-    address: result.display_name,
+    name,
+    address,
     lat: result.lat,
     lng: result.lon,
-    postcode: result.address?.postcode || result.address?.zipcode,
+    postcode: result.postcode || result.address?.postcode,
+    distance: dist,
   };
 }
 
@@ -138,11 +55,11 @@ export default function SearchPage() {
   const { setDestination, setPickup, pickup } = useApp();
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<(LocationItem & { distance?: number })[]>([]);
+  const [results, setResults] = useState<LocationItem[]>([]);
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const abortRef = useRef<(() => void) | null>(null);
 
-  // Current reference point for distance calculation (pickup or default Moscow)
   const refLat = pickup?.lat ?? 55.7539;
   const refLng = pickup?.lng ?? 37.6208;
 
@@ -150,39 +67,40 @@ export default function SearchPage() {
     inputRef.current?.focus();
   }, []);
 
-  // Sort items by distance from reference point
-  const sortByDistance = useCallback((items: LocationItem[]) => {
-    return items
-      .map((item) => {
-        const d = getDistanceKm(refLat, refLng, parseFloat(item.lat), parseFloat(item.lng));
-        return { ...item, distance: Math.round(d) };
-      })
-      .sort((a, b) => (a.distance ?? Infinity) - (b.distance ?? Infinity));
-  }, [refLat, refLng]);
+  // Cleanup abort on unmount
+  useEffect(() => {
+    return () => { abortRef.current?.(); };
+  }, []);
 
   const doSearch = useCallback((searchQuery: string) => {
-    if (searchQuery.trim().length < 2) {
+    // Abort any previous search
+    if (abortRef.current) abortRef.current();
+    
+    const trimmed = searchQuery.trim();
+    if (trimmed.length < 2) {
       setResults([]);
+      setLoading(false);
       return;
     }
+
     setLoading(true);
 
+    let aborted = false;
+    abortRef.current = () => { aborted = true; };
+
     autocompleteLocations(searchQuery, (data) => {
+      if (aborted) return;
+      
       if (data.length === 0) {
-        // Fallback: search local database
-        const q = searchQuery.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-        const fallback = LOCAL_FALLBACK.filter(
-          (loc) =>
-            loc.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(q) ||
-            loc.address.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(q)
-        );
-        setResults(sortByDistance(fallback));
+        // Try local search directly as fallback
+        const local = searchLocalAddresses(searchQuery);
+        setResults(local.map(r => convertToItem(r, refLat, refLng)));
       } else {
-        setResults(sortByDistance(data.map(convertGeocodingToItem)));
+        setResults(data.map(r => convertToItem(r, refLat, refLng)));
       }
       setLoading(false);
     });
-  }, [sortByDistance]);
+  }, [refLat, refLng]);
 
   const handleQueryChange = useCallback((value: string) => {
     setQuery(value);
@@ -211,9 +129,7 @@ export default function SearchPage() {
           name: parsed.name ?? 'Мое местоположение',
         });
         navigate('/book');
-      } catch {
-        // ignore parse errors
-      }
+      } catch { /* ignore */ }
     }
   }, [setPickup, navigate]);
 
@@ -228,7 +144,9 @@ export default function SearchPage() {
           className="w-10 h-10 flex items-center justify-center rounded-full bg-bg-surface active:bg-bg-elevated"
           whileTap={{ scale: 0.9 }}
         >
-          <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm"><ArrowLeft size={18} color="#FFFFFF"/></div>
+          <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
+            <ArrowLeft size={18} color="#FFFFFF" />
+          </div>
         </motion.button>
         <div className="flex-1 relative">
           <input
@@ -256,7 +174,6 @@ export default function SearchPage() {
               className="p-4 space-y-1"
             >
               {loading ? (
-                /* Skeleton loading */
                 Array.from({ length: 4 }).map((_, i) => (
                   <div key={i} className="flex items-center gap-4 p-3 rounded-piride-md">
                     <div className="w-10 h-10 rounded-full shimmer" />
@@ -288,13 +205,14 @@ export default function SearchPage() {
                     <div className="flex-1 min-w-0">
                       <p className="text-text-primary text-sm font-medium truncate">{item.name}</p>
                       <p className="text-text-tertiary text-xs truncate">
-                        {item.address}
-                        {item.postcode ? `, ${item.postcode}` : ''}
+                        {item.postcode ? `${item.postcode}, ` : ''}{item.address}
                       </p>
                     </div>
                     <div className="text-right shrink-0">
                       {item.distance !== undefined && (
-                        <span className="text-primary text-xs font-semibold">{item.distance} км</span>
+                        <span className="text-primary text-xs font-semibold">
+                          {item.distance === 0 ? '< 1 км' : `${item.distance} км`}
+                        </span>
                       )}
                     </div>
                   </motion.button>
@@ -332,47 +250,49 @@ export default function SearchPage() {
                 </>
               )}
 
-              <h3 className="text-text-secondary text-xs font-semibold uppercase tracking-wider mb-3 px-1">{t('popularPlaces')}</h3>
+              {/* Popular */}
+              <h3 className="text-text-secondary text-xs font-semibold uppercase tracking-wider mb-3 px-1">{t('popular')}</h3>
               <div className="space-y-1">
-                {LOCAL_FALLBACK.slice(0, 6).map((loc, idx) => (
+                {POPULAR_PLACES.map((item, idx) => (
                   <motion.button
-                    key={loc.name}
+                    key={item.name}
                     className="w-full flex items-center gap-4 p-3 rounded-piride-md text-left active:bg-bg-elevated transition-colors"
-                    onClick={() => handleSelect(loc)}
+                    onClick={() => handleSelect(item)}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: idx * 0.05 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    <div className="w-10 h-10 rounded-full bg-bg-surface flex items-center justify-center shrink-0">
-                      <Clock size={18} color="#A0A0A0" />
+                    <div className="w-10 h-10 rounded-full bg-bg-elevated flex items-center justify-center shrink-0">
+                      <Clock size={18} color="#666666" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-text-primary text-sm font-medium">{loc.name}</p>
-                      <p className="text-text-tertiary text-xs truncate">{loc.address}</p>
+                      <p className="text-text-primary text-sm font-medium truncate">{item.name}</p>
+                      <p className="text-text-tertiary text-xs truncate">{item.address}</p>
                     </div>
                   </motion.button>
                 ))}
               </div>
 
-              <h3 className="text-text-secondary text-xs font-semibold uppercase tracking-wider mt-6 mb-3 px-1">{t('saved')}</h3>
+              {/* Saved */}
+              <h3 className="text-text-secondary text-xs font-semibold uppercase tracking-wider mb-3 mt-6 px-1">{t('saved')}</h3>
               <div className="space-y-1">
-                {LOCAL_FALLBACK.slice(6, 12).map((loc, idx) => (
+                {SAVED_PLACES.map((item, idx) => (
                   <motion.button
-                    key={loc.name}
+                    key={item.name}
                     className="w-full flex items-center gap-4 p-3 rounded-piride-md text-left active:bg-bg-elevated transition-colors"
-                    onClick={() => handleSelect(loc)}
+                    onClick={() => handleSelect(item)}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.15 + idx * 0.05 }}
+                    transition={{ delay: idx * 0.05 + 0.3 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    <div className="w-10 h-10 rounded-full bg-piPurple/10 flex items-center justify-center shrink-0">
-                      <Star size={18} color="#6700C2" />
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                      <Star size={18} color="#9C27B0" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-text-primary text-sm font-medium">{loc.name}</p>
-                      <p className="text-text-tertiary text-xs truncate">{loc.address}</p>
+                      <p className="text-text-primary text-sm font-medium truncate">{item.name}</p>
+                      <p className="text-text-tertiary text-xs truncate">{item.address}</p>
                     </div>
                   </motion.button>
                 ))}

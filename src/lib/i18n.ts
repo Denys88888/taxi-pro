@@ -367,6 +367,7 @@ const translations = {
     piNetwork: 'Pi Network',
     piSymbol: 'π',
     pickup: 'Посадка',
+    popular: 'Популярные',
     pinCode: 'PIN',
     platformFee: 'Комиссия платформы',
     price: 'Цена',
