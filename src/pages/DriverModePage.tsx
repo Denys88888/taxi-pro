@@ -293,10 +293,12 @@ export default function DriverModePage() {
           </motion.button>
 
           {/* Locate me button for driver */}
-          <LocateMeButton
-            onLocate={(loc) => setDriverLocation(loc)}
-            className="static w-10 h-10"
-          />
+          <div className="w-10 h-10">
+            <LocateMeButton
+              onLocate={(loc) => setDriverLocation(loc)}
+              className="w-10 h-10"
+            />
+          </div>
         </div>
 
         <div className="flex items-center gap-2">

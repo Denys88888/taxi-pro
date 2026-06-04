@@ -40,7 +40,7 @@ export function LocateMeButton({ onLocate, className = '' }: LocateMeButtonProps
     <motion.button
       onClick={handleClick}
       disabled={loading}
-      className={`absolute bottom-[42%] right-4 z-map-overlay w-12 h-12 rounded-full bg-bg-elevated/90 backdrop-blur-xl border border-white/10 shadow-lg flex items-center justify-center active:scale-90 transition-transform ${className}`}
+      className={`w-12 h-12 rounded-full bg-bg-elevated/90 backdrop-blur-xl border border-white/10 shadow-lg flex items-center justify-center active:scale-90 transition-transform ${className}`}
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: 0.8 }}

@@ -165,8 +165,10 @@ export default function MapHome() {
         </motion.div>
       </div>
 
-      {/* Locate me button */}
-      <LocateMeButton onLocate={(pos) => setPickup(pos)} />
+      {/* Locate me button — fixed position above bottom sheet */}
+      <div className="absolute bottom-[320px] right-4 z-[100]">
+        <LocateMeButton onLocate={(pos) => setPickup(pos)} />
+      </div>
 
       </>)}
 
