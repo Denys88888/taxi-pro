@@ -8,7 +8,6 @@ import { FloatingSearchBar } from '@/components/FloatingSearchBar';
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { BottomSheet } from '@/components/BottomSheet';
 import { SkeletonMap } from '@/components/Skeleton';
-import { LocateMeButton } from '@/components/LocateMeButton';
 import { useApp } from '@/contexts/AppContext';
 import { requestNotificationPermission } from '@/lib/notifications';
 import { useTranslation } from '@/lib/i18n';
@@ -165,11 +164,6 @@ export default function MapHome() {
         </motion.div>
       </div>
 
-      {/* Locate me button */}
-      <div className="absolute bottom-[40%] right-4 z-[60]">
-        <LocateMeButton onLocate={(pos) => setPickup(pos)} />
-      </div>
-
       </>)}
 
       {/* Bottom Sheet */}
@@ -214,15 +208,38 @@ export default function MapHome() {
             )}
           </AnimatePresence>
 
-          {/* Select on map button */}
+          {/* Select on map + Locate me buttons */}
           {!mapSelectMode && (
-            <button
-              onClick={() => setMapSelectMode(true)}
-              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-piride-lg border border-white/10 bg-bg-surface text-text-primary text-sm font-medium active:bg-bg-elevated transition-colors"
-            >
-              <Crosshair size={16} color="#FF9800" />
-              {t('selectOnMap')}
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setMapSelectMode(true)}
+                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-piride-lg border border-white/10 bg-bg-surface text-text-primary text-sm font-medium active:bg-bg-elevated transition-colors"
+              >
+                <Crosshair size={16} color="#FF9800" />
+                {t('selectOnMap')}
+              </button>
+              <button
+                onClick={async () => {
+                  try {
+                    const { getCurrentPosition, reverseGeocode } = await import('@/lib/geocoding');
+                    const pos = await getCurrentPosition();
+                    const address = await reverseGeocode(pos.lat, pos.lng);
+                    setPickup({
+                      lat: pos.lat,
+                      lng: pos.lng,
+                      address: address || `${pos.lat.toFixed(4)}, ${pos.lng.toFixed(4)}`,
+                      name: address?.split(',')[0] || 'Мое местоположение',
+                    });
+                  } catch (err) {
+                    console.warn('[LocateMe] failed:', err);
+                  }
+                }}
+                className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-piride-lg border border-primary/30 bg-primary/10 text-primary text-sm font-medium active:bg-primary/20 transition-colors"
+              >
+                <MapPin size={16} color="#00C853" />
+                {t('myLocation')}
+              </button>
+            </div>
           )}
 
           {/* Tariff cards */}
