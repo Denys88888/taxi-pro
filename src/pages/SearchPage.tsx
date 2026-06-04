@@ -269,7 +269,7 @@ export default function SearchPage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-text-primary text-sm font-medium truncate">{item.name}</p>
-                      <p className="text-text-tertiary text-xs truncate">{item.address}</p>
+                      <p className="text-text-tertiary text-xs truncate">{item.postcode ? `${item.postcode}, ${item.address}` : item.address}</p>
                     </div>
                   </motion.button>
                 ))}
