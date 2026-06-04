@@ -22,6 +22,52 @@ export interface GeocodingResult {
   };
 }
 
+export interface GeoPosition {
+  lat: number;
+  lng: number;
+  accuracy: number;
+}
+
+// ===== GEOLOCATION =====
+
+export function getCurrentPosition(): Promise<GeoPosition> {
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation) {
+      reject(new Error('Geolocation not supported'));
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (pos) => resolve({
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude,
+        accuracy: pos.coords.accuracy,
+      }),
+      (err) => reject(new Error(err.message)),
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+    );
+  });
+}
+
+export function watchPosition(
+  onUpdate: (pos: GeoPosition) => void,
+  onError?: (err: Error) => void
+): () => void {
+  if (!navigator.geolocation) {
+    onError?.(new Error('Geolocation not supported'));
+    return () => {};
+  }
+  const id = navigator.geolocation.watchPosition(
+    (pos) => onUpdate({
+      lat: pos.coords.latitude,
+      lng: pos.coords.longitude,
+      accuracy: pos.coords.accuracy,
+    }),
+    (err) => onError?.(new Error(err.message)),
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 }
+  );
+  return () => navigator.geolocation.clearWatch(id);
+}
+
 
 // ===== SEARCH LOGIC =====
 

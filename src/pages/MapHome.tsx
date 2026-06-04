@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { getCurrentPosition } from '@/lib/geolocation';
+import { getCurrentPosition, reverseGeocode } from '@/lib/geocoding';
 import { useNavigate } from 'react-router';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Home, Briefcase, MapPin, Car, Clock, Users, ArrowRight, Crosshair, Check } from 'lucide-react';
@@ -59,18 +59,19 @@ export default function MapHome() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Get real GPS location on mount (runs in parallel with skeleton)
+  // Get real GPS location on mount + reverse geocode to address
   useEffect(() => {
     getCurrentPosition()
-      .then((pos) => {
+      .then(async (pos) => {
+        const address = await reverseGeocode(pos.lat, pos.lng);
         setPickup({
           lat: pos.lat,
           lng: pos.lng,
-          address: 'Текущее местоположение',
-          name: 'Мое местоположение',
+          address: address || `${pos.lat.toFixed(4)}, ${pos.lng.toFixed(4)}`,
+          name: address?.split(',')[0] || 'Мое местоположение',
         });
       })
-      .catch(() => { /* keep default Union Square */ });
+      .catch(() => { /* keep default pickup */ });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
