@@ -23,24 +23,25 @@
       })();
     </script>
     <meta name="description" content="Taxi Pro - Ride-hailing powered by Pi Network" />
-    <link rel="manifest" href="./assets/manifest-BT2ZFy5o.json" />
-    <link rel="apple-touch-icon" href="./assets/icon-192x192-CKSIArNp.png" />
+    <link rel="manifest" href="./assets/manifest-BT2ZFy5o-BT2ZFy5o.json" />
+    <link rel="apple-touch-icon" href="./assets/icon-192x192-CKSIArNp-CKSIArNp.png" />
     <title>Taxi Pro</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-    <script type="module" crossorigin src="./assets/index-Eha8m1PE.js"></script>
-    <link rel="modulepreload" crossorigin href="./assets/vendor-react-CKjCVW_e.js">
-    <link rel="modulepreload" crossorigin href="./assets/vendor-framer-DbdDR1Q2.js">
-    <link rel="modulepreload" crossorigin href="./assets/vendor-ui-BkwWKix3.js">
-    <link rel="modulepreload" crossorigin href="./assets/chunk-map-BRrMI7oy.js">
-    <link rel="modulepreload" crossorigin href="./assets/vendor-pi-3-ZEnNM0.js">
-    <link rel="modulepreload" crossorigin href="./assets/chunk-payment-SfdrECyq.js">
-    <link rel="modulepreload" crossorigin href="./assets/chunk-driver-CRlQp8fp.js">
+    <link rel="modulepreload" crossorigin href="./assets/vendor-react-CKjCVW_e-C8I93ok5.js">
+    <link rel="modulepreload" crossorigin href="./assets/vendor-framer-DbdDR1Q2-C6jbdhAp.js">
+    <link rel="modulepreload" crossorigin href="./assets/vendor-ui-BkwWKix3-cGsfbzaX.js">
+    <link rel="modulepreload" crossorigin href="./assets/chunk-map-BRrMI7oy-BAUjqBoT.js">
+    <link rel="modulepreload" crossorigin href="./assets/vendor-pi-3-ZEnNM0-Vq_e4T6G.js">
+    <link rel="modulepreload" crossorigin href="./assets/chunk-payment-SfdrECyq-CjGx-usn.js">
+    <link rel="modulepreload" crossorigin href="./assets/chunk-driver-CRlQp8fp-B0y5dkG8.js">
+    <script type="module" crossorigin src="./assets/index-2Iio20Ms.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/chunk-map-Csh-mwQW.js">
     <link rel="stylesheet" crossorigin href="./assets/chunk-map-Dgihpmma.css">
-    <link rel="stylesheet" crossorigin href="./assets/index-BfT7BpL1.css">
+    <link rel="stylesheet" crossorigin href="./assets/index-BFyp-vpN.css">
   </head>
   <body>
     <div id="root"></div>
@@ -85,4 +86,26 @@
                 const newWorker = reg.installing;
                 newWorker.addEventListener('statechange', function() {
                   if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-         
+                    console.log('[SW] New update available, reload to activate');
+                  }
+                });
+              });
+            })
+            .catch(function(err) {
+              console.log('[SW] PWA SW registration failed:', err);
+            });
+
+          // Register Firebase Messaging Service Worker (push notifications)
+          // This SW is separate because FCM needs its own message handling
+          navigator.serviceWorker.register('/firebase-messaging-sw.js')
+            .then(function(reg) {
+              console.log('[FCM SW] Firebase Messaging SW registered:', reg.scope);
+            })
+            .catch(function(err) {
+              console.log('[FCM SW] Registration failed:', err);
+            });
+        });
+      }
+    </script>
+  </body>
+</html>
