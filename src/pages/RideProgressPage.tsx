@@ -199,7 +199,7 @@ export default function RideProgressPage() {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-text-tertiary text-xs">{t('destination')}</p>
-                <p className="text-text-primary text-sm font-medium truncate">{destination?.name}</p>
+                <p className="text-text-primary text-sm font-medium truncate">{destination?.name}{destination?.postcode ? `, ${destination.postcode}` : ''}</p>
               </div>
             </div>
 

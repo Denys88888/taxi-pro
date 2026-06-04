@@ -111,8 +111,9 @@ export default function SearchPage() {
     setDestination({
       lat: parseFloat(item.lat),
       lng: parseFloat(item.lng),
-      address: item.address,
+      address: item.postcode ? `${item.name}, ${item.postcode}, ${item.address}` : `${item.name}, ${item.address}`,
       name: item.name,
+      postcode: item.postcode,
     });
     navigate('/book');
   }, [setDestination, navigate]);

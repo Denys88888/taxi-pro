@@ -8,6 +8,7 @@ export interface Location {
   lng: number;
   address: string;
   name: string;
+  postcode?: string;
 }
 
 export type TariffType = 'standard' | 'comfort' | 'xl';

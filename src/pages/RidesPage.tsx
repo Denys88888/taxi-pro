@@ -34,9 +34,9 @@ export default function RidesPage() {
   // Add mock rides for demo if empty
   const hasRides = rideHistory.length > 0;
   const mockRides = [
-    { id: 'mock_1', pickup: { name: 'Красная площадь' }, destination: { name: 'Шереметьево' }, price: 5.50, status: 'completed' as const, createdAt: new Date(Date.now() - 86400000).toISOString() },
-    { id: 'mock_2', pickup: { name: 'Тверская улица' }, destination: { name: 'Парк Горького' }, price: 3.20, status: 'completed' as const, createdAt: new Date(Date.now() - 172800000).toISOString() },
-    { id: 'mock_3', pickup: { name: 'Арбат' }, destination: { name: 'ВДНХ' }, price: 2.80, status: 'cancelled' as const, createdAt: new Date(Date.now() - 259200000).toISOString() },
+    { id: 'mock_1', pickup: { name: 'Красная площадь', postcode: '101000' }, destination: { name: 'Шереметьево', postcode: '141400' }, price: 5.50, status: 'completed' as const, createdAt: new Date(Date.now() - 86400000).toISOString() },
+    { id: 'mock_2', pickup: { name: 'Тверская улица', postcode: '125009' }, destination: { name: 'Парк Горького', postcode: '119049' }, price: 3.20, status: 'completed' as const, createdAt: new Date(Date.now() - 172800000).toISOString() },
+    { id: 'mock_3', pickup: { name: 'Арбат', postcode: '119019' }, destination: { name: 'ВДНХ', postcode: '129223' }, price: 2.80, status: 'cancelled' as const, createdAt: new Date(Date.now() - 259200000).toISOString() },
   ];
 
   const displayRides = hasRides ? Object.entries(grouped) : [];
@@ -99,7 +99,7 @@ function RideCard({
   isExpanded,
   onToggle,
 }: {
-  ride: { id: string; pickup: { name: string }; destination: { name: string }; price: number; status: string; createdAt: string };
+  ride: { id: string; pickup: { name: string; postcode?: string }; destination: { name: string; postcode?: string }; price: number; status: string; createdAt: string };
   isExpanded: boolean;
   onToggle: () => void;
 }) {
@@ -126,11 +126,11 @@ function RideCard({
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
             <Circle size={8} fill={statusColor} color={statusColor} />
-            <span className="text-text-primary text-sm font-medium truncate">{ride.pickup.name}</span>
+            <span className="text-text-primary text-sm font-medium truncate">{ride.pickup.name}{ride.pickup.postcode ? `, ${ride.pickup.postcode}` : ''}</span>
           </div>
           <div className="flex items-center gap-2 mt-1 ml-5">
             <MapPin size={10} color="#FF5252" />
-            <span className="text-text-tertiary text-xs truncate">{ride.destination.name}</span>
+            <span className="text-text-tertiary text-xs truncate">{ride.destination.name}{ride.destination.postcode ? `, ${ride.destination.postcode}` : ''}</span>
           </div>
         </div>
         <div className="text-right shrink-0">

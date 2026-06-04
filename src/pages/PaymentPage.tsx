@@ -102,7 +102,7 @@ export default function PaymentPage() {
     setStep('escrow');
 
     const rideId = `ride_${Date.now()}`;
-    const memo = `Taxi Pro: ${pickup.name} → ${destination?.name}`;
+    const memo = `Taxi Pro: ${pickup.name}${pickup.postcode ? `, ${pickup.postcode}` : ''} → ${destination?.name}${destination?.postcode ? `, ${destination.postcode}` : ''}`;
 
     try {
       // 1. Create payment record on server first

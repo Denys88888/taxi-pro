@@ -127,7 +127,7 @@ export default function BookPage() {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-text-tertiary text-xs">{t('pickup')}</p>
-                <p className="text-text-primary text-sm font-medium truncate">{pickup.name}</p>
+                <p className="text-text-primary text-sm font-medium truncate">{pickup.name}{pickup.postcode ? `, ${pickup.postcode}` : ''}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -136,7 +136,7 @@ export default function BookPage() {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-text-tertiary text-xs">{t('destination')}</p>
-                <p className="text-text-primary text-sm font-medium truncate">{destination.name}</p>
+                <p className="text-text-primary text-sm font-medium truncate">{destination.name}{destination?.postcode ? `, ${destination.postcode}` : ''}</p>
               </div>
             </div>
           </div>

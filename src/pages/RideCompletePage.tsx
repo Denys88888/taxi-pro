@@ -67,7 +67,7 @@ export default function RideCompletePage() {
           <div className="flex items-start gap-3">
             <Navigation size={14} color="#00C853" className="mt-0.5 shrink-0" />
             <div className="flex-1 min-w-0">
-              <p className="text-text-primary text-sm truncate">{pickup.name}</p>
+              <p className="text-text-primary text-sm truncate">{pickup.name}{pickup.postcode ? `, ${pickup.postcode}` : ''}</p>
             </div>
           </div>
           <div className="flex items-start gap-3">
