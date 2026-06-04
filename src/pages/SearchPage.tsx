@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Search, MapPin, Star, Navigation, Clock } from 'lucide-react';
-import { autocompleteLocations, searchLocalAddresses, getDistanceKm } from '@/lib/geocoding';
+import { autocompleteLocations, getDistanceKm } from '@/lib/geocoding';
 import { useApp } from '@/contexts/AppContext';
 import { useTranslation } from '@/lib/i18n';
 import type { GeocodingResult } from '@/lib/geocoding';
@@ -91,13 +91,7 @@ export default function SearchPage() {
     autocompleteLocations(searchQuery, (data) => {
       if (aborted) return;
       
-      if (data.length === 0) {
-        // Try local search directly as fallback
-        const local = searchLocalAddresses(searchQuery);
-        setResults(local.map(r => convertToItem(r, refLat, refLng)));
-      } else {
-        setResults(data.map(r => convertToItem(r, refLat, refLng)));
-      }
+      setResults(data.map((r: GeocodingResult) => convertToItem(r, refLat, refLng)));
       setLoading(false);
     });
   }, [refLat, refLng]);

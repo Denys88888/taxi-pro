@@ -103,19 +103,45 @@ class TaxiProWS {
   private handlers: Map<string, WSMessageHandler[]> = new Map();
   private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
   private _connected = false;
+  private shouldReconnect = false;
+  private reconnectAttempts = 0;
+  private maxReconnectAttempts = 2;
 
   get connected() {
     return this._connected;
   }
 
   connect() {
-    if (this.ws?.readyState === WebSocket.OPEN) return;
+    if (this.ws?.readyState === WebSocket.OPEN || this.ws?.readyState === WebSocket.CONNECTING) return;
+    this.shouldReconnect = true;
+    this.reconnectAttempts = 0;
+    // Defer connection to avoid blocking page render
+    setTimeout(() => this._doConnect(), 100);
+  }
+
+  private _doConnect() {
+    if (!this.shouldReconnect) return;
+    if (this.reconnectAttempts >= this.maxReconnectAttempts) {
+      console.warn('[WS] Max reconnect attempts reached, giving up.');
+      this.shouldReconnect = false;
+      return;
+    }
 
     try {
       this.ws = new WebSocket(WS_URL);
 
+      // Force close if connection takes too long (prevents page freeze)
+      const connectTimeout = setTimeout(() => {
+        if (this.ws?.readyState !== WebSocket.OPEN) {
+          console.warn('[WS] Connection timeout, forcing close');
+          this.ws?.close();
+        }
+      }, 3000);
+
       this.ws.onopen = () => {
+        clearTimeout(connectTimeout);
         this._connected = true;
+        this.reconnectAttempts = 0;
         console.log('[WS] Connected to Taxi Pro server');
         this.emit('connected', { connected: true });
       };
@@ -130,13 +156,18 @@ class TaxiProWS {
       };
 
       this.ws.onclose = () => {
+        clearTimeout(connectTimeout);
         this._connected = false;
-        console.log('[WS] Disconnected, reconnecting in 3s...');
-        this.emit('disconnected', {});
-        this.reconnectTimer = setTimeout(() => this.connect(), 3000);
+        if (this.shouldReconnect) {
+          this.reconnectAttempts++;
+          console.log(`[WS] Disconnected, reconnecting in 3s... (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
+          this.emit('disconnected', {});
+          this.reconnectTimer = setTimeout(() => this._doConnect(), 1000);
+        }
       };
 
       this.ws.onerror = (err) => {
+        clearTimeout(connectTimeout);
         console.error('[WS] Error:', err);
         this._connected = false;
       };
@@ -146,6 +177,7 @@ class TaxiProWS {
   }
 
   disconnect() {
+    this.shouldReconnect = false;
     if (this.reconnectTimer) {
       clearTimeout(this.reconnectTimer);
       this.reconnectTimer = null;

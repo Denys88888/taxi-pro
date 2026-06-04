@@ -190,10 +190,8 @@ export default function DriverModePage() {
   const [activeRide, setActiveRide] = useState<ActiveRide | null>(null);
   // Track request timestamps for animation delays
 
-  // Connect to WebSocket on mount
+  // WebSocket is disabled for demo — rides are simulated locally
   useEffect(() => {
-    wsClient.connect();
-
     const handleRideAvailable = (data: any) => {
       const newRequest: RideRequest = {
         rideId: data.rideId || `ride_${Date.now()}`,
