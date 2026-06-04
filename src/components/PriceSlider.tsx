@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation } from '@/lib/i18n';
 
 interface PriceSliderProps {
   min?: number;
@@ -16,12 +17,13 @@ export function PriceSlider({
   value,
   onChange,
 }: PriceSliderProps) {
+  const { t } = useTranslation();
   const [isDragging, setIsDragging] = useState(false);
 
   return (
     <div className="w-full py-4">
       <div className="flex items-center justify-between mb-3">
-        <span className="text-text-secondary text-sm font-medium">Suggested Price</span>
+        <span className="text-text-secondary text-sm font-medium">{t('price')}</span>
         <motion.span
           className="text-primary font-bold text-2xl font-mono"
           animate={{ scale: isDragging ? 1.1 : 1 }}

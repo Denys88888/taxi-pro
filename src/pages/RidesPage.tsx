@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, MapPin, Clock, ChevronDown, ChevronUp, Circle } from 'lucide-react';
 import { useApp } from '@/contexts/AppContext';
+import { useTranslation } from '@/lib/i18n';
 
 const STATUS_COLORS: Record<string, string> = {
   completed: '#00C853',
@@ -12,17 +13,10 @@ const STATUS_COLORS: Record<string, string> = {
   searching: '#A0A0A0',
 };
 
-const STATUS_LABELS: Record<string, string> = {
-  completed: 'Completed',
-  cancelled: 'Cancelled',
-  in_progress: 'In Progress',
-  driver_found: 'Driver Found',
-  searching: 'Searching',
-};
-
 export default function RidesPage() {
   const navigate = useNavigate();
   const { rideHistory } = useApp();
+  const { t } = useTranslation();
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   // Group rides by date
@@ -40,9 +34,9 @@ export default function RidesPage() {
   // Add mock rides for demo if empty
   const hasRides = rideHistory.length > 0;
   const mockRides = [
-    { id: 'mock_1', pickup: { name: 'Union Square' }, destination: { name: 'SFO Airport' }, price: 5.50, status: 'completed' as const, createdAt: new Date(Date.now() - 86400000).toISOString() },
-    { id: 'mock_2', pickup: { name: 'Mission District' }, destination: { name: 'Fisherman\'s Wharf' }, price: 3.20, status: 'completed' as const, createdAt: new Date(Date.now() - 172800000).toISOString() },
-    { id: 'mock_3', pickup: { name: 'Castro' }, destination: { name: 'SOMA' }, price: 2.80, status: 'cancelled' as const, createdAt: new Date(Date.now() - 259200000).toISOString() },
+    { id: 'mock_1', pickup: { name: 'Красная площадь' }, destination: { name: 'Шереметьево' }, price: 5.50, status: 'completed' as const, createdAt: new Date(Date.now() - 86400000).toISOString() },
+    { id: 'mock_2', pickup: { name: 'Тверская улица' }, destination: { name: 'Парк Горького' }, price: 3.20, status: 'completed' as const, createdAt: new Date(Date.now() - 172800000).toISOString() },
+    { id: 'mock_3', pickup: { name: 'Арбат' }, destination: { name: 'ВДНХ' }, price: 2.80, status: 'cancelled' as const, createdAt: new Date(Date.now() - 259200000).toISOString() },
   ];
 
   const displayRides = hasRides ? Object.entries(grouped) : [];
@@ -57,9 +51,9 @@ export default function RidesPage() {
           className="w-10 h-10 flex items-center justify-center rounded-full bg-bg-surface active:bg-bg-elevated"
           whileTap={{ scale: 0.9 }}
         >
-          <ArrowLeft size={20} color="#FFFFFF" />
+          <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm"><ArrowLeft size={18} color="#FFFFFF"/></div>
         </motion.button>
-        <h1 className="text-text-primary text-lg font-semibold">Ride History</h1>
+        <h1 className="text-text-primary text-lg font-semibold">{t('rideHistory')}</h1>
       </div>
 
       {/* Content */}
@@ -92,7 +86,7 @@ export default function RidesPage() {
 
         {!hasRides && (
           <div className="text-center py-8">
-            <p className="text-text-tertiary text-sm">No ride history yet. Your completed rides will appear here.</p>
+            <p className="text-text-tertiary text-sm">{t('noRides')}</p>
           </div>
         )}
       </div>
@@ -109,8 +103,16 @@ function RideCard({
   isExpanded: boolean;
   onToggle: () => void;
 }) {
+  const { t } = useTranslation();
   const statusColor = STATUS_COLORS[ride.status] || '#A0A0A0';
-  const statusLabel = STATUS_LABELS[ride.status] || ride.status;
+  const statusLabels: Record<string, string> = {
+    completed: t('completed'),
+    cancelled: t('cancelled'),
+    in_progress: t('inProgress'),
+    driver_found: t('driverFound'),
+    searching: t('searching'),
+  };
+  const statusLabel = statusLabels[ride.status] || ride.status;
 
   return (
     <motion.div
@@ -154,14 +156,14 @@ function RideCard({
           >
             <div className="px-4 pb-4 space-y-2 border-t border-white/5 pt-3">
               <div className="flex justify-between text-xs">
-                <span className="text-text-tertiary">Ride ID</span>
+                <span className="text-text-tertiary">{t('rideHistory')}</span>
                 <span className="text-text-secondary font-mono">{ride.id}</span>
               </div>
               <div className="flex justify-between text-xs">
-                <span className="text-text-tertiary">Time</span>
+                <span className="text-text-tertiary">{t('estTime')}</span>
                 <span className="text-text-secondary flex items-center gap-1">
                   <Clock size={10} />
-                  {new Date(ride.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  {new Date(ride.createdAt).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}
                 </span>
               </div>
             </div>

@@ -1,18 +1,52 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router';
 import { motion } from 'framer-motion';
-import { Navigation, Share2, MapPin, Shield, Clock } from 'lucide-react';
+import { Navigation, Share2, MapPin, Shield, Clock, MessageCircle, AlertTriangle } from 'lucide-react';
+import { useTranslation } from '@/lib/i18n';
 import { MapView } from '@/components/MapView';
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { useApp } from '@/contexts/AppContext';
 import SOSButton from '@/components/SOSButton';
 import { notifyDriverArriving, notifyRideComplete } from '@/lib/notifications';
+import { wsClient } from '@/lib/api';
 
 export default function RideProgressPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { currentRide, pickup, destination, routeDuration, setCurrentRide, addRideToHistory } = useApp();
   const [elapsed, setElapsed] = useState(0);
   const [shared, setShared] = useState(false);
+  const [driverLocation, setDriverLocation] = useState({ lat: pickup.lat + 0.001, lng: pickup.lng + 0.001 });
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  // WebSocket integration for real-time driver location and chat messages
+  useEffect(() => {
+    wsClient.connect();
+
+    const handleDriverLocation = (data: { rideId: string; lat: number; lng: number }) => {
+      if (data.rideId === currentRide?.id) {
+        setDriverLocation({ lat: data.lat, lng: data.lng });
+      }
+    };
+
+    const handleNewMessage = () => {
+      setUnreadCount((c) => c + 1);
+    };
+
+    const handleConnected = () => {
+      console.log('[WS] Connected');
+    };
+
+    wsClient.on('driver_location_update', handleDriverLocation);
+    wsClient.on('new_message', handleNewMessage);
+    wsClient.on('connected', handleConnected);
+
+    return () => {
+      wsClient.off('driver_location_update', handleDriverLocation);
+      wsClient.off('new_message', handleNewMessage);
+      wsClient.off('connected', handleConnected);
+    };
+  }, [currentRide?.id]);
 
   // Simulate ride progress
   useEffect(() => {
@@ -55,22 +89,22 @@ export default function RideProgressPage() {
   const handleShare = useCallback(async () => {
     try {
       await navigator.share?.({
-        title: 'Моя поездка Taxi Pro',
-        text: `Я еду в ${destination?.name}. Отследить поездку!`,
+        title: `${t('shareTrip')} Taxi Pro`,
+        text: `${t('enRoute')} — ${destination?.name}`,
       });
     } catch {
       // Fallback
       setShared(true);
       setTimeout(() => setShared(false), 2000);
     }
-  }, [destination]);
+  }, [destination, t]);
 
   if (!currentRide) {
     return (
       <div className="absolute inset-0 z-modal-content bg-bg-body flex flex-col items-center justify-center">
         <MapPin size={48} color="#333333" />
-        <p className="text-text-secondary mt-4">Нет активной поездки</p>
-        <button onClick={() => navigate('/')} className="mt-4 text-primary text-sm">На главную</button>
+        <p className="text-text-secondary mt-4">{t('noActiveRide')}</p>
+        <button onClick={() => navigate('/')} className="mt-4 text-primary text-sm">{t('goHome')}</button>
       </div>
     );
   }
@@ -78,7 +112,7 @@ export default function RideProgressPage() {
   return (
     <div className="relative w-full h-full">
       {/* Map */}
-      <MapView driverLocation={{ lat: pickup.lat + (progress / 100) * 0.005, lng: pickup.lng + (progress / 100) * 0.005 }} />
+      <MapView driverLocation={driverLocation} />
 
       {/* Top bar */}
       <div className="absolute top-0 left-0 right-0 z-floating safe-area-top">
@@ -90,20 +124,43 @@ export default function RideProgressPage() {
           >
             <span className="text-text-primary text-sm font-medium flex items-center gap-1.5">
               <Navigation size={14} color="#00C853" className="animate-spin" style={{ animationDuration: '3s' }} />
-              В пути
+              {t('enRoute')}
             </span>
           </motion.div>
-          <motion.button
-            onClick={handleShare}
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-bg-elevated/90 backdrop-blur-xl border border-white/10"
-            whileTap={{ scale: 0.9 }}
-          >
-            {shared ? (
-              <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} className="text-primary text-xs font-bold">OK</motion.span>
-            ) : (
-              <Share2 size={18} color="#FFFFFF" />
-            )}
-          </motion.button>
+          <div className="flex items-center gap-2">
+            <motion.button
+              onClick={() => { setUnreadCount(0); navigate('/chat'); }}
+              className="relative w-10 h-10 flex items-center justify-center rounded-full bg-bg-elevated/90 backdrop-blur-xl border border-white/10"
+              whileTap={{ scale: 0.9 }}
+            >
+              <MessageCircle size={18} color="#448AFF" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-error rounded-full flex items-center justify-center text-[10px] font-bold text-white">
+                  {unreadCount}
+                </span>
+              )}
+            </motion.button>
+            <motion.button
+              onClick={handleShare}
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-bg-elevated/90 backdrop-blur-xl border border-white/10"
+              whileTap={{ scale: 0.9 }}
+              title={t('shareRide')}
+            >
+              {shared ? (
+                <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} className="text-primary text-xs font-bold">OK</motion.span>
+              ) : (
+                <Share2 size={18} color="#FFFFFF" />
+              )}
+            </motion.button>
+            <motion.button
+              onClick={() => navigate('/cancel-ride')}
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-bg-elevated/90 backdrop-blur-xl border border-white/10"
+              whileTap={{ scale: 0.9 }}
+              title={t('cancelRideTitle')}
+            >
+              <AlertTriangle size={18} color="#FF5252" />
+            </motion.button>
+          </div>
         </div>
       </div>
 
@@ -121,7 +178,7 @@ export default function RideProgressPage() {
             <div className="space-y-2">
               <div className="flex justify-between text-xs">
                 <span className="text-text-secondary flex items-center gap-1">
-                  <Clock size={12} /> {elapsed} мин
+                  <Clock size={12} /> {elapsed} {t('min')}
                 </span>
                 <span className="text-text-tertiary">{Math.round(progress)}%</span>
               </div>
@@ -141,7 +198,7 @@ export default function RideProgressPage() {
                 <MapPin size={14} color="#FF5252" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-text-tertiary text-xs">Пункт назначения</p>
+                <p className="text-text-tertiary text-xs">{t('destination')}</p>
                 <p className="text-text-primary text-sm font-medium truncate">{destination?.name}</p>
               </div>
             </div>
@@ -149,12 +206,23 @@ export default function RideProgressPage() {
             {/* Safety note */}
             <div className="flex items-center gap-2 text-text-tertiary text-xs">
               <Shield size={12} color="#00C853" />
-              <span>Поездка защищена эскроу</span>
+              <span>{t('rideCoveredByEscrow')}</span>
             </div>
+
+            {/* Cancel ride */}
+            <motion.button
+              onClick={() => navigate('/cancel-ride')}
+              className="w-full h-12 bg-bg-surface rounded-piride-lg flex items-center justify-center gap-2 border border-error/20 text-error font-medium text-sm active:scale-[0.97] transition-transform"
+              whileTap={{ scale: 0.97 }}
+              style={{ touchAction: 'manipulation' }}
+            >
+              <AlertTriangle size={16} />
+              {t('cancelRideTitle')}
+            </motion.button>
 
             {/* CTA */}
             <PrimaryButton onClick={handleComplete}>
-              Завершить поездку
+              {t('completeRide')}
             </PrimaryButton>
           </div>
         </motion.div>

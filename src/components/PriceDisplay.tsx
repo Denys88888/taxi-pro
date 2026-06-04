@@ -1,3 +1,5 @@
+import { useTranslation } from '@/lib/i18n';
+
 interface PriceDisplayProps {
   amount: number;
   size?: 'small' | 'medium' | 'large';
@@ -6,6 +8,8 @@ interface PriceDisplayProps {
 }
 
 export function PriceDisplay({ amount, size = 'medium', className = '', showFee = false }: PriceDisplayProps) {
+  const { t } = useTranslation();
+
   const sizeClasses = {
     small: 'text-sm font-medium',
     medium: 'text-xl font-semibold',
@@ -22,7 +26,7 @@ export function PriceDisplay({ amount, size = 'medium', className = '', showFee 
       </span>
       {showFee && (
         <span className="text-xs text-text-secondary mt-1">
-          includes 2% platform fee
+          {t('commission')}
         </span>
       )}
     </div>

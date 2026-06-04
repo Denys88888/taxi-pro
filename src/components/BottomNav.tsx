@@ -1,22 +1,12 @@
 import { useLocation, useNavigate } from 'react-router';
 import { motion } from 'framer-motion';
 import { Home, Clock, User } from 'lucide-react';
-
-interface NavItem {
-  icon: typeof Home;
-  label: string;
-  path: string;
-}
-
-const navItems: NavItem[] = [
-  { icon: Home, label: 'Home', path: '/' },
-  { icon: Clock, label: 'Rides', path: '/rides' },
-  { icon: User, label: 'Profile', path: '/profile' },
-];
+import { useTranslation } from '@/lib/i18n';
 
 export function BottomNav() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const isHidden = location.pathname.startsWith('/search') ||
     location.pathname.startsWith('/book') ||
@@ -26,6 +16,12 @@ export function BottomNav() {
     location.pathname.startsWith('/complete');
 
   if (isHidden) return null;
+
+  const navItems = [
+    { icon: Home, label: t('home'), path: '/' },
+    { icon: Clock, label: t('rides'), path: '/rides' },
+    { icon: User, label: t('profile'), path: '/profile' },
+  ];
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-floating" style={{ maxWidth: 430, margin: '0 auto' }}>

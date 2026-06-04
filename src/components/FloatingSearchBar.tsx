@@ -1,9 +1,11 @@
 import { motion } from 'framer-motion';
 import { Search } from 'lucide-react';
 import { useNavigate } from 'react-router';
+import { useTranslation } from '@/lib/i18n';
 
 export function FloatingSearchBar() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <motion.div
@@ -17,7 +19,7 @@ export function FloatingSearchBar() {
         className="w-full h-14 bg-bg-elevated/95 backdrop-blur-xl rounded-full border border-white/10 shadow-lg flex items-center gap-3 px-5 text-left select-none active:scale-[0.98] transition-transform"
       >
         <Search size={18} color="#666666" />
-        <span className="text-text-secondary text-base">Where to?</span>
+        <span className="text-text-secondary text-base">{t('whereTo')}</span>
       </button>
     </motion.div>
   );

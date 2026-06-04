@@ -2,11 +2,14 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router';
 import { motion } from 'framer-motion';
 import { ArrowLeft, MapPin, Navigation, Car, Users, ChevronRight, Tag } from 'lucide-react';
+import { useTranslation } from '@/lib/i18n';
 import { MapView } from '@/components/MapView';
 import { PriceSlider } from '@/components/PriceSlider';
 import { PrimaryButton } from '@/components/PrimaryButton';
+import { PromoCodeInput } from '@/components/PromoCodeInput';
 import { useApp } from '@/contexts/AppContext';
 import { getRoute } from '@/lib/osrm';
+import { wsClient } from '@/lib/api';
 import type { TariffType } from '@/contexts/AppContext';
 
 const tariffIcons: Record<TariffType, typeof Car> = {
@@ -17,6 +20,7 @@ const tariffIcons: Record<TariffType, typeof Car> = {
 
 export default function BookPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const {
     pickup,
     destination,
@@ -26,6 +30,10 @@ export default function BookPage() {
     setPrice,
     setRouteInfo,
     tariffs,
+    promoCode,
+    promoDiscount,
+    applyPromo,
+    removePromo,
   } = useApp();
 
   const [routeCoords, setRouteCoords] = useState<[number, number][]>([]);
@@ -51,21 +59,22 @@ export default function BookPage() {
 
   const selectedTariffData = tariffs.find((t) => t.id === selectedTariff);
   const finalPrice = price * (selectedTariffData?.baseMultiplier || 1);
-  const commission = finalPrice * 0.02;
-  void commission; // used in JSX
+  const discountedPrice = Math.max(0, finalPrice - promoDiscount);
+  const commission = discountedPrice * 0.02;
 
   const handleBook = useCallback(() => {
-    setPrice(finalPrice);
+    setPrice(discountedPrice);
+    wsClient.connect();
     navigate('/payment');
-  }, [navigate, finalPrice, setPrice]);
+  }, [navigate, discountedPrice, setPrice]);
 
   if (!destination) {
     return (
       <div className="absolute inset-0 z-modal-content bg-bg-body flex flex-col items-center justify-center">
         <MapPin size={48} color="#333333" />
-        <p className="text-text-secondary mt-4">No destination selected</p>
+        <p className="text-text-secondary mt-4">{t('noDestinationSelected')}</p>
         <PrimaryButton onClick={() => navigate('/search')} variant="secondary">
-          Search Location
+          {t('searchLocation')}
         </PrimaryButton>
       </div>
     );
@@ -84,9 +93,9 @@ export default function BookPage() {
             className="w-10 h-10 flex items-center justify-center rounded-full bg-bg-elevated/90 backdrop-blur-xl border border-white/10 shadow-lg"
             whileTap={{ scale: 0.9 }}
           >
-            <ArrowLeft size={20} color="#FFFFFF" />
+            <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm"><ArrowLeft size={18} color="#FFFFFF"/></div>
           </motion.button>
-          <h1 className="text-text-primary font-semibold text-lg">Confirm Ride</h1>
+          <h1 className="text-text-primary font-semibold text-lg">{t('confirmRide')}</h1>
         </div>
       </div>
 
@@ -110,7 +119,7 @@ export default function BookPage() {
                 <Navigation size={14} color="#00C853" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-text-tertiary text-xs">Pickup</p>
+                <p className="text-text-tertiary text-xs">{t('pickup')}</p>
                 <p className="text-text-primary text-sm font-medium truncate">{pickup.name}</p>
               </div>
             </div>
@@ -119,7 +128,7 @@ export default function BookPage() {
                 <MapPin size={14} color="#FF5252" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-text-tertiary text-xs">Destination</p>
+                <p className="text-text-tertiary text-xs">{t('destination')}</p>
                 <p className="text-text-primary text-sm font-medium truncate">{destination.name}</p>
               </div>
             </div>
@@ -128,18 +137,18 @@ export default function BookPage() {
           {/* Distance/Time */}
           <div className="flex gap-3">
             <div className="flex-1 bg-bg-surface rounded-piride-md p-3 text-center border border-white/5">
-              <p className="text-text-tertiary text-xs">Distance</p>
-              <p className="text-text-primary font-semibold text-sm">{distance.toFixed(1)} km</p>
+              <p className="text-text-tertiary text-xs">{t('distance')}</p>
+              <p className="text-text-primary font-semibold text-sm">{distance.toFixed(1)} {t('km')}</p>
             </div>
             <div className="flex-1 bg-bg-surface rounded-piride-md p-3 text-center border border-white/5">
-              <p className="text-text-tertiary text-xs">Est. Time</p>
-              <p className="text-text-primary font-semibold text-sm">{duration} min</p>
+              <p className="text-text-tertiary text-xs">{t('estTime')}</p>
+              <p className="text-text-primary font-semibold text-sm">{duration} {t('min')}</p>
             </div>
           </div>
 
           {/* Tariff selection */}
           <div>
-            <p className="text-text-secondary text-xs font-semibold uppercase tracking-wider mb-2">Select Class</p>
+            <p className="text-text-secondary text-xs font-semibold uppercase tracking-wider mb-2">{t('selectClass')}</p>
             <div className="flex gap-2">
               {tariffs.map((tariff) => {
                 const Icon = tariffIcons[tariff.id];
@@ -155,9 +164,9 @@ export default function BookPage() {
                   >
                     <Icon size={20} color={isSelected ? '#00C853' : '#A0A0A0'} />
                     <span className={`text-xs font-medium ${isSelected ? 'text-primary' : 'text-text-secondary'}`}>
-                      {tariff.name}
+                      {t(tariff.id as 'standard' | 'comfort' | 'xl')}
                     </span>
-                    <span className="text-text-tertiary text-[10px]">{tariff.eta}</span>
+                    <span className="text-text-tertiary text-[10px]">{tariff.eta.replace('min', t('min'))}</span>
                   </motion.button>
                 );
               })}
@@ -167,34 +176,61 @@ export default function BookPage() {
           {/* Price slider */}
           <PriceSlider value={price} onChange={setPrice} />
 
+          {/* Promo code */}
+          <PromoCodeInput
+            onApply={(code, _discount) => applyPromo(code)}
+            onRemove={removePromo}
+            appliedCode={promoCode}
+            originalPrice={finalPrice}
+          />
+
           {/* Fare breakdown */}
           <div className="bg-bg-surface rounded-piride-md p-4 space-y-2 border border-white/5">
-            <p className="text-text-secondary text-xs font-semibold uppercase tracking-wider mb-2">Fare Breakdown</p>
+            <p className="text-text-secondary text-xs font-semibold uppercase tracking-wider mb-2">{t('fareBreakdown')}</p>
             <div className="flex justify-between text-sm">
-              <span className="text-text-secondary flex items-center gap-1"><Tag size={12} /> Base fare</span>
+              <span className="text-text-secondary flex items-center gap-1"><Tag size={12} /> {t('baseFare')}</span>
               <span className="text-text-primary font-mono">{2.00.toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-text-secondary">Distance ({distance.toFixed(1)} km)</span>
+              <span className="text-text-secondary">{t('distance')} ({distance.toFixed(1)} {t('km')})</span>
               <span className="text-text-primary font-mono">{(distance * 1.2).toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-text-secondary">Tariff ({selectedTariffData?.name})</span>
+              <span className="text-text-secondary">{t('tariff')} ({selectedTariffData ? t(selectedTariffData.id as 'standard' | 'comfort' | 'xl') : ''})</span>
               <span className="text-text-primary font-mono">x{selectedTariffData?.baseMultiplier}</span>
             </div>
+            {promoDiscount > 0 && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                className="flex justify-between text-sm"
+              >
+                <span className="text-primary flex items-center gap-1">
+                  <Tag size={12} /> {t('discount')} ({promoCode})
+                </span>
+                <span className="text-primary font-mono">-{promoDiscount.toFixed(2)}</span>
+              </motion.div>
+            )}
             <div className="border-t border-white/5 pt-2 flex justify-between text-sm">
-              <span className="text-text-secondary">Commission (2%)</span>
-              <span className="text-warning font-mono">-{commission.toFixed(2)}</span>
+              <span className="text-text-secondary">{t('commission')}</span>
+              <span className="text-warning font-mono">{commission.toFixed(2)}</span>
             </div>
             <div className="border-t border-white/5 pt-2 flex justify-between">
-              <span className="text-text-primary font-semibold">Total</span>
-              <span className="text-primary font-bold text-lg font-mono">{finalPrice.toFixed(2)}</span>
+              <span className="text-text-primary font-semibold">{t('total')}</span>
+              {promoDiscount > 0 ? (
+                <div className="text-right">
+                  <span className="text-text-tertiary text-sm font-mono line-through mr-2">{finalPrice.toFixed(2)}</span>
+                  <span className="text-primary font-bold text-lg font-mono">{discountedPrice.toFixed(2)}</span>
+                </div>
+              ) : (
+                <span className="text-primary font-bold text-lg font-mono">{finalPrice.toFixed(2)}</span>
+              )}
             </div>
           </div>
 
           {/* Book CTA */}
           <PrimaryButton onClick={handleBook} icon={<ChevronRight size={18} />}>
-            Book with Pi
+            {promoDiscount > 0 ? `${t('bookWithPi')} (-${promoDiscount.toFixed(2)})` : t('bookWithPi')}
           </PrimaryButton>
         </div>
       </motion.div>

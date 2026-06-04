@@ -1,11 +1,27 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#F5F5F7" media="(prefers-color-scheme: light)" />
+    <script>
+      // Prevent FOUC - set theme before React loads
+      (function() {
+        var theme = localStorage.getItem('taxipro_theme') || 'system';
+        var resolved = theme;
+        if (theme === 'system') {
+          resolved = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.classList.add(resolved);
+        document.documentElement.setAttribute('data-theme', resolved);
+      })();
+    </script>
     <meta name="description" content="Taxi Pro - Ride-hailing powered by Pi Network" />
     <link rel="manifest" href="./manifest.json" />
     <link rel="apple-touch-icon" href="./icon-192x192.png" />
@@ -20,14 +36,6 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script>
-      // Register Service Worker for PWA
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
-            .then((reg) => console.log('[PWA] SW registered:', reg.scope))
-            .catch((err) => console.log('[PWA] SW failed:', err));
-        });
-      }
       // GPS Geolocation — save real location for app to use
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -39,6 +47,54 @@
           () => { console.log('[GPS] Permission denied, using default'); },
           { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
         );
+      }
+    </script>
+
+    <!-- Force refresh Service Worker on every load -->
+    <script>
+      (function() {
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then(function(regs) {
+            regs.forEach(function(reg) {
+              reg.update();
+              console.log('[SW] Checked for update');
+            });
+          });
+        }
+      })();
+    </script>
+    <!-- Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          // Register main PWA Service Worker (caching, offline support)
+          navigator.serviceWorker.register('/sw.js')
+            .then(function(reg) {
+              console.log('[SW] PWA Service Worker registered:', reg.scope);
+              // Listen for updates
+              reg.addEventListener('updatefound', function() {
+                const newWorker = reg.installing;
+                newWorker.addEventListener('statechange', function() {
+                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    console.log('[SW] New update available, reload to activate');
+                  }
+                });
+              });
+            })
+            .catch(function(err) {
+              console.log('[SW] PWA SW registration failed:', err);
+            });
+
+          // Register Firebase Messaging Service Worker (push notifications)
+          // This SW is separate because FCM needs its own message handling
+          navigator.serviceWorker.register('/firebase-messaging-sw.js')
+            .then(function(reg) {
+              console.log('[FCM SW] Firebase Messaging SW registered:', reg.scope);
+            })
+            .catch(function(err) {
+              console.log('[FCM SW] Registration failed:', err);
+            });
+        });
       }
     </script>
   </body>

@@ -2,6 +2,7 @@ import { Routes, Route, useLocation } from 'react-router';
 import { AnimatePresence, motion } from 'framer-motion';
 // Components
 import { BottomNav } from '@/components/BottomNav';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 // Pages
 import MapHome from '@/pages/MapHome';
 import SearchPage from '@/pages/SearchPage';
@@ -13,6 +14,12 @@ import RideCompletePage from '@/pages/RideCompletePage';
 import RidesPage from '@/pages/RidesPage';
 import ProfilePage from '@/pages/ProfilePage';
 import DriverModePage from '@/pages/DriverModePage';
+import ChatPage from '@/pages/ChatPage';
+import RateRidePage from '@/pages/RateRidePage';
+import SOSPage from '@/pages/SOSPage';
+import CancelRidePage from '@/pages/CancelRidePage';
+import AdminPage from '@/pages/AdminPage';
+import OnboardingPage from '@/pages/OnboardingPage';
 
 function PageTransition({ children }: { children: React.ReactNode }) {
   const location = useLocation();
@@ -24,7 +31,11 @@ function PageTransition({ children }: { children: React.ReactNode }) {
     location.pathname.startsWith('/complete') ||
     location.pathname.startsWith('/rides') ||
     location.pathname.startsWith('/profile') ||
-    location.pathname.startsWith('/driver');
+    location.pathname.startsWith('/driver') ||
+    location.pathname.startsWith('/chat') ||
+    location.pathname.startsWith('/rate-ride') ||
+    location.pathname.startsWith('/sos') ||
+    location.pathname.startsWith('/cancel-ride');
 
   if (isOverlay) {
     return (
@@ -44,7 +55,7 @@ function PageTransition({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-function Layout({ children }: { children: React.ReactNode }) {
+function MobileLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="mobile-container bg-bg-body">
       <div className="relative w-full h-full">
@@ -55,11 +66,10 @@ function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function App() {
+function MobileRoutes() {
   const location = useLocation();
-
   return (
-    <Layout>
+    <MobileLayout>
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<PageTransition><MapHome /></PageTransition>} />
@@ -72,8 +82,40 @@ export default function App() {
           <Route path="/rides" element={<PageTransition><RidesPage /></PageTransition>} />
           <Route path="/profile" element={<PageTransition><ProfilePage /></PageTransition>} />
           <Route path="/driver" element={<PageTransition><DriverModePage /></PageTransition>} />
+          <Route path="/chat" element={<PageTransition><ChatPage /></PageTransition>} />
+          <Route path="/rate-ride" element={<PageTransition><RateRidePage /></PageTransition>} />
+          <Route path="/sos" element={<PageTransition><SOSPage /></PageTransition>} />
+          <Route path="/cancel-ride" element={<PageTransition><CancelRidePage /></PageTransition>} />
         </Routes>
       </AnimatePresence>
-    </Layout>
+    </MobileLayout>
+  );
+}
+
+export default function App() {
+  const location = useLocation();
+  const isAdmin = location.pathname === '/admin';
+  const hasOnboarded = localStorage.getItem('taxipro_onboarded') === 'true';
+
+  if (!hasOnboarded) {
+    return (
+      <ErrorBoundary>
+        <OnboardingPage />
+      </ErrorBoundary>
+    );
+  }
+
+  if (isAdmin) {
+    return (
+      <ErrorBoundary>
+        <AdminPage />
+      </ErrorBoundary>
+    );
+  }
+
+  return (
+    <ErrorBoundary>
+      <MobileRoutes />
+    </ErrorBoundary>
   );
 }

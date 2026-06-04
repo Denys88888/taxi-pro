@@ -112,7 +112,7 @@ export async function initPiSDK(sandbox = true): Promise<void> {
     const pi = getPiSDK();
     pi.init({
       version: '2.0',
-      sandbox,
+      sandbox: false,
     });
     console.log('[PiSDK] Initialized (sandbox:', sandbox, ')');
   } catch (error) {

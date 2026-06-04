@@ -3,7 +3,9 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
+  /* ─── DARK THEME (default) ───────────────────────────────── */
+  :root,
+  .dark {
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
     --card: 0 0% 7%;
@@ -24,6 +26,60 @@
     --input: 0 0% 18%;
     --ring: 146 100% 39%;
     --radius: 0.75rem;
+
+    /* Custom theme-aware colors */
+    --bg-body: #000000;
+    --bg-surface: #121212;
+    --bg-elevated: #1E1E1E;
+    --text-primary: #FFFFFF;
+    --text-secondary: #A0A0A0;
+    --text-tertiary: #666666;
+    --slider-track: #1E1E1E;
+    --shimmer-base: #1E1E1E;
+    --shimmer-highlight: #2a2a2a;
+    --map-filter: none;
+    --map-bg: #d4d4d4;
+    --overlay-gradient: linear-gradient(to top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.1) 60%, transparent 100%);
+    --overlay-gradient-top: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, transparent 100%);
+  }
+
+  /* ─── LIGHT THEME ────────────────────────────────────────── */
+  .light {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 5%;
+    --card: 0 0% 98%;
+    --card-foreground: 0 0% 5%;
+    --popover: 0 0% 98%;
+    --popover-foreground: 0 0% 5%;
+    --primary: 146 100% 39%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 95%;
+    --secondary-foreground: 0 0% 5%;
+    --muted: 0 0% 95%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 0 0% 95%;
+    --accent-foreground: 0 0% 5%;
+    --destructive: 0 100% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 88%;
+    --input: 0 0% 88%;
+    --ring: 146 100% 39%;
+    --radius: 0.75rem;
+
+    /* Custom theme-aware colors */
+    --bg-body: #F5F5F7;
+    --bg-surface: #FFFFFF;
+    --bg-elevated: #FFFFFF;
+    --text-primary: #1A1A1A;
+    --text-secondary: #666666;
+    --text-tertiary: #999999;
+    --slider-track: #E0E0E0;
+    --shimmer-base: #E8E8E8;
+    --shimmer-highlight: #F0F0F0;
+    --map-filter: none;
+    --map-bg: #e5e5e5;
+    --overlay-gradient: linear-gradient(to top, rgba(245,245,247,0.95) 0%, rgba(245,245,247,0.5) 60%, transparent 100%);
+    --overlay-gradient-top: linear-gradient(to bottom, rgba(255,255,255,0.5) 0%, transparent 100%);
   }
 
   * {
@@ -39,7 +95,14 @@
   html {
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
+  }
+
+  html.dark {
     background: #000000;
+  }
+
+  html.light {
+    background: #F5F5F7;
   }
 
   body {
@@ -47,7 +110,6 @@
     overscroll-behavior-y: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background: #000000;
   }
 
   #root {
@@ -56,7 +118,6 @@
     min-height: 100dvh;
     display: flex;
     justify-content: center;
-    background: #000000;
   }
 }
 
@@ -66,7 +127,6 @@
     max-width: 430px;
     min-height: 100dvh;
     position: relative;
-    background: #000000;
     overflow-x: hidden;
   }
 
@@ -77,8 +137,15 @@
       margin-top: 2.5dvh;
       margin-bottom: 2.5dvh;
       border-radius: 24px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       overflow: hidden;
+    }
+
+    html.dark .mobile-container {
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    html.light .mobile-container {
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
     }
   }
 
@@ -105,13 +172,20 @@
   }
 }
 
-/* ─── Leaflet Dark Theme Overrides ─────────────────────────── */
+/* ─── Leaflet Theme Overrides ─────────────────────────────── */
 
 .leaflet-container {
   width: 100%;
   height: 100%;
   z-index: 0 !important;
-  background: #1a1a2e !important;
+}
+
+.dark .leaflet-container {
+  background: #d4d4d4 !important;
+}
+
+.light .leaflet-container {
+  background: #e5e5e5 !important;
 }
 
 .leaflet-control-container {
@@ -122,8 +196,9 @@
   z-index: 10 !important;
 }
 
-.leaflet-tile-pane {
-  filter: brightness(0.7) contrast(1.1) saturate(0.8);
+/* Map tiles — clear voyager style */
+.light .leaflet-tile-pane {
+  opacity: 1;
 }
 
 /* ─── Custom Pin Animations ────────────────────────────────── */
@@ -150,12 +225,12 @@
 /* ─── Map Overlay Gradient ────────────────────────────────── */
 
 .map-overlay-gradient {
-  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 40%, transparent 100%);
+  background: var(--overlay-gradient);
   pointer-events: none;
 }
 
 .map-overlay-gradient-top {
-  background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, transparent 100%);
+  background: var(--overlay-gradient-top);
   pointer-events: none;
 }
 
@@ -167,7 +242,7 @@ input[type='range'] {
   width: 100%;
   height: 6px;
   border-radius: 3px;
-  background: #1E1E1E;
+  background: var(--slider-track);
   outline: none;
 }
 
@@ -212,10 +287,48 @@ input[type='range']::-moz-range-thumb {
   100% { background-position: 200% 0; }
 }
 
-.shimmer {
+.dark .shimmer {
   background: linear-gradient(90deg, #1E1E1E 25%, #2a2a2a 50%, #1E1E1E 75%);
   background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.light .shimmer {
+  background: linear-gradient(90deg, #E8E8E8 25%, #F0F0F0 50%, #E8E8E8 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* ─── Skeleton Base Utility ──────────────────────────────── */
+
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.8; }
+}
+
+.skeleton {
+  background: var(--bg-elevated);
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+/* Skeleton map grid line helpers */
+.skeleton-grid-h {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--text-tertiary);
+  opacity: 0.2;
+}
+
+.skeleton-grid-v {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--text-tertiary);
+  opacity: 0.2;
 }
 
 /* ─── Progress Bar Animation ─────────────────────────────── */
@@ -223,4 +336,75 @@ input[type='range']::-moz-range-thumb {
 @keyframes progress-fill {
   from { width: 0%; }
   to { width: 100%; }
+}
+
+.progress-fill {
+  animation: progress-fill 0.5s ease-out forwards;
+}
+
+/* ─── Toast Slide In ────────────────────────────────────── */
+
+@keyframes toast-slide-in {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.toast-slide-in {
+  animation: toast-slide-in 0.3s ease-out;
+}
+
+/* ─── Bottom Sheet Drag Handle ──────────────────────────── */
+
+.drag-handle {
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--text-tertiary);
+  opacity: 0.4;
+}
+
+/* ─── RTL Support ───────────────────────────────────────── */
+
+[dir='rtl'] .rtl-flip {
+  transform: scaleX(-1);
+}
+
+/* ─── Selection Color ───────────────────────────────────── */
+
+::selection {
+  background: rgba(0, 200, 83, 0.3);
+  color: inherit;
+}
+
+/* ─── Focus Ring ────────────────────────────────────────── */
+
+:focus-visible {
+  outline: 2px solid #00C853;
+  outline-offset: 2px;
+}
+
+/* ─── Disabled State ────────────────────────────────────── */
+
+button:disabled,
+[role='button']:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ─── Safe Area Utilities ───────────────────────────────── */
+
+@supports (padding-top: env(safe-area-inset-top)) {
+  .safe-pad-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  .safe-pad-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
 }

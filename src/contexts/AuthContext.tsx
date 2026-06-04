@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react';
 import { initPiSDK, authenticate, isPiBrowser as checkPiBrowser } from '@/lib/pi-sdk';
+import { initFCM, deleteFCMToken } from '@/lib/notifications';
 
 export type UserRole = 'passenger' | 'driver' | null;
 
@@ -72,16 +73,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           role: null,
         };
         setUser(mockUser);
+        // Initialize FCM push notifications for demo user
+        await initFCM(mockUser.uid);
         return;
       }
       initPiSDK(true);
       const result = await authenticate();
-      setUser({
+      const loggedInUser: User = {
         uid: result.user.uid,
         username: result.user.username,
         accessToken: result.accessToken,
         role: null,
-      });
+      };
+      setUser(loggedInUser);
+      // Initialize FCM push notifications after successful login
+      await initFCM(loggedInUser.uid);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Authentication failed');
     } finally {
@@ -90,6 +96,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const logout = useCallback(() => {
+    // Delete FCM token to stop push notifications for this user
+    deleteFCMToken();
     setUser(null);
     localStorage.removeItem(STORAGE_KEY);
     localStorage.removeItem('pi_incomplete_payment');

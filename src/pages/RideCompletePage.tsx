@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router';
 import { motion } from 'framer-motion';
 import { Check, MapPin, Navigation } from 'lucide-react';
+import { useTranslation } from '@/lib/i18n';
 import { StarRating } from '@/components/StarRating';
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { useApp } from '@/contexts/AppContext';
@@ -10,6 +11,7 @@ const TIP_AMOUNTS = [0, 0.5, 1, 2];
 
 export default function RideCompletePage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { price, pickup, destination, setCurrentRide } = useApp();
   const [rating, setRating] = useState(0);
   const [tip, setTip] = useState(0);
@@ -41,7 +43,7 @@ export default function RideCompletePage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          Поездка завершена!
+          {t('rideComplete')}
         </motion.h1>
         <motion.p
           className="text-text-secondary text-sm mt-1"
@@ -49,7 +51,7 @@ export default function RideCompletePage() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
-          Спасибо за поездку с Taxi Pro
+          {t('thankYou')}
         </motion.p>
       </div>
 
@@ -60,7 +62,7 @@ export default function RideCompletePage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
       >
-        <h3 className="text-text-secondary text-xs font-semibold uppercase tracking-wider mb-3">Детали поездки</h3>
+        <h3 className="text-text-secondary text-xs font-semibold uppercase tracking-wider mb-3">{t('tripSummary')}</h3>
         <div className="space-y-2">
           <div className="flex items-start gap-3">
             <Navigation size={14} color="#00C853" className="mt-0.5 shrink-0" />
@@ -75,12 +77,12 @@ export default function RideCompletePage() {
             </div>
           </div>
           <div className="border-t border-white/5 pt-3 mt-3 flex justify-between items-center">
-            <span className="text-text-secondary text-sm">Итого оплачено</span>
+            <span className="text-text-secondary text-sm">{t('totalPaid')}</span>
             <span className="text-primary text-2xl font-bold font-mono">{price.toFixed(2)}</span>
           </div>
           {tip > 0 && (
             <div className="flex justify-between items-center">
-              <span className="text-text-secondary text-sm">Чаевые</span>
+              <span className="text-text-secondary text-sm">{t('tip')}</span>
               <span className="text-piGold font-mono">+{tip.toFixed(2)}</span>
             </div>
           )}
@@ -94,10 +96,10 @@ export default function RideCompletePage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
       >
-        <h3 className="text-text-secondary text-xs font-semibold uppercase tracking-wider mb-3 text-center">Оцените водителя</h3>
+        <h3 className="text-text-secondary text-xs font-semibold uppercase tracking-wider mb-3 text-center">{t('rateYourDriver')}</h3>
         <StarRating rating={rating} onRate={setRating} />
         <p className="text-text-tertiary text-xs text-center mt-2">
-          {rating === 0 ? 'Нажмите для оценки' : rating >= 4 ? 'Отличная поездка!' : rating >= 3 ? 'Хорошая поездка' : 'Нам жаль'}
+          {rating === 0 ? t('tapToRate') : rating >= 4 ? t('greatRide') : rating >= 3 ? t('goodRide') : t('wereSorry')}
         </p>
       </motion.div>
 
@@ -108,7 +110,7 @@ export default function RideCompletePage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
       >
-        <h3 className="text-text-secondary text-xs font-semibold uppercase tracking-wider mb-3 text-center">Добавить чаевые</h3>
+        <h3 className="text-text-secondary text-xs font-semibold uppercase tracking-wider mb-3 text-center">{t('addATip')}</h3>
         <div className="flex gap-2 justify-center">
           {TIP_AMOUNTS.map((amount) => (
             <motion.button
@@ -121,7 +123,7 @@ export default function RideCompletePage() {
               onClick={() => setTip(amount)}
               whileTap={{ scale: 0.95 }}
             >
-              {amount === 0 ? 'Нет' : `+${amount.toFixed(1)}`}
+              {amount === 0 ? t('none') : `+${amount.toFixed(1)}`}
             </motion.button>
           ))}
         </div>
@@ -131,7 +133,7 @@ export default function RideCompletePage() {
       <div className="flex-1" />
 
       {/* Submit */}
-      <div className="px-4 pb-8 pt-4">
+      <div className="px-4 pb-8 pt-4 space-y-3">
         {submitted ? (
           <motion.div
             className="text-center py-3"
@@ -139,12 +141,24 @@ export default function RideCompletePage() {
             animate={{ opacity: 1 }}
           >
             <Check size={24} color="#00C853" className="mx-auto mb-2" />
-            <p className="text-primary text-sm font-medium">Спасибо за ваш отзыв!</p>
+            <p className="text-primary text-sm font-medium">{t('thanksFeedback')}</p>
           </motion.div>
         ) : (
-          <PrimaryButton onClick={handleSubmit}>
-            Отправить и на главную
-          </PrimaryButton>
+          <>
+            <motion.button
+              className="w-full h-14 bg-gradient-to-r from-primary to-emerald-500 rounded-2xl font-semibold text-white text-base shadow-lg shadow-primary/20"
+              onClick={() => navigate('/rate-ride')}
+              whileTap={{ scale: 0.97 }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+            >
+              {t('rateDriver')}
+            </motion.button>
+            <PrimaryButton onClick={handleSubmit}>
+              {t('submitGoHome')}
+            </PrimaryButton>
+          </>
         )}
       </div>
     </div>
