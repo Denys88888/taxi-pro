@@ -15,6 +15,8 @@ export interface GeocodingResult {
     county?: string;
     state?: string;
     country?: string;
+    postcode?: string;
+    zipcode?: string;
   };
 }
 

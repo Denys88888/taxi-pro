@@ -129,6 +129,7 @@ function convertGeocodingToItem(result: GeocodingResult): LocationItem {
     address: result.display_name,
     lat: result.lat,
     lng: result.lon,
+    postcode: result.address?.postcode || result.address?.zipcode,
   };
 }
 
