@@ -125,16 +125,27 @@ function normalize(str: string): string {
     .trim();
 }
 
+// Extract text words (remove house numbers like "60", "111", "2a")
+function textWords(words: string[]): string[] {
+  return words.filter(w => !/^\d+$/.test(w) && w.length >= 2);
+}
+
 function matchesQuery(item: GeocodingResult, queryWords: string[]): boolean {
+  // Try full match first (all words including numbers)
   const haystack = normalize(item.display_name);
-  // Check main display name
-  const mainMatch = queryWords.every(w => haystack.includes(w));
-  if (mainMatch) return true;
-  // Check aliases
+  if (queryWords.every(w => haystack.includes(w))) return true;
   if (item.aliases) {
     for (const alias of item.aliases) {
-      const aliasNorm = normalize(alias);
-      if (queryWords.every(w => aliasNorm.includes(w))) return true;
+      if (queryWords.every(w => normalize(alias).includes(w))) return true;
+    }
+  }
+  // Fallback: match only text words (ignore house numbers)
+  const texts = textWords(queryWords);
+  if (texts.length === 0) return false;
+  if (texts.every(w => haystack.includes(w))) return true;
+  if (item.aliases) {
+    for (const alias of item.aliases) {
+      if (texts.every(w => normalize(alias).includes(w))) return true;
     }
   }
   return false;

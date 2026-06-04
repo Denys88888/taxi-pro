@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { getCurrentPosition } from '@/lib/geolocation';
 import { useNavigate } from 'react-router';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, Briefcase, MapPin, Car, Clock, Users, ArrowRight } from 'lucide-react';
+import { Home, Briefcase, MapPin, Car, Clock, Users, ArrowRight, Crosshair, Check } from 'lucide-react';
 import { MapView } from '@/components/MapView';
 import { FloatingSearchBar } from '@/components/FloatingSearchBar';
 import { PrimaryButton } from '@/components/PrimaryButton';
@@ -25,6 +25,26 @@ export default function MapHome() {
   const { pickup, tariffs, selectedTariff, setSelectedTariff, setDestination, destination, setPickup } = useApp();
   const [sheetOpen, setSheetOpen] = useState(true);
   const [mapLoading, setMapLoading] = useState(true);
+  const [clickPin, setClickPin] = useState<{ lat: number; lng: number } | null>(null);
+  const [mapSelectMode, setMapSelectMode] = useState(false);
+
+  const handleMapClick = useCallback((lat: number, lng: number) => {
+    if (!mapSelectMode) return;
+    setClickPin({ lat, lng });
+  }, [mapSelectMode]);
+
+  const handleConfirmPin = useCallback(() => {
+    if (!clickPin) return;
+    setDestination({
+      lat: clickPin.lat,
+      lng: clickPin.lng,
+      address: `${clickPin.lat.toFixed(4)}, ${clickPin.lng.toFixed(4)}`,
+      name: t('selectedPoint'),
+    });
+    setMapSelectMode(false);
+    setClickPin(null);
+    navigate('/book');
+  }, [clickPin, setDestination, navigate, t]);
 
   // Request notification permission on mount
   useEffect(() => {
@@ -91,7 +111,7 @@ export default function MapHome() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, ease: 'easeOut' }}
           >
-            <MapView />
+            <MapView onMapClick={handleMapClick} clickPin={clickPin} />
           </motion.div>
         )}
       </AnimatePresence>
@@ -153,6 +173,50 @@ export default function MapHome() {
             <h2 className="text-text-primary text-lg font-semibold">{t('chooseARide')}</h2>
             <span className="text-text-tertiary text-xs">{pickup.name.slice(0, 20)}...</span>
           </div>
+
+          {/* Tap-to-select banner */}
+          <AnimatePresence>
+            {mapSelectMode && (
+              <motion.div
+                className="bg-accent/10 border border-accent/30 rounded-piride-lg p-3 flex items-center gap-3"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+              >
+                <Crosshair size={18} color="#FF9800" />
+                <span className="text-accent text-sm font-medium">{t('tapOnMap')}</span>
+                <button
+                  onClick={() => { setMapSelectMode(false); setClickPin(null); }}
+                  className="ml-auto text-text-tertiary text-xs underline"
+                >
+                  {t('cancel')}
+                </button>
+              </motion.div>
+            )}
+            {clickPin && mapSelectMode && (
+              <motion.button
+                className="w-full bg-primary text-bg-body py-3 rounded-piride-lg font-semibold flex items-center justify-center gap-2"
+                onClick={handleConfirmPin}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Check size={18} />
+                {t('confirmPoint')}
+              </motion.button>
+            )}
+          </AnimatePresence>
+
+          {/* Select on map button */}
+          {!mapSelectMode && (
+            <button
+              onClick={() => setMapSelectMode(true)}
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-piride-lg border border-white/10 bg-bg-surface text-text-primary text-sm font-medium active:bg-bg-elevated transition-colors"
+            >
+              <Crosshair size={16} color="#FF9800" />
+              {t('selectOnMap')}
+            </button>
+          )}
 
           {/* Tariff cards */}
           <div className="space-y-2.5">

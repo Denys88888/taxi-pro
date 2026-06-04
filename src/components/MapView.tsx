@@ -61,20 +61,49 @@ function MapController({ center, shouldCenter }: { center: LatLngExpression; sho
   return null;
 }
 
+// ─── Map Click Handler ────────────────────────────────────────
+
+function MapClickHandler({ onClick }: { onClick?: (lat: number, lng: number) => void }) {
+  const map = useMap();
+  useEffect(() => {
+    if (!onClick) return;
+    const handler = (e: L.LeafletMouseEvent) => {
+      onClick(e.latlng.lat, e.latlng.lng);
+    };
+    map.on('click', handler);
+    return () => { map.off('click', handler); };
+  }, [map, onClick]);
+  return null;
+}
+
 // ─── MapView Component ─────────────────────────────────────────
 
 interface MapViewProps {
   showRoute?: boolean;
   routeCoords?: [number, number][];
   driverLocation?: { lat: number; lng: number };
-  // eslint-disable-next-line react/no-unused-prop-types
-  showRecenterButton?: boolean; // available for future use
+  onMapClick?: (lat: number, lng: number) => void;
+  clickPin?: { lat: number; lng: number } | null;
 }
+
+const clickPinIcon = L.divIcon({
+  className: 'custom-pin',
+  html: `<svg width="36" height="44" viewBox="0 0 40 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 0C8.96 0 0 8.96 0 20c0 15 20 28 20 28s20-13 20-28C40 8.96 31.04 0 20 0z" fill="#FF9800"/>
+    <circle cx="20" cy="20" r="8" fill="white"/>
+    <circle cx="20" cy="20" r="4" fill="#FF9800"/>
+  </svg>`,
+  iconSize: [36, 44],
+  iconAnchor: [18, 44],
+  popupAnchor: [0, -44],
+});
 
 export function MapView({
   showRoute = false,
   routeCoords = [],
   driverLocation,
+  onMapClick,
+  clickPin,
 }: MapViewProps) {
   const { pickup, destination, currentRide } = useApp();
 
@@ -103,6 +132,12 @@ export function MapView({
         />
 
         <MapController center={center} shouldCenter={!hasRoute} />
+        <MapClickHandler onClick={onMapClick} />
+
+        {/* Click pin (tap-to-select) */}
+        {clickPin && (
+          <Marker position={[clickPin.lat, clickPin.lng]} icon={clickPinIcon} />
+        )}
 
         {/* Pickup marker */}
         <Marker position={[pickup.lat, pickup.lng]} icon={pickupIcon} />
