@@ -12,35 +12,45 @@ interface LocationItem {
   address: string;
   lat: string;
   lng: string;
+  postcode?: string;
+}
+
+// Haversine distance in km
+function getDistanceKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
 const LOCAL_FALLBACK: LocationItem[] = [
   // Moscow (12)
-  { name: 'Красная площадь', address: 'Москва, Россия', lat: '55.7539', lng: '37.6208' },
-  { name: 'Кремль', address: 'Москва, Россия', lat: '55.7520', lng: '37.6175' },
-  { name: 'Москва-Сити', address: 'Москва, Россия', lat: '55.7495', lng: '37.5373' },
-  { name: 'Аэропорт Шереметьево', address: 'Москва, Россия', lat: '55.9736', lng: '37.4125' },
-  { name: 'Аэропорт Домодедово', address: 'Москва, Россия', lat: '55.4103', lng: '37.9023' },
-  { name: 'ВДНХ', address: 'Москва, Россия', lat: '55.8261', lng: '37.6376' },
-  { name: 'Улица Арбат', address: 'Москва, Россия', lat: '55.7521', lng: '37.5952' },
-  { name: 'Парк Горького', address: 'Москва, Россия', lat: '55.7314', lng: '37.6035' },
-  { name: 'Стадион Лужники', address: 'Москва, Россия', lat: '55.7158', lng: '37.5536' },
-  { name: 'Останкинская башня', address: 'Москва, Россия', lat: '55.8197', lng: '37.6119' },
-  { name: 'Сокольники', address: 'Москва, Россия', lat: '55.7891', lng: '37.6797' },
-  { name: 'Тверская улица', address: 'Москва, Россия', lat: '55.7648', lng: '37.6063' },
+  { name: 'Красная площадь', address: 'Москва, Россия', lat: '55.7539', lng: '37.6208', postcode: '101000' },
+  { name: 'Кремль', address: 'Москва, Россия', lat: '55.7520', lng: '37.6175', postcode: '101000' },
+  { name: 'Москва-Сити', address: 'Москва, Россия', lat: '55.7495', lng: '37.5373', postcode: '123317' },
+  { name: 'Аэропорт Шереметьево', address: 'Москва, Россия', lat: '55.9736', lng: '37.4125', postcode: '141400' },
+  { name: 'Аэропорт Домодедово', address: 'Москва, Россия', lat: '55.4103', lng: '37.9023', postcode: '142015' },
+  { name: 'ВДНХ', address: 'Москва, Россия', lat: '55.8261', lng: '37.6376', postcode: '129223' },
+  { name: 'Улица Арбат', address: 'Москва, Россия', lat: '55.7521', lng: '37.5952', postcode: '119019' },
+  { name: 'Парк Горького', address: 'Москва, Россия', lat: '55.7314', lng: '37.6035', postcode: '119049' },
+  { name: 'Стадион Лужники', address: 'Москва, Россия', lat: '55.7158', lng: '37.5536', postcode: '119048' },
+  { name: 'Останкинская башня', address: 'Москва, Россия', lat: '55.8197', lng: '37.6119', postcode: '127427' },
+  { name: 'Сокольники', address: 'Москва, Россия', lat: '55.7891', lng: '37.6797', postcode: '107014' },
+  { name: 'Тверская улица', address: 'Москва, Россия', lat: '55.7648', lng: '37.6063', postcode: '125009' },
   // Saint Petersburg (12)
-  { name: 'Дворцовая площадь', address: 'Санкт-Петербург, Россия', lat: '59.9402', lng: '30.3159' },
-  { name: 'Эрмитаж', address: 'Санкт-Петербург, Россия', lat: '59.9398', lng: '30.3146' },
-  { name: 'Невский проспект', address: 'Санкт-Петербург, Россия', lat: '59.9343', lng: '30.3351' },
-  { name: 'Петропавловская крепость', address: 'Санкт-Петербург, Россия', lat: '59.9500', lng: '30.3167' },
-  { name: 'Аэропорт Пулково', address: 'Санкт-Петербург, Россия', lat: '59.8003', lng: '30.2625' },
-  { name: 'Исаакиевский собор', address: 'Санкт-Петербург, Россия', lat: '59.9341', lng: '30.3062' },
-  { name: 'Казанский собор', address: 'Санкт-Петербург, Россия', lat: '59.9343', lng: '30.3245' },
-  { name: 'Храм Спаса на Крови', address: 'Санкт-Петербург, Россия', lat: '59.9400', lng: '30.3289' },
-  { name: 'Летний сад', address: 'Санкт-Петербург, Россия', lat: '59.9461', lng: '30.3364' },
-  { name: 'Мариинский театр', address: 'Санкт-Петербург, Россия', lat: '59.9258', lng: '30.2966' },
-  { name: 'Васильевский остров', address: 'Санкт-Петербург, Россия', lat: '59.9400', lng: '30.2900' },
-  { name: 'Финляндский вокзал', address: 'Санкт-Петербург, Россия', lat: '59.9553', lng: '30.3558' },
+  { name: 'Дворцовая площадь', address: 'Санкт-Петербург, Россия', lat: '59.9402', lng: '30.3159', postcode: '191186' },
+  { name: 'Эрмитаж', address: 'Санкт-Петербург, Россия', lat: '59.9398', lng: '30.3146', postcode: '190000' },
+  { name: 'Невский проспект', address: 'Санкт-Петербург, Россия', lat: '59.9343', lng: '30.3351', postcode: '191025' },
+  { name: 'Петропавловская крепость', address: 'Санкт-Петербург, Россия', lat: '59.9500', lng: '30.3167', postcode: '197046' },
+  { name: 'Аэропорт Пулково', address: 'Санкт-Петербург, Россия', lat: '59.8003', lng: '30.2625', postcode: '196210' },
+  { name: 'Исаакиевский собор', address: 'Санкт-Петербург, Россия', lat: '59.9341', lng: '30.3062', postcode: '190000' },
+  { name: 'Казанский собор', address: 'Санкт-Петербург, Россия', lat: '59.9343', lng: '30.3245', postcode: '191186' },
+  { name: 'Храм Спаса на Крови', address: 'Санкт-Петербург, Россия', lat: '59.9400', lng: '30.3289', postcode: '191186' },
+  { name: 'Летний сад', address: 'Санкт-Петербург, Россия', lat: '59.9461', lng: '30.3364', postcode: '191186' },
+  { name: 'Мариинский театр', address: 'Санкт-Петербург, Россия', lat: '59.9258', lng: '30.2966', postcode: '190000' },
+  { name: 'Васильевский остров', address: 'Санкт-Петербург, Россия', lat: '59.9400', lng: '30.2900', postcode: '199034' },
+  { name: 'Финляндский вокзал', address: 'Санкт-Петербург, Россия', lat: '59.9553', lng: '30.3558', postcode: '194100' },
   // Kyiv (12)
   { name: 'Майдан Незалежности', address: 'Киев, Украина', lat: '50.4504', lng: '30.5245' },
   { name: 'Киево-Печерская Лавра', address: 'Киев, Украина', lat: '50.4343', lng: '30.5592' },
@@ -99,19 +109,18 @@ const LOCAL_FALLBACK: LocationItem[] = [
   { name: 'Саграда Фамилия', address: 'Барселона, Испания', lat: '41.4036', lng: '2.1744' },
   { name: 'Башня CN', address: 'Торонто, Канада', lat: '43.6426', lng: '-79.3871' },
   // Warsaw (12)
-  { name: 'Замковая площадь', address: 'Варшава, Польша', lat: '52.2476', lng: '21.0142' },
-  { name: 'Аэропорт Шопена', address: 'Варшава, Польша', lat: '52.1657', lng: '20.9671' },
-  { name: 'Дворец культуры', address: 'Варшава, Польша', lat: '52.2318', lng: '21.0058' },
-  { name: 'Улица Плёвецкая', address: 'Варшава, Польша', lat: '52.2370', lng: '21.1230' },
-
-  { name: 'Национальный стадион', address: 'Варшава, Польша', lat: '52.2395', lng: '21.0456' },
-  { name: 'Злоте Тарасы', address: 'Варшава, Польша', lat: '52.2303', lng: '21.0019' },
-  { name: 'Лазенковский дворец', address: 'Варшава, Польша', lat: '52.2144', lng: '21.0354' },
-  { name: 'Улица Новый Свет', address: 'Варшава, Польша', lat: '52.2352', lng: '21.0190' },
-  { name: 'Мокотув', address: 'Варшава, Польша', lat: '52.1904', lng: '21.0038' },
-  { name: 'Виланув', address: 'Варшава, Польша', lat: '52.1658', lng: '21.0906' },
-  { name: 'Прага-Полудне', address: 'Варшава, Польша', lat: '52.2449', lng: '21.0845' },
-  { name: 'Воля', address: 'Варшава, Польша', lat: '52.2370', lng: '20.9800' },
+  { name: 'Замковая площадь', address: 'Варшава, Польша', lat: '52.2476', lng: '21.0142', postcode: '00-277' },
+  { name: 'Аэропорт Шопена', address: 'Варшава, Польша', lat: '52.1657', lng: '20.9671', postcode: '02-143' },
+  { name: 'Дворец культуры', address: 'Варшава, Польша', lat: '52.2318', lng: '21.0058', postcode: '00-901' },
+  { name: 'Улица Плёвецкая', address: 'Варшава, Польша', lat: '52.2370', lng: '21.1230', postcode: '04-567' },
+  { name: 'Национальный стадион', address: 'Варшава, Польша', lat: '52.2395', lng: '21.0456', postcode: '03-972' },
+  { name: 'Злоте Тарасы', address: 'Варшава, Польша', lat: '52.2303', lng: '21.0019', postcode: '00-906' },
+  { name: 'Лазенковский дворец', address: 'Варшава, Польша', lat: '52.2144', lng: '21.0354', postcode: '00-460' },
+  { name: 'Улица Новый Свет', address: 'Варшава, Польша', lat: '52.2352', lng: '21.0190', postcode: '00-372' },
+  { name: 'Мокотув', address: 'Варшава, Польша', lat: '52.1904', lng: '21.0038', postcode: '02-001' },
+  { name: 'Виланув', address: 'Варшава, Польша', lat: '52.1658', lng: '21.0906', postcode: '02-958' },
+  { name: 'Прага-Полудне', address: 'Варшава, Польша', lat: '52.2449', lng: '21.0845', postcode: '04-001' },
+  { name: 'Воля', address: 'Варшава, Польша', lat: '52.2370', lng: '20.9800', postcode: '01-001' },
 ];
 
 function convertGeocodingToItem(result: GeocodingResult): LocationItem {
@@ -125,17 +134,30 @@ function convertGeocodingToItem(result: GeocodingResult): LocationItem {
 
 export default function SearchPage() {
   const navigate = useNavigate();
-  const { setDestination, setPickup } = useApp();
+  const { setDestination, setPickup, pickup } = useApp();
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<LocationItem[]>([]);
+  const [results, setResults] = useState<(LocationItem & { distance?: number })[]>([]);
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Current reference point for distance calculation (pickup or default Moscow)
+  const refLat = pickup?.lat ?? 55.7539;
+  const refLng = pickup?.lng ?? 37.6208;
 
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
+
+  // Sort items by distance from reference point
+  const sortByDistance = useCallback((items: LocationItem[]) => {
+    return items
+      .map((item) => {
+        const d = getDistanceKm(refLat, refLng, parseFloat(item.lat), parseFloat(item.lng));
+        return { ...item, distance: Math.round(d) };
+      })
+      .sort((a, b) => (a.distance ?? Infinity) - (b.distance ?? Infinity));
+  }, [refLat, refLng]);
 
   const doSearch = useCallback((searchQuery: string) => {
     if (searchQuery.trim().length < 2) {
@@ -153,13 +175,13 @@ export default function SearchPage() {
             loc.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(q) ||
             loc.address.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(q)
         );
-        setResults(fallback);
+        setResults(sortByDistance(fallback));
       } else {
-        setResults(data.map(convertGeocodingToItem));
+        setResults(sortByDistance(data.map(convertGeocodingToItem)));
       }
       setLoading(false);
     });
-  }, []);
+  }, [sortByDistance]);
 
   const handleQueryChange = useCallback((value: string) => {
     setQuery(value);
@@ -264,7 +286,15 @@ export default function SearchPage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-text-primary text-sm font-medium truncate">{item.name}</p>
-                      <p className="text-text-tertiary text-xs truncate">{item.address}</p>
+                      <p className="text-text-tertiary text-xs truncate">
+                        {item.address}
+                        {item.postcode ? `, ${item.postcode}` : ''}
+                      </p>
+                    </div>
+                    <div className="text-right shrink-0">
+                      {item.distance !== undefined && (
+                        <span className="text-primary text-xs font-semibold">{item.distance} км</span>
+                      )}
                     </div>
                   </motion.button>
                 ))
