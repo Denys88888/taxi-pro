@@ -73,7 +73,7 @@ export default function RideCompletePage() {
           <div className="flex items-start gap-3">
             <MapPin size={14} color="#FF5252" className="mt-0.5 shrink-0" />
             <div className="flex-1 min-w-0">
-              <p className="text-text-primary text-sm truncate">{destination?.name}</p>
+              <p className="text-text-primary text-sm truncate">{destination?.name}{destination?.postcode ? `, ${destination.postcode}` : ''}</p>
             </div>
           </div>
           <div className="border-t border-white/5 pt-3 mt-3 flex justify-between items-center">
