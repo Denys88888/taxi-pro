@@ -22,6 +22,8 @@ export function DriverHomeScreen() {
   const [online, setOnline] = useState(false);
   const [requests, setRequests] = useState<Ride[]>([]);
   const [sortByPrice, setSortByPrice] = useState(false);
+  const [offerInputs, setOfferInputs] = useState<Record<string, string>>({});
+  const [offered, setOffered] = useState<Record<string, boolean>>({});
 
   const center: GeoPoint = position ?? { lat: 52.2297, lng: 21.0122 };
 
@@ -69,6 +71,22 @@ export function DriverHomeScreen() {
     navigate('ride', { id: ride.id });
   };
 
+  // Bid on a negotiable ride (counter-offer with the driver's own price).
+  const sendOffer = async (ride: Ride): Promise<void> => {
+    const amount = Number(offerInputs[ride.id]);
+    if (!amount || amount <= 0) return;
+    const etaMin = Math.round(
+      (haversineKm(center.lat, center.lng, ride.pickup.lat, ride.pickup.lng) / 30) * 60
+    );
+    try {
+      await api.submitOffer(ride.id, amount, etaMin);
+      setOffered((prev) => ({ ...prev, [ride.id]: true }));
+      addToast('success', t('driver.offerSent'));
+    } catch {
+      addToast('error', t('common.error'));
+    }
+  };
+
   const sorted = [...requests].sort((a, b) =>
     sortByPrice
       ? b.fare - a.fare
@@ -114,19 +132,51 @@ export function DriverHomeScreen() {
             <div className="flex items-start justify-between">
               <div className="min-w-0 flex-1 text-sm">
                 <p className="truncate">🟢 {ride.pickup.address ?? 'Pickup'}</p>
+                {ride.stops?.map((s, i) => (
+                  <p key={i} className="truncate opacity-70">🟠 {s.address ?? `Stop ${i + 1}`}</p>
+                ))}
                 <p className="truncate opacity-70">🔴 {ride.destination.address ?? 'Destination'}</p>
               </div>
-              <span className="ml-2 font-bold">{formatPi(ride.fare)}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-xs opacity-60">
-                {formatDistance(haversineKm(center.lat, center.lng, ride.pickup.lat, ride.pickup.lng))} ·{' '}
-                {ride.vehicleType}
+              <span className="ml-2 text-right">
+                <span className="block font-bold">{formatPi(ride.fare)}</span>
+                {ride.negotiable && <span className="text-[10px] text-primary">{t('driver.negotiable')}</span>}
               </span>
-              <Button variant="success" onClick={() => accept(ride)} className="px-5 py-2">
-                {t('driver.accept')}
-              </Button>
             </div>
+            <div className="text-xs opacity-60">
+              {formatDistance(haversineKm(center.lat, center.lng, ride.pickup.lat, ride.pickup.lng))} · {ride.vehicleType}
+            </div>
+
+            {ride.negotiable ? (
+              offered[ride.id] ? (
+                <p className="text-center text-sm text-success">✓ {t('driver.offerSent')}</p>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <div className="flex flex-1 items-center gap-1 rounded-lg border border-[#E0E0E0] dark:border-white/15 px-3 py-2">
+                    <span className="font-bold text-primary">π</span>
+                    <input
+                      type="number"
+                      min={0}
+                      step="0.1"
+                      value={offerInputs[ride.id] ?? ''}
+                      placeholder={String(ride.offeredFare ?? ride.fare)}
+                      onChange={(e) =>
+                        setOfferInputs((prev) => ({ ...prev, [ride.id]: e.target.value }))
+                      }
+                      className="w-full bg-transparent text-sm outline-none"
+                    />
+                  </div>
+                  <Button variant="primary" onClick={() => sendOffer(ride)} className="px-4 py-2">
+                    {t('driver.submitOffer')}
+                  </Button>
+                </div>
+              )
+            ) : (
+              <div className="flex justify-end">
+                <Button variant="success" onClick={() => accept(ride)} className="px-5 py-2">
+                  {t('driver.accept')}
+                </Button>
+              </div>
+            )}
           </Card>
         ))}
       </div>

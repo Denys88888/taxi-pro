@@ -46,9 +46,23 @@
     "noDrivers": "No drivers available nearby",
     "useMyLocation": "Use my location",
     "chooseVehicle": "Choose a vehicle",
-    "estimatedFare": "Estimated fare"
+    "estimatedFare": "Estimated fare",
+    "now": "Now",
+    "schedule": "Schedule",
+    "pickDateTime": "Pick date & time",
+    "addStop": "Add stop",
+    "stop": "Stop",
+    "removeStop": "Remove stop",
+    "setYourPrice": "Set your price",
+    "yourPrice": "Your price",
+    "yourPriceHint": "Drivers will offer or counter your price",
+    "goHere": "Go here?",
+    "findOffers": "Find offers",
+    "scheduleRide": "Schedule ride",
+    "tapMapHint": "Tap the map to set destination"
   },
   "ride": {
+    "statusScheduled": "Scheduled",
     "statusSearching": "Searching for a driver",
     "statusAssigned": "Driver on the way",
     "statusArrived": "Driver has arrived",
@@ -74,7 +88,12 @@
     "reviewPlaceholder": "Add a review (optional)",
     "platformFee": "Platform fee",
     "youEarn": "You earn",
-    "receipt": "Receipt"
+    "receipt": "Receipt",
+    "offers": "Driver offers",
+    "noOffers": "Waiting for driver offers…",
+    "acceptOffer": "Accept",
+    "scheduledFor": "Scheduled for",
+    "stops": "Stops"
   },
   "vehicle": {
     "economy": "Economy",
@@ -110,7 +129,11 @@
     "sortByDistance": "By distance",
     "sortByPrice": "By price",
     "register": "Become a Driver",
-    "earnings": "Earnings"
+    "earnings": "Earnings",
+    "offerYourPrice": "Offer your price",
+    "submitOffer": "Send offer",
+    "offerSent": "Offer sent",
+    "negotiable": "Negotiable"
   },
   "earnings": {
     "title": "Earnings",
@@ -151,7 +174,13 @@
     "rating": "Rating",
     "rolePassenger": "Passenger",
     "roleDriver": "Driver",
-    "roleAdmin": "Admin"
+    "roleAdmin": "Admin",
+    "phone": "Phone number",
+    "phonePlaceholder": "+1 555 123 4567",
+    "uploadAvatar": "Change photo",
+    "adminPanel": "Admin panel",
+    "call": "Call",
+    "saved": "Saved"
   },
   "history": {
     "title": "Ride history",

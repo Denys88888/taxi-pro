@@ -13,10 +13,11 @@ import { usePayments } from '../hooks/usePayments';
 import { wsService } from '../services/wsService';
 import { api } from '../services/api';
 import { chatIdForRide } from '../utils/helpers';
-import { formatPi, formatDistance, formatDuration } from '../utils/formatters';
-import type { GeoPoint, Ride } from '../types';
+import { formatPi, formatDistance, formatDuration, formatDate, maskPhone } from '../utils/formatters';
+import type { GeoPoint, Ride, RideParty, FareOffer } from '../types';
 
-// Ride tracking screen: live map + status, driver actions, cancel + rating flow.
+// Ride tracking screen: live map + status, counterpart contact (phone/call),
+// driver offers for negotiable rides, cancel + pay + rate.
 export function RideDetailsScreen() {
   const { t } = useTranslation();
   const params = useRouter((s) => s.params);
@@ -25,6 +26,7 @@ export function RideDetailsScreen() {
   const { addToast } = useToast();
   const { payRide, processing } = usePayments();
   const storeRide = useAppStore((s) => s.currentRide);
+  const uid = useAppStore((s) => s.user?.uid ?? '');
 
   const [ride, setRide] = useState<Ride | null>(storeRide);
   const [driverPos, setDriverPos] = useState<GeoPoint | null>(null);
@@ -35,12 +37,18 @@ export function RideDetailsScreen() {
 
   useEffect(() => {
     if (!rideId) return;
-    api.getRide(rideId).then(setRide).catch(() => {});
+    const refresh = () => api.getRide(rideId).then(setRide).catch(() => {});
+    refresh();
     const offStatus = wsService.on('ride_status_update', (msg) => {
-      if (String(msg.rideId) === rideId) api.getRide(rideId).then(setRide).catch(() => {});
+      if (String(msg.rideId) === rideId) refresh();
     });
     const offAssigned = wsService.on('ride_assigned', (msg) => {
-      if (String(msg.rideId) === rideId) api.getRide(rideId).then(setRide).catch(() => {});
+      if (String(msg.rideId) === rideId) refresh();
+    });
+    const offOffers = wsService.on('fare_offers', (msg) => {
+      if (String(msg.rideId) === rideId) {
+        setRide((r) => (r ? { ...r, offers: msg.offers as FareOffer[] } : r));
+      }
     });
     const offLoc = wsService.on('driver_location_update', (msg) => {
       if (String(msg.rideId) === rideId) {
@@ -50,6 +58,7 @@ export function RideDetailsScreen() {
     return () => {
       offStatus();
       offAssigned();
+      offOffers();
       offLoc();
     };
   }, [rideId]);
@@ -58,12 +67,13 @@ export function RideDetailsScreen() {
     return <div className="flex h-full items-center justify-center opacity-60">{t('common.loading')}</div>;
   }
 
+  const isDriver = ride.driverId === uid;
+  const counterpart: RideParty | null | undefined = isDriver ? ride.passenger : ride.driver;
   const feeApplies = ride.status === 'arrived' || ride.status === 'in_progress';
 
   const doCancel = async (): Promise<void> => {
     try {
       await api.cancelRide(ride.id, feeApplies ? 'late-cancel' : 'user-cancel');
-      wsService.send('ride_decline', { rideId: ride.id });
       addToast('info', t('ride.statusCancelled'));
       setShowCancel(false);
       back();
@@ -87,13 +97,26 @@ export function RideDetailsScreen() {
     if (txid) api.getRide(ride.id).then(setRide).catch(() => {});
   };
 
+  const acceptOffer = async (offer: FareOffer): Promise<void> => {
+    try {
+      await api.acceptOffer(ride.id, offer.driverId);
+      // Refetch so the enriched driver contact card (phone/call) appears.
+      const fresh = await api.getRide(ride.id);
+      setRide(fresh);
+      addToast('success', t('ride.acceptOffer'));
+    } catch {
+      addToast('error', t('common.error'));
+    }
+  };
+
   return (
     <div className="flex h-full flex-col">
-      <div className="h-[52%]">
+      <div className="h-[48%]">
         <MapView
           center={driverPos ?? ride.pickup}
           pickup={ride.pickup}
           destination={ride.destination}
+          stops={ride.stops}
           driver={driverPos}
           className="h-full w-full"
         />
@@ -105,22 +128,34 @@ export function RideDetailsScreen() {
           <span className="text-lg font-bold">{formatPi(ride.fare)}</span>
         </div>
 
-        {ride.driverId && (
+        {ride.status === 'scheduled' && ride.scheduledAt && (
+          <Card className="text-sm">
+            🗓 {t('ride.scheduledFor')}: <b>{formatDate(ride.scheduledAt)}</b>
+          </Card>
+        )}
+
+        {/* Counterpart contact card with phone + call (once assigned). */}
+        {counterpart && (
           <Card className="flex items-center gap-3">
-            <Avatar name={ride.driverId} size={48} />
+            <Avatar name={counterpart.name} src={counterpart.avatar} size={48} />
             <div className="flex-1">
-              <p className="font-semibold">{ride.driverId}</p>
+              <p className="font-semibold">{counterpart.name}</p>
               <p className="text-xs opacity-60">
-                {formatDistance(ride.distanceKm)} · {formatDuration(ride.estimatedDurationMin)}
+                ⭐ {counterpart.rating.toFixed(1)}
+                {counterpart.brand ? ` · ${counterpart.brand} ${counterpart.model} · ${counterpart.number}` : ''}
               </p>
+              {counterpart.phone && <p className="text-xs opacity-50">{maskPhone(counterpart.phone)}</p>}
             </div>
             <div className="flex gap-2">
-              <button
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-success/15 text-success"
-                aria-label={t('ride.callDriver')}
-              >
-                📞
-              </button>
+              {counterpart.phone && (
+                <a
+                  href={`tel:${counterpart.phone}`}
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-success/15 text-success"
+                  aria-label={t('ride.callDriver')}
+                >
+                  📞
+                </a>
+              )}
               <button
                 onClick={() => navigate('chat', { chatId: chatIdForRide(ride.id) })}
                 className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/15 text-primary"
@@ -132,13 +167,36 @@ export function RideDetailsScreen() {
           </Card>
         )}
 
-        {/* Completed → pay (if unpaid) then rate. */}
-        {ride.status === 'completed' && !ride.txid && (
+        {/* Negotiable ride: incoming driver offers (passenger picks one). */}
+        {ride.negotiable && ride.status === 'searching' && !isDriver && (
+          <div className="space-y-2">
+            <p className="text-sm font-semibold">{t('ride.offers')}</p>
+            {(!ride.offers || ride.offers.length === 0) && (
+              <p className="text-sm opacity-50">{t('ride.noOffers')}</p>
+            )}
+            {ride.offers?.map((o) => (
+              <Card key={o.driverId} className="flex items-center justify-between">
+                <div>
+                  <p className="font-semibold">{formatPi(o.amount)}</p>
+                  <p className="text-xs opacity-60">
+                    {o.driverName} · ⭐ {o.driverRating.toFixed(1)}
+                    {o.etaMin != null ? ` · ${o.etaMin} min` : ''}
+                  </p>
+                </div>
+                <Button variant="success" className="px-4 py-2" onClick={() => acceptOffer(o)}>
+                  {t('ride.acceptOffer')}
+                </Button>
+              </Card>
+            ))}
+          </div>
+        )}
+
+        {ride.status === 'completed' && !ride.txid && !isDriver && (
           <Button fullWidth loading={processing} onClick={pay}>
             {t('ride.fare')}: {formatPi(ride.fare)} — π Pay
           </Button>
         )}
-        {ride.status === 'completed' && (
+        {ride.status === 'completed' && !isDriver && (
           <Card className="space-y-3">
             <p className="text-center font-semibold">{t('ride.rateTitle')}</p>
             <div className="flex justify-center gap-2 text-3xl">
@@ -154,8 +212,14 @@ export function RideDetailsScreen() {
           </Card>
         )}
 
-        {/* Active ride actions: share, SOS, cancel. */}
-        {!['completed', 'cancelled'].includes(ride.status) && (
+        <div className="flex items-center justify-between text-xs opacity-60">
+          <span>{formatDistance(ride.distanceKm)} · {formatDuration(ride.estimatedDurationMin)}</span>
+          {ride.stops && ride.stops.length > 0 && (
+            <span>{ride.stops.length} {t('ride.stops')}</span>
+          )}
+        </div>
+
+        {!['completed', 'cancelled'].includes(ride.status) && !isDriver && (
           <div className="grid grid-cols-2 gap-3">
             <Button
               variant="outline"
@@ -169,10 +233,7 @@ export function RideDetailsScreen() {
             >
               🔗 {t('ride.share')}
             </Button>
-            <Button
-              variant="danger"
-              onClick={() => addToast('warning', t('ride.sosSent'))}
-            >
+            <Button variant="danger" onClick={() => addToast('warning', t('ride.sosSent'))}>
               🆘 {t('ride.sos')}
             </Button>
             <Button variant="ghost" className="col-span-2 !text-danger" onClick={() => setShowCancel(true)}>

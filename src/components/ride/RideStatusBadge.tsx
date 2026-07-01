@@ -2,7 +2,8 @@ import { useTranslation } from 'react-i18next';
 import { Badge } from '../ui/Badge';
 import type { RideStatus } from '../../types';
 
-const MAP: Record<RideStatus, { tone: 'warning' | 'info' | 'primary' | 'success' | 'danger'; key: string }> = {
+const MAP: Record<RideStatus, { tone: 'warning' | 'info' | 'primary' | 'success' | 'danger' | 'neutral'; key: string }> = {
+  scheduled: { tone: 'neutral', key: 'ride.statusScheduled' },
   searching: { tone: 'warning', key: 'ride.statusSearching' },
   assigned: { tone: 'info', key: 'ride.statusAssigned' },
   arrived: { tone: 'warning', key: 'ride.statusArrived' },

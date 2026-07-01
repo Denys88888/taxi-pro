@@ -3,10 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
+import { Avatar } from '../components/ui/Avatar';
 import { useToast } from '../hooks/useToast';
 import { useRouter } from '../store/useRouter';
+import { useAppStore } from '../store/useAppStore';
 import { api } from '../services/api';
 import { isNonEmpty, isValidPlate } from '../utils/validators';
+import { fileToAvatarDataUrl } from '../utils/image';
 import { cn } from '../utils/helpers';
 import type { VehicleType } from '../types';
 
@@ -17,11 +20,13 @@ export function DriverRegistrationScreen() {
   const { t } = useTranslation();
   const { addToast } = useToast();
   const back = useRouter((s) => s.back);
+  const user = useAppStore((s) => s.user);
+  const updateUser = useAppStore((s) => s.updateUser);
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({
-    name: '',
-    phone: '',
+    name: user?.name ?? '',
+    phone: user?.phone ?? '',
     brand: '',
     model: '',
     color: '',
@@ -31,15 +36,32 @@ export function DriverRegistrationScreen() {
 
   const set = (k: keyof typeof form, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
+  const uploadAvatar = async (file: File): Promise<void> => {
+    try {
+      const dataUrl = await fileToAvatarDataUrl(file);
+      const updated = await api.updateProfile({ avatar: dataUrl });
+      updateUser({ avatar: updated.avatar });
+      addToast('success', t('profile.saved'));
+    } catch {
+      addToast('error', t('common.error'));
+    }
+  };
+
+  // A profile photo is required before a driver can be verified.
   const canNext =
     step === 0
       ? isNonEmpty(form.name) && isNonEmpty(form.phone)
       : step === 1
         ? isNonEmpty(form.brand) && isNonEmpty(form.model) && isValidPlate(form.number)
-        : true;
+        : step === 2
+          ? !!user?.avatar
+          : true;
 
   const submit = async (): Promise<void> => {
     try {
+      // Persist the name/phone captured in step 1 onto the profile.
+      await api.updateProfile({ name: form.name, phone: form.phone });
+      updateUser({ name: form.name, phone: form.phone });
       await api.registerDriver({
         vehicleType: form.vehicleType,
         brand: form.brand,
@@ -95,12 +117,26 @@ export function DriverRegistrationScreen() {
           </Card>
         )}
         {step === 2 && (
-          <Card className="space-y-3">
-            <label className="flex h-28 cursor-pointer flex-col items-center justify-center rounded-card border-2 border-dashed border-black/15 dark:border-white/15 text-sm opacity-70">
+          <Card className="space-y-4">
+            {/* Profile photo — required before a driver can be verified. */}
+            <div className="flex items-center gap-3">
+              <Avatar name={form.name || user?.name || '?'} src={user?.avatar} size={56} />
+              <label className="cursor-pointer rounded-btn border border-primary px-4 py-2 text-sm font-semibold text-primary">
+                {user?.avatar ? t('profile.uploadAvatar') : `📷 ${t('register.title')}`}
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => e.target.files?.[0] && uploadAvatar(e.target.files[0])}
+                />
+              </label>
+              {!user?.avatar && <span className="text-xs text-danger">*</span>}
+            </div>
+            <label className="flex h-24 cursor-pointer flex-col items-center justify-center rounded-card border-2 border-dashed border-black/15 dark:border-white/15 text-sm opacity-70">
               📷 {t('register.vehiclePhoto')}
               <input type="file" accept="image/*" className="hidden" />
             </label>
-            <label className="flex h-28 cursor-pointer flex-col items-center justify-center rounded-card border-2 border-dashed border-black/15 dark:border-white/15 text-sm opacity-70">
+            <label className="flex h-24 cursor-pointer flex-col items-center justify-center rounded-card border-2 border-dashed border-black/15 dark:border-white/15 text-sm opacity-70">
               🪪 {t('register.licensePhoto')}
               <input type="file" accept="image/*" className="hidden" />
             </label>

@@ -5,12 +5,36 @@ export type VehicleType = 'economy' | 'comfort' | 'business' | 'xl';
 export type Theme = 'light' | 'dark' | 'auto';
 
 export type RideStatus =
+  | 'scheduled'
   | 'searching'
   | 'assigned'
   | 'arrived'
   | 'in_progress'
   | 'completed'
   | 'cancelled';
+
+export interface FareOffer {
+  driverId: string;
+  driverName: string;
+  driverRating: number;
+  vehicleType?: VehicleType;
+  amount: number;
+  etaMin?: number;
+  createdAt: string;
+}
+
+export interface RideParty {
+  uid: string;
+  name: string;
+  phone?: string;
+  rating: number;
+  avatar?: string;
+  vehicleType?: VehicleType;
+  brand?: string;
+  model?: string;
+  color?: string;
+  number?: string;
+}
 
 export interface GeoPoint {
   lat: number;
@@ -55,6 +79,7 @@ export interface Ride {
   driverId?: string;
   pickup: GeoPoint;
   destination: GeoPoint;
+  stops?: GeoPoint[];
   vehicleType: VehicleType;
   distanceKm: number;
   estimatedDurationMin: number;
@@ -63,6 +88,10 @@ export interface Ride {
   platformFee: number;
   driverEarnings: number;
   status: RideStatus;
+  scheduledAt?: string;
+  negotiable?: boolean;
+  offeredFare?: number;
+  offers?: FareOffer[];
   paymentId?: string;
   txid?: string;
   passengerRating?: number;
@@ -71,6 +100,9 @@ export interface Ride {
   cancellationReason?: string;
   cancellationFee?: number;
   shareToken?: string;
+  // Enriched by GET /api/rides/:id once assigned (contact cards).
+  driver?: RideParty | null;
+  passenger?: RideParty | null;
   createdAt: string;
   updatedAt: string;
 }

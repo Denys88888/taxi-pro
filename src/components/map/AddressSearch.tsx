@@ -8,11 +8,14 @@ interface Props {
   placeholder: string;
   value: string;
   icon?: string;
+  near?: GeoPoint | null;
+  countryCodes?: string;
   onSelect: (point: GeoPoint) => void;
 }
 
-// Debounced Nominatim autocomplete. Emits a GeoPoint (with address) on select.
-export function AddressSearch({ label, placeholder, value, icon, onSelect }: Props) {
+// Debounced Nominatim autocomplete. When `near` is supplied, results are limited
+// to the user's local region (~50 km). Emits a GeoPoint (with address) on select.
+export function AddressSearch({ label, placeholder, value, icon, near, countryCodes, onSelect }: Props) {
   const [query, setQuery] = useState(value);
   const [results, setResults] = useState<AddressResult[]>([]);
   const [open, setOpen] = useState(false);
@@ -27,7 +30,7 @@ export function AddressSearch({ label, placeholder, value, icon, onSelect }: Pro
       return;
     }
     timer.current = setTimeout(async () => {
-      setResults(await searchAddress(query));
+      setResults(await searchAddress(query, near, countryCodes));
       setOpen(true);
     }, 400);
     return () => {

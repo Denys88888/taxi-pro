@@ -1,5 +1,12 @@
 import { useEffect } from 'react';
-import { MapContainer as LeafletMap, TileLayer, Marker, Polyline, useMap } from 'react-leaflet';
+import {
+  MapContainer as LeafletMap,
+  TileLayer,
+  Marker,
+  Polyline,
+  useMap,
+  useMapEvents,
+} from 'react-leaflet';
 import L from 'leaflet';
 import type { GeoPoint } from '../../types';
 
@@ -26,18 +33,40 @@ function Recenter({ center }: { center: GeoPoint }) {
   return null;
 }
 
+// Relays map tap coordinates to the parent (tap-to-select destination).
+function ClickCapture({ onClick }: { onClick: (p: GeoPoint) => void }) {
+  useMapEvents({
+    click(e) {
+      onClick({ lat: e.latlng.lat, lng: e.latlng.lng });
+    },
+  });
+  return null;
+}
+
 interface Props {
   center: GeoPoint;
   pickup?: GeoPoint | null;
   destination?: GeoPoint | null;
   driver?: GeoPoint | null;
+  stops?: GeoPoint[];
+  onMapClick?: (p: GeoPoint) => void;
   className?: string;
 }
 
-// The map surface: OSM tiles, pickup/destination/driver markers, and a route line.
-export function MapView({ center, pickup, destination, driver, className }: Props) {
+// The map surface: OSM tiles, pickup/stops/destination/driver markers, and a
+// route line that threads through any intermediate stops.
+export function MapView({
+  center,
+  pickup,
+  destination,
+  driver,
+  stops = [],
+  onMapClick,
+  className,
+}: Props) {
   const route: [number, number][] = [];
   if (pickup) route.push([pickup.lat, pickup.lng]);
+  for (const s of stops) route.push([s.lat, s.lng]);
   if (destination) route.push([destination.lat, destination.lng]);
 
   return (
@@ -51,12 +80,16 @@ export function MapView({ center, pickup, destination, driver, className }: Prop
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <Recenter center={driver ?? pickup ?? center} />
+        {onMapClick && <ClickCapture onClick={onMapClick} />}
         {pickup && <Marker position={[pickup.lat, pickup.lng]} icon={pin('#2979FF', true)} />}
+        {stops.map((s, i) => (
+          <Marker key={`stop-${i}`} position={[s.lat, s.lng]} icon={pin('#FFAB00')} />
+        ))}
         {destination && (
           <Marker position={[destination.lat, destination.lng]} icon={pin('#FF1744')} />
         )}
         {driver && <Marker position={[driver.lat, driver.lng]} icon={pin('#00C853')} />}
-        {route.length === 2 && (
+        {route.length >= 2 && (
           <Polyline positions={route} pathOptions={{ color: '#7B3FE4', weight: 4 }} />
         )}
       </LeafletMap>

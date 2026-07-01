@@ -50,12 +50,25 @@ export const api = {
       .post<{ token: string; user: User }>('/api/auth/pi', { accessToken })
       .then((r) => r.data),
 
+  // ── Profile ──
+  getMe: () => client.get<User>('/api/users/me').then((r) => r.data),
+  updateProfile: (patch: Partial<Pick<User, 'name' | 'phone' | 'avatar' | 'preferredLanguage' | 'preferredTheme'>>) =>
+    client.patch<User>('/api/users/me', patch).then((r) => r.data),
+
   // ── Rides ──
   createRide: (payload: {
     pickup: GeoPoint;
     destination: GeoPoint;
     vehicleType: VehicleType;
+    stops?: GeoPoint[];
+    scheduledAt?: string;
+    negotiable?: boolean;
+    offeredFare?: number;
   }) => client.post<Ride>('/api/rides', payload).then((r) => r.data),
+  submitOffer: (rideId: string, amount: number, etaMin?: number) =>
+    client.post<Ride>(`/api/rides/${rideId}/offers`, { amount, etaMin }).then((r) => r.data),
+  acceptOffer: (rideId: string, driverId: string) =>
+    client.post<Ride>(`/api/rides/${rideId}/offers/accept`, { driverId }).then((r) => r.data),
   listRides: (params?: { status?: RideStatus; page?: number; limit?: number }) =>
     client.get<PaginatedRides>('/api/rides', { params }).then((r) => r.data),
   getRide: (id: string) => client.get<Ride>(`/api/rides/${id}`).then((r) => r.data),

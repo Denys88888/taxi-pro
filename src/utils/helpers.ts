@@ -29,6 +29,15 @@ export function haversineKm(
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
+// Total path length in km across an ordered list of points (multi-stop routes).
+export function routeDistanceKm(points: { lat: number; lng: number }[]): number {
+  let total = 0;
+  for (let i = 1; i < points.length; i++) {
+    total += haversineKm(points[i - 1].lat, points[i - 1].lng, points[i].lat, points[i].lng);
+  }
+  return total;
+}
+
 export function chatIdForRide(rideId: string): string {
   return `chat_${rideId}`;
 }
