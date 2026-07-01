@@ -46,7 +46,19 @@
     "noDrivers": "Geen chauffeurs in de buurt",
     "useMyLocation": "Mijn locatie",
     "chooseVehicle": "Kies een voertuig",
-    "estimatedFare": "Geschatte prijs"
+    "estimatedFare": "Geschatte prijs",
+    "now": "Nu",
+    "schedule": "Plannen",
+    "addStop": "Stop toevoegen",
+    "stop": "Stop",
+    "removeStop": "Stop verwijderen",
+    "setYourPrice": "Stel je prijs in",
+    "yourPrice": "Jouw prijs",
+    "yourPriceHint": "Chauffeurs bieden hun prijs",
+    "goHere": "Hierheen?",
+    "findOffers": "Aanbiedingen zoeken",
+    "scheduleRide": "Rit plannen",
+    "tapMapHint": "Tik op de kaart om de bestemming te kiezen"
   },
   "ride": {
     "statusSearching": "Chauffeur zoeken",
@@ -74,7 +86,13 @@
     "reviewPlaceholder": "Add a review (optional)",
     "platformFee": "Platform fee",
     "youEarn": "You earn",
-    "receipt": "Receipt"
+    "receipt": "Receipt",
+    "statusScheduled": "Gepland",
+    "offers": "Aanbiedingen van chauffeurs",
+    "noOffers": "Wachten op aanbiedingen…",
+    "acceptOffer": "Accepteren",
+    "scheduledFor": "Gepland voor",
+    "stops": "stops"
   },
   "vehicle": {
     "economy": "Economy",
@@ -110,7 +128,11 @@
     "sortByDistance": "By distance",
     "sortByPrice": "By price",
     "register": "Word chauffeur",
-    "earnings": "Earnings"
+    "earnings": "Earnings",
+    "offerYourPrice": "Bied je prijs",
+    "submitOffer": "Versturen",
+    "offerSent": "Aanbod verzonden",
+    "negotiable": "Onderhandelbaar"
   },
   "earnings": {
     "title": "Earnings",
@@ -151,7 +173,12 @@
     "rating": "Rating",
     "rolePassenger": "Passenger",
     "roleDriver": "Driver",
-    "roleAdmin": "Admin"
+    "roleAdmin": "Admin",
+    "phone": "Telefoonnummer",
+    "uploadAvatar": "Foto wijzigen",
+    "adminPanel": "Beheerderspaneel",
+    "call": "Bellen",
+    "saved": "Opgeslagen"
   },
   "history": {
     "title": "Ritgeschiedenis",

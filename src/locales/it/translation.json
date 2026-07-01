@@ -46,7 +46,19 @@
     "noDrivers": "Nessun autista nelle vicinanze",
     "useMyLocation": "La mia posizione",
     "chooseVehicle": "Scegli un veicolo",
-    "estimatedFare": "Tariffa stimata"
+    "estimatedFare": "Tariffa stimata",
+    "now": "Ora",
+    "schedule": "Programma",
+    "addStop": "Aggiungi tappa",
+    "stop": "Tappa",
+    "removeStop": "Rimuovi tappa",
+    "setYourPrice": "Imposta il prezzo",
+    "yourPrice": "Il tuo prezzo",
+    "yourPriceHint": "Gli autisti proporranno il loro prezzo",
+    "goHere": "Andare qui?",
+    "findOffers": "Trova offerte",
+    "scheduleRide": "Programma la corsa",
+    "tapMapHint": "Tocca la mappa per scegliere la destinazione"
   },
   "ride": {
     "statusSearching": "Ricerca autista",
@@ -74,7 +86,13 @@
     "reviewPlaceholder": "Add a review (optional)",
     "platformFee": "Platform fee",
     "youEarn": "You earn",
-    "receipt": "Receipt"
+    "receipt": "Receipt",
+    "statusScheduled": "Programmata",
+    "offers": "Offerte degli autisti",
+    "noOffers": "In attesa di offerte…",
+    "acceptOffer": "Accetta",
+    "scheduledFor": "Programmata per",
+    "stops": "tappe"
   },
   "vehicle": {
     "economy": "Economy",
@@ -110,7 +128,11 @@
     "sortByDistance": "By distance",
     "sortByPrice": "By price",
     "register": "Diventa autista",
-    "earnings": "Earnings"
+    "earnings": "Earnings",
+    "offerYourPrice": "Proponi il prezzo",
+    "submitOffer": "Invia",
+    "offerSent": "Offerta inviata",
+    "negotiable": "Trattabile"
   },
   "earnings": {
     "title": "Earnings",
@@ -151,7 +173,12 @@
     "rating": "Rating",
     "rolePassenger": "Passenger",
     "roleDriver": "Driver",
-    "roleAdmin": "Admin"
+    "roleAdmin": "Admin",
+    "phone": "Numero di telefono",
+    "uploadAvatar": "Cambia foto",
+    "adminPanel": "Pannello admin",
+    "call": "Chiama",
+    "saved": "Salvato"
   },
   "history": {
     "title": "Cronologia corse",

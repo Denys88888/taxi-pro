@@ -46,7 +46,19 @@
     "noDrivers": "ไม่มีคนขับใกล้เคียง",
     "useMyLocation": "ตำแหน่งของฉัน",
     "chooseVehicle": "เลือกยานพาหนะ",
-    "estimatedFare": "ค่าโดยสารโดยประมาณ"
+    "estimatedFare": "ค่าโดยสารโดยประมาณ",
+    "now": "ตอนนี้",
+    "schedule": "ตั้งเวลา",
+    "addStop": "เพิ่มจุดแวะ",
+    "stop": "จุดแวะ",
+    "removeStop": "ลบจุดแวะ",
+    "setYourPrice": "ตั้งราคาของคุณ",
+    "yourPrice": "ราคาของคุณ",
+    "yourPriceHint": "คนขับจะเสนอราคา",
+    "goHere": "ไปที่นี่?",
+    "findOffers": "ค้นหาข้อเสนอ",
+    "scheduleRide": "ตั้งเวลาการเดินทาง",
+    "tapMapHint": "แตะแผนที่เพื่อเลือกปลายทาง"
   },
   "ride": {
     "statusSearching": "กำลังหาคนขับ",
@@ -74,7 +86,13 @@
     "reviewPlaceholder": "Add a review (optional)",
     "platformFee": "Platform fee",
     "youEarn": "You earn",
-    "receipt": "Receipt"
+    "receipt": "Receipt",
+    "statusScheduled": "ตั้งเวลาไว้",
+    "offers": "ข้อเสนอจากคนขับ",
+    "noOffers": "กำลังรอข้อเสนอ…",
+    "acceptOffer": "ยอมรับ",
+    "scheduledFor": "กำหนดเวลา",
+    "stops": "จุดแวะ"
   },
   "vehicle": {
     "economy": "ประหยัด",
@@ -110,7 +128,11 @@
     "sortByDistance": "By distance",
     "sortByPrice": "By price",
     "register": "เป็นคนขับ",
-    "earnings": "Earnings"
+    "earnings": "Earnings",
+    "offerYourPrice": "เสนอราคาของคุณ",
+    "submitOffer": "ส่ง",
+    "offerSent": "ส่งข้อเสนอแล้ว",
+    "negotiable": "ต่อรองได้"
   },
   "earnings": {
     "title": "Earnings",
@@ -151,7 +173,12 @@
     "rating": "Rating",
     "rolePassenger": "Passenger",
     "roleDriver": "Driver",
-    "roleAdmin": "Admin"
+    "roleAdmin": "Admin",
+    "phone": "หมายเลขโทรศัพท์",
+    "uploadAvatar": "เปลี่ยนรูป",
+    "adminPanel": "แผงผู้ดูแล",
+    "call": "โทร",
+    "saved": "บันทึกแล้ว"
   },
   "history": {
     "title": "ประวัติการเดินทาง",

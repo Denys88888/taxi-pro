@@ -46,7 +46,19 @@
     "noDrivers": "आसपास कोई ड्राइवर नहीं",
     "useMyLocation": "मेरा स्थान",
     "chooseVehicle": "वाहन चुनें",
-    "estimatedFare": "अनुमानित किराया"
+    "estimatedFare": "अनुमानित किराया",
+    "now": "अभी",
+    "schedule": "शेड्यूल करें",
+    "addStop": "स्टॉप जोड़ें",
+    "stop": "स्टॉप",
+    "removeStop": "स्टॉप हटाएँ",
+    "setYourPrice": "अपनी कीमत तय करें",
+    "yourPrice": "आपकी कीमत",
+    "yourPriceHint": "ड्राइवर अपनी कीमत बताएँगे",
+    "goHere": "यहाँ जाएँ?",
+    "findOffers": "ऑफ़र खोजें",
+    "scheduleRide": "राइड शेड्यूल करें",
+    "tapMapHint": "गंतव्य चुनने के लिए मानचित्र पर टैप करें"
   },
   "ride": {
     "statusSearching": "ड्राइवर खोजा जा रहा है",
@@ -74,7 +86,13 @@
     "reviewPlaceholder": "Add a review (optional)",
     "platformFee": "Platform fee",
     "youEarn": "You earn",
-    "receipt": "Receipt"
+    "receipt": "Receipt",
+    "statusScheduled": "शेड्यूल्ड",
+    "offers": "ड्राइवर ऑफ़र",
+    "noOffers": "ऑफ़र की प्रतीक्षा…",
+    "acceptOffer": "स्वीकारें",
+    "scheduledFor": "इसके लिए शेड्यूल",
+    "stops": "स्टॉप"
   },
   "vehicle": {
     "economy": "इकॉनमी",
@@ -110,7 +128,11 @@
     "sortByDistance": "By distance",
     "sortByPrice": "By price",
     "register": "ड्राइवर बनें",
-    "earnings": "Earnings"
+    "earnings": "Earnings",
+    "offerYourPrice": "अपनी कीमत बताएँ",
+    "submitOffer": "भेजें",
+    "offerSent": "ऑफ़र भेजा गया",
+    "negotiable": "मोलभाव"
   },
   "earnings": {
     "title": "Earnings",
@@ -151,7 +173,12 @@
     "rating": "Rating",
     "rolePassenger": "Passenger",
     "roleDriver": "Driver",
-    "roleAdmin": "Admin"
+    "roleAdmin": "Admin",
+    "phone": "फ़ोन नंबर",
+    "uploadAvatar": "फ़ोटो बदलें",
+    "adminPanel": "एडमिन पैनल",
+    "call": "कॉल",
+    "saved": "सहेजा गया"
   },
   "history": {
     "title": "यात्रा इतिहास",

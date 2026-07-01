@@ -46,7 +46,19 @@
     "noDrivers": "Рядом нет водителей",
     "useMyLocation": "Моё местоположение",
     "chooseVehicle": "Выберите класс",
-    "estimatedFare": "Примерная цена"
+    "estimatedFare": "Примерная цена",
+    "now": "Сейчас",
+    "schedule": "Запланировать",
+    "addStop": "Добавить остановку",
+    "stop": "Остановка",
+    "removeStop": "Убрать остановку",
+    "setYourPrice": "Назначить цену",
+    "yourPrice": "Ваша цена",
+    "yourPriceHint": "Водители предложат свою цену",
+    "goHere": "Поехать сюда?",
+    "findOffers": "Найти предложения",
+    "scheduleRide": "Запланировать поездку",
+    "tapMapHint": "Нажмите на карту, чтобы выбрать точку"
   },
   "ride": {
     "statusSearching": "Поиск водителя",
@@ -74,7 +86,13 @@
     "reviewPlaceholder": "Add a review (optional)",
     "platformFee": "Platform fee",
     "youEarn": "You earn",
-    "receipt": "Receipt"
+    "receipt": "Receipt",
+    "statusScheduled": "Запланирована",
+    "offers": "Предложения водителей",
+    "noOffers": "Ожидание предложений…",
+    "acceptOffer": "Принять",
+    "scheduledFor": "Запланировано на",
+    "stops": "остановок"
   },
   "vehicle": {
     "economy": "Эконом",
@@ -110,7 +128,11 @@
     "sortByDistance": "By distance",
     "sortByPrice": "By price",
     "register": "Стать водителем",
-    "earnings": "Earnings"
+    "earnings": "Earnings",
+    "offerYourPrice": "Предложить цену",
+    "submitOffer": "Отправить",
+    "offerSent": "Предложение отправлено",
+    "negotiable": "Торг"
   },
   "earnings": {
     "title": "Earnings",
@@ -151,7 +173,12 @@
     "rating": "Rating",
     "rolePassenger": "Passenger",
     "roleDriver": "Driver",
-    "roleAdmin": "Admin"
+    "roleAdmin": "Admin",
+    "phone": "Номер телефона",
+    "uploadAvatar": "Изменить фото",
+    "adminPanel": "Панель админа",
+    "call": "Позвонить",
+    "saved": "Сохранено"
   },
   "history": {
     "title": "История поездок",

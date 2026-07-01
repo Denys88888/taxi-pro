@@ -46,7 +46,19 @@
     "noDrivers": "Inga förare i närheten",
     "useMyLocation": "Min plats",
     "chooseVehicle": "Välj fordon",
-    "estimatedFare": "Uppskattat pris"
+    "estimatedFare": "Uppskattat pris",
+    "now": "Nu",
+    "schedule": "Schemalägg",
+    "addStop": "Lägg till stopp",
+    "stop": "Stopp",
+    "removeStop": "Ta bort stopp",
+    "setYourPrice": "Ange ditt pris",
+    "yourPrice": "Ditt pris",
+    "yourPriceHint": "Förare erbjuder sitt pris",
+    "goHere": "Åka hit?",
+    "findOffers": "Hitta erbjudanden",
+    "scheduleRide": "Schemalägg resa",
+    "tapMapHint": "Tryck på kartan för att välja destination"
   },
   "ride": {
     "statusSearching": "Söker förare",
@@ -74,7 +86,13 @@
     "reviewPlaceholder": "Add a review (optional)",
     "platformFee": "Platform fee",
     "youEarn": "You earn",
-    "receipt": "Receipt"
+    "receipt": "Receipt",
+    "statusScheduled": "Schemalagd",
+    "offers": "Förarerbjudanden",
+    "noOffers": "Väntar på erbjudanden…",
+    "acceptOffer": "Acceptera",
+    "scheduledFor": "Schemalagd till",
+    "stops": "stopp"
   },
   "vehicle": {
     "economy": "Economy",
@@ -110,7 +128,11 @@
     "sortByDistance": "By distance",
     "sortByPrice": "By price",
     "register": "Bli förare",
-    "earnings": "Earnings"
+    "earnings": "Earnings",
+    "offerYourPrice": "Erbjud ditt pris",
+    "submitOffer": "Skicka",
+    "offerSent": "Erbjudande skickat",
+    "negotiable": "Förhandlingsbar"
   },
   "earnings": {
     "title": "Earnings",
@@ -151,7 +173,12 @@
     "rating": "Rating",
     "rolePassenger": "Passenger",
     "roleDriver": "Driver",
-    "roleAdmin": "Admin"
+    "roleAdmin": "Admin",
+    "phone": "Telefonnummer",
+    "uploadAvatar": "Byt foto",
+    "adminPanel": "Adminpanel",
+    "call": "Ring",
+    "saved": "Sparad"
   },
   "history": {
     "title": "Reshistorik",

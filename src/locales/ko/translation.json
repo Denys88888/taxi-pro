@@ -46,7 +46,19 @@
     "noDrivers": "근처에 기사님이 없습니다",
     "useMyLocation": "내 위치",
     "chooseVehicle": "차량 선택",
-    "estimatedFare": "예상 요금"
+    "estimatedFare": "예상 요금",
+    "now": "지금",
+    "schedule": "예약",
+    "addStop": "경유지 추가",
+    "stop": "경유지",
+    "removeStop": "경유지 삭제",
+    "setYourPrice": "가격 설정",
+    "yourPrice": "내 가격",
+    "yourPriceHint": "기사님이 가격을 제안합니다",
+    "goHere": "여기로 갈까요?",
+    "findOffers": "제안 찾기",
+    "scheduleRide": "운행 예약",
+    "tapMapHint": "지도를 눌러 목적지 선택"
   },
   "ride": {
     "statusSearching": "기사님 찾는 중",
@@ -74,7 +86,13 @@
     "reviewPlaceholder": "Add a review (optional)",
     "platformFee": "Platform fee",
     "youEarn": "You earn",
-    "receipt": "Receipt"
+    "receipt": "Receipt",
+    "statusScheduled": "예약됨",
+    "offers": "기사 제안",
+    "noOffers": "제안을 기다리는 중…",
+    "acceptOffer": "수락",
+    "scheduledFor": "예약 시간",
+    "stops": "경유지"
   },
   "vehicle": {
     "economy": "이코노미",
@@ -110,7 +128,11 @@
     "sortByDistance": "By distance",
     "sortByPrice": "By price",
     "register": "기사 등록",
-    "earnings": "Earnings"
+    "earnings": "Earnings",
+    "offerYourPrice": "가격 제안",
+    "submitOffer": "보내기",
+    "offerSent": "제안을 보냈습니다",
+    "negotiable": "흥정 가능"
   },
   "earnings": {
     "title": "Earnings",
@@ -151,7 +173,12 @@
     "rating": "Rating",
     "rolePassenger": "Passenger",
     "roleDriver": "Driver",
-    "roleAdmin": "Admin"
+    "roleAdmin": "Admin",
+    "phone": "전화번호",
+    "uploadAvatar": "사진 변경",
+    "adminPanel": "관리자 패널",
+    "call": "전화",
+    "saved": "저장됨"
   },
   "history": {
     "title": "운행 기록",

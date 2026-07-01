@@ -46,7 +46,19 @@
     "noDrivers": "Không có tài xế gần đây",
     "useMyLocation": "Vị trí của tôi",
     "chooseVehicle": "Chọn loại xe",
-    "estimatedFare": "Giá ước tính"
+    "estimatedFare": "Giá ước tính",
+    "now": "Bây giờ",
+    "schedule": "Đặt lịch",
+    "addStop": "Thêm điểm dừng",
+    "stop": "Điểm dừng",
+    "removeStop": "Xóa điểm dừng",
+    "setYourPrice": "Đặt giá của bạn",
+    "yourPrice": "Giá của bạn",
+    "yourPriceHint": "Tài xế sẽ đưa ra giá",
+    "goHere": "Đến đây?",
+    "findOffers": "Tìm đề nghị",
+    "scheduleRide": "Đặt lịch chuyến",
+    "tapMapHint": "Chạm vào bản đồ để chọn điểm đến"
   },
   "ride": {
     "statusSearching": "Đang tìm tài xế",
@@ -74,7 +86,13 @@
     "reviewPlaceholder": "Add a review (optional)",
     "platformFee": "Platform fee",
     "youEarn": "You earn",
-    "receipt": "Receipt"
+    "receipt": "Receipt",
+    "statusScheduled": "Đã đặt lịch",
+    "offers": "Đề nghị của tài xế",
+    "noOffers": "Đang chờ đề nghị…",
+    "acceptOffer": "Chấp nhận",
+    "scheduledFor": "Lên lịch cho",
+    "stops": "điểm dừng"
   },
   "vehicle": {
     "economy": "Tiết kiệm",
@@ -110,7 +128,11 @@
     "sortByDistance": "By distance",
     "sortByPrice": "By price",
     "register": "Trở thành tài xế",
-    "earnings": "Earnings"
+    "earnings": "Earnings",
+    "offerYourPrice": "Đưa ra giá",
+    "submitOffer": "Gửi",
+    "offerSent": "Đã gửi đề nghị",
+    "negotiable": "Thương lượng"
   },
   "earnings": {
     "title": "Earnings",
@@ -151,7 +173,12 @@
     "rating": "Rating",
     "rolePassenger": "Passenger",
     "roleDriver": "Driver",
-    "roleAdmin": "Admin"
+    "roleAdmin": "Admin",
+    "phone": "Số điện thoại",
+    "uploadAvatar": "Đổi ảnh",
+    "adminPanel": "Bảng quản trị",
+    "call": "Gọi",
+    "saved": "Đã lưu"
   },
   "history": {
     "title": "Lịch sử chuyến đi",

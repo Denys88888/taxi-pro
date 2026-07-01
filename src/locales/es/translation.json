@@ -46,7 +46,19 @@
     "noDrivers": "No hay conductores cerca",
     "useMyLocation": "Mi ubicación",
     "chooseVehicle": "Elige un vehículo",
-    "estimatedFare": "Tarifa estimada"
+    "estimatedFare": "Tarifa estimada",
+    "now": "Ahora",
+    "schedule": "Programar",
+    "addStop": "Añadir parada",
+    "stop": "Parada",
+    "removeStop": "Quitar parada",
+    "setYourPrice": "Fija tu precio",
+    "yourPrice": "Tu precio",
+    "yourPriceHint": "Los conductores ofertarán su precio",
+    "goHere": "¿Ir aquí?",
+    "findOffers": "Buscar ofertas",
+    "scheduleRide": "Programar viaje",
+    "tapMapHint": "Toca el mapa para elegir destino"
   },
   "ride": {
     "statusSearching": "Buscando conductor",
@@ -74,7 +86,13 @@
     "reviewPlaceholder": "Add a review (optional)",
     "platformFee": "Platform fee",
     "youEarn": "You earn",
-    "receipt": "Receipt"
+    "receipt": "Receipt",
+    "statusScheduled": "Programado",
+    "offers": "Ofertas de conductores",
+    "noOffers": "Esperando ofertas…",
+    "acceptOffer": "Aceptar",
+    "scheduledFor": "Programado para",
+    "stops": "paradas"
   },
   "vehicle": {
     "economy": "Económico",
@@ -110,7 +128,11 @@
     "sortByDistance": "By distance",
     "sortByPrice": "By price",
     "register": "Ser conductor",
-    "earnings": "Earnings"
+    "earnings": "Earnings",
+    "offerYourPrice": "Ofrece tu precio",
+    "submitOffer": "Enviar",
+    "offerSent": "Oferta enviada",
+    "negotiable": "Negociable"
   },
   "earnings": {
     "title": "Earnings",
@@ -151,7 +173,12 @@
     "rating": "Rating",
     "rolePassenger": "Passenger",
     "roleDriver": "Driver",
-    "roleAdmin": "Admin"
+    "roleAdmin": "Admin",
+    "phone": "Número de teléfono",
+    "uploadAvatar": "Cambiar foto",
+    "adminPanel": "Panel de admin",
+    "call": "Llamar",
+    "saved": "Guardado"
   },
   "history": {
     "title": "Historial de viajes",

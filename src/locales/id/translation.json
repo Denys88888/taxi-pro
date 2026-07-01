@@ -46,7 +46,19 @@
     "noDrivers": "Tidak ada pengemudi terdekat",
     "useMyLocation": "Lokasi saya",
     "chooseVehicle": "Pilih kendaraan",
-    "estimatedFare": "Perkiraan tarif"
+    "estimatedFare": "Perkiraan tarif",
+    "now": "Sekarang",
+    "schedule": "Jadwalkan",
+    "addStop": "Tambah perhentian",
+    "stop": "Perhentian",
+    "removeStop": "Hapus perhentian",
+    "setYourPrice": "Tetapkan harga Anda",
+    "yourPrice": "Harga Anda",
+    "yourPriceHint": "Pengemudi akan menawar harga",
+    "goHere": "Ke sini?",
+    "findOffers": "Cari penawaran",
+    "scheduleRide": "Jadwalkan perjalanan",
+    "tapMapHint": "Ketuk peta untuk memilih tujuan"
   },
   "ride": {
     "statusSearching": "Mencari pengemudi",
@@ -74,7 +86,13 @@
     "reviewPlaceholder": "Add a review (optional)",
     "platformFee": "Platform fee",
     "youEarn": "You earn",
-    "receipt": "Receipt"
+    "receipt": "Receipt",
+    "statusScheduled": "Terjadwal",
+    "offers": "Penawaran pengemudi",
+    "noOffers": "Menunggu penawaran…",
+    "acceptOffer": "Terima",
+    "scheduledFor": "Dijadwalkan untuk",
+    "stops": "perhentian"
   },
   "vehicle": {
     "economy": "Ekonomi",
@@ -110,7 +128,11 @@
     "sortByDistance": "By distance",
     "sortByPrice": "By price",
     "register": "Jadi pengemudi",
-    "earnings": "Earnings"
+    "earnings": "Earnings",
+    "offerYourPrice": "Tawarkan harga",
+    "submitOffer": "Kirim",
+    "offerSent": "Penawaran terkirim",
+    "negotiable": "Bisa nego"
   },
   "earnings": {
     "title": "Earnings",
@@ -151,7 +173,12 @@
     "rating": "Rating",
     "rolePassenger": "Passenger",
     "roleDriver": "Driver",
-    "roleAdmin": "Admin"
+    "roleAdmin": "Admin",
+    "phone": "Nomor telepon",
+    "uploadAvatar": "Ubah foto",
+    "adminPanel": "Panel admin",
+    "call": "Telepon",
+    "saved": "Tersimpan"
   },
   "history": {
     "title": "Riwayat perjalanan",

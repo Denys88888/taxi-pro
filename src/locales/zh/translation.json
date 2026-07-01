@@ -46,7 +46,19 @@
     "noDrivers": "附近没有司机",
     "useMyLocation": "我的位置",
     "chooseVehicle": "选择车型",
-    "estimatedFare": "预估费用"
+    "estimatedFare": "预估费用",
+    "now": "现在",
+    "schedule": "预约",
+    "addStop": "添加途经点",
+    "stop": "途经点",
+    "removeStop": "移除途经点",
+    "setYourPrice": "设定您的价格",
+    "yourPrice": "您的价格",
+    "yourPriceHint": "司机将出价或还价",
+    "goHere": "去这里？",
+    "findOffers": "寻找报价",
+    "scheduleRide": "预约行程",
+    "tapMapHint": "点击地图选择目的地"
   },
   "ride": {
     "statusSearching": "正在寻找司机",
@@ -74,7 +86,13 @@
     "reviewPlaceholder": "Add a review (optional)",
     "platformFee": "Platform fee",
     "youEarn": "You earn",
-    "receipt": "Receipt"
+    "receipt": "Receipt",
+    "statusScheduled": "已预约",
+    "offers": "司机报价",
+    "noOffers": "等待司机报价…",
+    "acceptOffer": "接受",
+    "scheduledFor": "预约时间",
+    "stops": "个途经点"
   },
   "vehicle": {
     "economy": "经济型",
@@ -110,7 +128,11 @@
     "sortByDistance": "By distance",
     "sortByPrice": "By price",
     "register": "成为司机",
-    "earnings": "Earnings"
+    "earnings": "Earnings",
+    "offerYourPrice": "出价",
+    "submitOffer": "发送",
+    "offerSent": "报价已发送",
+    "negotiable": "可议价"
   },
   "earnings": {
     "title": "Earnings",
@@ -151,7 +173,12 @@
     "rating": "Rating",
     "rolePassenger": "Passenger",
     "roleDriver": "Driver",
-    "roleAdmin": "Admin"
+    "roleAdmin": "Admin",
+    "phone": "电话号码",
+    "uploadAvatar": "更换照片",
+    "adminPanel": "管理后台",
+    "call": "呼叫",
+    "saved": "已保存"
   },
   "history": {
     "title": "行程记录",

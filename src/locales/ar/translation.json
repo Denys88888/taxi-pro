@@ -46,7 +46,19 @@
     "noDrivers": "لا يوجد سائقون قريبون",
     "useMyLocation": "موقعي",
     "chooseVehicle": "اختر مركبة",
-    "estimatedFare": "الأجرة التقديرية"
+    "estimatedFare": "الأجرة التقديرية",
+    "now": "الآن",
+    "schedule": "جدولة",
+    "addStop": "إضافة محطة",
+    "stop": "محطة",
+    "removeStop": "إزالة المحطة",
+    "setYourPrice": "حدّد سعرك",
+    "yourPrice": "سعرك",
+    "yourPriceHint": "سيقدّم السائقون أسعارهم",
+    "goHere": "الذهاب إلى هنا؟",
+    "findOffers": "البحث عن عروض",
+    "scheduleRide": "جدولة الرحلة",
+    "tapMapHint": "انقر على الخريطة لتحديد الوجهة"
   },
   "ride": {
     "statusSearching": "البحث عن سائق",
@@ -74,7 +86,13 @@
     "reviewPlaceholder": "Add a review (optional)",
     "platformFee": "Platform fee",
     "youEarn": "You earn",
-    "receipt": "Receipt"
+    "receipt": "Receipt",
+    "statusScheduled": "مجدولة",
+    "offers": "عروض السائقين",
+    "noOffers": "في انتظار العروض…",
+    "acceptOffer": "قبول",
+    "scheduledFor": "مجدولة في",
+    "stops": "محطات"
   },
   "vehicle": {
     "economy": "اقتصادي",
@@ -110,7 +128,11 @@
     "sortByDistance": "By distance",
     "sortByPrice": "By price",
     "register": "كن سائقًا",
-    "earnings": "Earnings"
+    "earnings": "Earnings",
+    "offerYourPrice": "اعرض سعرك",
+    "submitOffer": "إرسال",
+    "offerSent": "تم إرسال العرض",
+    "negotiable": "قابل للتفاوض"
   },
   "earnings": {
     "title": "Earnings",
@@ -151,7 +173,12 @@
     "rating": "Rating",
     "rolePassenger": "Passenger",
     "roleDriver": "Driver",
-    "roleAdmin": "Admin"
+    "roleAdmin": "Admin",
+    "phone": "رقم الهاتف",
+    "uploadAvatar": "تغيير الصورة",
+    "adminPanel": "لوحة الإدارة",
+    "call": "اتصال",
+    "saved": "تم الحفظ"
   },
   "history": {
     "title": "سجل الرحلات",

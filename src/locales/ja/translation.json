@@ -46,7 +46,19 @@
     "noDrivers": "近くにドライバーがいません",
     "useMyLocation": "現在地",
     "chooseVehicle": "車種を選択",
-    "estimatedFare": "概算料金"
+    "estimatedFare": "概算料金",
+    "now": "今すぐ",
+    "schedule": "予約",
+    "addStop": "経由地を追加",
+    "stop": "経由地",
+    "removeStop": "経由地を削除",
+    "setYourPrice": "料金を設定",
+    "yourPrice": "あなたの料金",
+    "yourPriceHint": "ドライバーが料金を提示します",
+    "goHere": "ここへ行く？",
+    "findOffers": "見積もりを探す",
+    "scheduleRide": "乗車を予約",
+    "tapMapHint": "地図をタップして目的地を選択"
   },
   "ride": {
     "statusSearching": "ドライバーを検索中",
@@ -74,7 +86,13 @@
     "reviewPlaceholder": "Add a review (optional)",
     "platformFee": "Platform fee",
     "youEarn": "You earn",
-    "receipt": "Receipt"
+    "receipt": "Receipt",
+    "statusScheduled": "予約済み",
+    "offers": "ドライバーの提示",
+    "noOffers": "提示を待っています…",
+    "acceptOffer": "受ける",
+    "scheduledFor": "予約日時",
+    "stops": "経由地"
   },
   "vehicle": {
     "economy": "エコノミー",
@@ -110,7 +128,11 @@
     "sortByDistance": "By distance",
     "sortByPrice": "By price",
     "register": "ドライバー登録",
-    "earnings": "Earnings"
+    "earnings": "Earnings",
+    "offerYourPrice": "料金を提示",
+    "submitOffer": "送信",
+    "offerSent": "提示を送信しました",
+    "negotiable": "交渉可"
   },
   "earnings": {
     "title": "Earnings",
@@ -151,7 +173,12 @@
     "rating": "Rating",
     "rolePassenger": "Passenger",
     "roleDriver": "Driver",
-    "roleAdmin": "Admin"
+    "roleAdmin": "Admin",
+    "phone": "電話番号",
+    "uploadAvatar": "写真を変更",
+    "adminPanel": "管理パネル",
+    "call": "電話",
+    "saved": "保存しました"
   },
   "history": {
     "title": "乗車履歴",

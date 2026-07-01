@@ -46,7 +46,19 @@
     "noDrivers": "Поблизу немає водіїв",
     "useMyLocation": "Моє місцезнаходження",
     "chooseVehicle": "Оберіть авто",
-    "estimatedFare": "Орієнтовна ціна"
+    "estimatedFare": "Орієнтовна ціна",
+    "now": "Зараз",
+    "schedule": "Запланувати",
+    "addStop": "Додати зупинку",
+    "stop": "Зупинка",
+    "removeStop": "Прибрати зупинку",
+    "setYourPrice": "Вкажіть свою ціну",
+    "yourPrice": "Ваша ціна",
+    "yourPriceHint": "Водії запропонують свою ціну",
+    "goHere": "Поїхати сюди?",
+    "findOffers": "Знайти пропозиції",
+    "scheduleRide": "Запланувати поїздку",
+    "tapMapHint": "Торкніться карти, щоб обрати точку"
   },
   "ride": {
     "statusSearching": "Пошук водія",
@@ -74,7 +86,13 @@
     "reviewPlaceholder": "Add a review (optional)",
     "platformFee": "Platform fee",
     "youEarn": "You earn",
-    "receipt": "Receipt"
+    "receipt": "Receipt",
+    "statusScheduled": "Заплановано",
+    "offers": "Пропозиції водіїв",
+    "noOffers": "Очікування пропозицій…",
+    "acceptOffer": "Прийняти",
+    "scheduledFor": "Заплановано на",
+    "stops": "зупинок"
   },
   "vehicle": {
     "economy": "Економ",
@@ -110,7 +128,11 @@
     "sortByDistance": "By distance",
     "sortByPrice": "By price",
     "register": "Стати водієм",
-    "earnings": "Earnings"
+    "earnings": "Earnings",
+    "offerYourPrice": "Запропонувати ціну",
+    "submitOffer": "Надіслати",
+    "offerSent": "Пропозицію надіслано",
+    "negotiable": "Торг"
   },
   "earnings": {
     "title": "Earnings",
@@ -151,7 +173,12 @@
     "rating": "Rating",
     "rolePassenger": "Passenger",
     "roleDriver": "Driver",
-    "roleAdmin": "Admin"
+    "roleAdmin": "Admin",
+    "phone": "Номер телефону",
+    "uploadAvatar": "Змінити фото",
+    "adminPanel": "Панель адміна",
+    "call": "Подзвонити",
+    "saved": "Збережено"
   },
   "history": {
     "title": "Історія поїздок",

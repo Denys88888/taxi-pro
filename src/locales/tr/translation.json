@@ -46,7 +46,19 @@
     "noDrivers": "Yakında sürücü yok",
     "useMyLocation": "Konumum",
     "chooseVehicle": "Araç seçin",
-    "estimatedFare": "Tahmini ücret"
+    "estimatedFare": "Tahmini ücret",
+    "now": "Şimdi",
+    "schedule": "Planla",
+    "addStop": "Durak ekle",
+    "stop": "Durak",
+    "removeStop": "Durağı kaldır",
+    "setYourPrice": "Fiyatını belirle",
+    "yourPrice": "Fiyatınız",
+    "yourPriceHint": "Sürücüler kendi fiyatını teklif eder",
+    "goHere": "Buraya gidilsin mi?",
+    "findOffers": "Teklif bul",
+    "scheduleRide": "Yolculuğu planla",
+    "tapMapHint": "Varış için haritaya dokunun"
   },
   "ride": {
     "statusSearching": "Sürücü aranıyor",
@@ -74,7 +86,13 @@
     "reviewPlaceholder": "Add a review (optional)",
     "platformFee": "Platform fee",
     "youEarn": "You earn",
-    "receipt": "Receipt"
+    "receipt": "Receipt",
+    "statusScheduled": "Planlandı",
+    "offers": "Sürücü teklifleri",
+    "noOffers": "Teklifler bekleniyor…",
+    "acceptOffer": "Kabul et",
+    "scheduledFor": "Planlanan zaman",
+    "stops": "durak"
   },
   "vehicle": {
     "economy": "Ekonomi",
@@ -110,7 +128,11 @@
     "sortByDistance": "By distance",
     "sortByPrice": "By price",
     "register": "Sürücü ol",
-    "earnings": "Earnings"
+    "earnings": "Earnings",
+    "offerYourPrice": "Fiyat teklif et",
+    "submitOffer": "Gönder",
+    "offerSent": "Teklif gönderildi",
+    "negotiable": "Pazarlık"
   },
   "earnings": {
     "title": "Earnings",
@@ -151,7 +173,12 @@
     "rating": "Rating",
     "rolePassenger": "Passenger",
     "roleDriver": "Driver",
-    "roleAdmin": "Admin"
+    "roleAdmin": "Admin",
+    "phone": "Telefon numarası",
+    "uploadAvatar": "Fotoğrafı değiştir",
+    "adminPanel": "Yönetici paneli",
+    "call": "Ara",
+    "saved": "Kaydedildi"
   },
   "history": {
     "title": "Yolculuk geçmişi",
