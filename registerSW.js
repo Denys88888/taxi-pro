@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/taxi-pro/sw.js', { scope: '/taxi-pro/' })})}
