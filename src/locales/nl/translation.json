@@ -49,6 +49,7 @@
     "estimatedFare": "Geschatte prijs",
     "now": "Nu",
     "schedule": "Plannen",
+    "pickDateTime": "Pick date & time",
     "addStop": "Stop toevoegen",
     "stop": "Stop",
     "removeStop": "Stop verwijderen",
@@ -61,6 +62,7 @@
     "tapMapHint": "Tik op de kaart om de bestemming te kiezen"
   },
   "ride": {
+    "statusScheduled": "Gepland",
     "statusSearching": "Chauffeur zoeken",
     "statusAssigned": "Chauffeur onderweg",
     "statusArrived": "Chauffeur is gearriveerd",
@@ -87,7 +89,6 @@
     "platformFee": "Platform fee",
     "youEarn": "You earn",
     "receipt": "Receipt",
-    "statusScheduled": "Gepland",
     "offers": "Aanbiedingen van chauffeurs",
     "noOffers": "Wachten op aanbiedingen…",
     "acceptOffer": "Accepteren",
@@ -175,6 +176,7 @@
     "roleDriver": "Driver",
     "roleAdmin": "Admin",
     "phone": "Telefoonnummer",
+    "phonePlaceholder": "+1 555 123 4567",
     "uploadAvatar": "Foto wijzigen",
     "adminPanel": "Beheerderspaneel",
     "call": "Bellen",

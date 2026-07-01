@@ -49,6 +49,7 @@
     "estimatedFare": "Примерная цена",
     "now": "Сейчас",
     "schedule": "Запланировать",
+    "pickDateTime": "Pick date & time",
     "addStop": "Добавить остановку",
     "stop": "Остановка",
     "removeStop": "Убрать остановку",
@@ -61,6 +62,7 @@
     "tapMapHint": "Нажмите на карту, чтобы выбрать точку"
   },
   "ride": {
+    "statusScheduled": "Запланирована",
     "statusSearching": "Поиск водителя",
     "statusAssigned": "Водитель в пути",
     "statusArrived": "Водитель прибыл",
@@ -87,7 +89,6 @@
     "platformFee": "Platform fee",
     "youEarn": "You earn",
     "receipt": "Receipt",
-    "statusScheduled": "Запланирована",
     "offers": "Предложения водителей",
     "noOffers": "Ожидание предложений…",
     "acceptOffer": "Принять",
@@ -175,6 +176,7 @@
     "roleDriver": "Driver",
     "roleAdmin": "Admin",
     "phone": "Номер телефона",
+    "phonePlaceholder": "+1 555 123 4567",
     "uploadAvatar": "Изменить фото",
     "adminPanel": "Панель админа",
     "call": "Позвонить",

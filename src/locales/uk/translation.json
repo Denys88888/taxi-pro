@@ -49,6 +49,7 @@
     "estimatedFare": "Орієнтовна ціна",
     "now": "Зараз",
     "schedule": "Запланувати",
+    "pickDateTime": "Pick date & time",
     "addStop": "Додати зупинку",
     "stop": "Зупинка",
     "removeStop": "Прибрати зупинку",
@@ -61,6 +62,7 @@
     "tapMapHint": "Торкніться карти, щоб обрати точку"
   },
   "ride": {
+    "statusScheduled": "Заплановано",
     "statusSearching": "Пошук водія",
     "statusAssigned": "Водій у дорозі",
     "statusArrived": "Водій прибув",
@@ -87,7 +89,6 @@
     "platformFee": "Platform fee",
     "youEarn": "You earn",
     "receipt": "Receipt",
-    "statusScheduled": "Заплановано",
     "offers": "Пропозиції водіїв",
     "noOffers": "Очікування пропозицій…",
     "acceptOffer": "Прийняти",
@@ -175,6 +176,7 @@
     "roleDriver": "Driver",
     "roleAdmin": "Admin",
     "phone": "Номер телефону",
+    "phonePlaceholder": "+1 555 123 4567",
     "uploadAvatar": "Змінити фото",
     "adminPanel": "Панель адміна",
     "call": "Подзвонити",

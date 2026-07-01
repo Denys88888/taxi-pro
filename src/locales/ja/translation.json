@@ -49,6 +49,7 @@
     "estimatedFare": "概算料金",
     "now": "今すぐ",
     "schedule": "予約",
+    "pickDateTime": "Pick date & time",
     "addStop": "経由地を追加",
     "stop": "経由地",
     "removeStop": "経由地を削除",
@@ -61,6 +62,7 @@
     "tapMapHint": "地図をタップして目的地を選択"
   },
   "ride": {
+    "statusScheduled": "予約済み",
     "statusSearching": "ドライバーを検索中",
     "statusAssigned": "ドライバーが向かっています",
     "statusArrived": "ドライバーが到着しました",
@@ -87,7 +89,6 @@
     "platformFee": "Platform fee",
     "youEarn": "You earn",
     "receipt": "Receipt",
-    "statusScheduled": "予約済み",
     "offers": "ドライバーの提示",
     "noOffers": "提示を待っています…",
     "acceptOffer": "受ける",
@@ -175,6 +176,7 @@
     "roleDriver": "Driver",
     "roleAdmin": "Admin",
     "phone": "電話番号",
+    "phonePlaceholder": "+1 555 123 4567",
     "uploadAvatar": "写真を変更",
     "adminPanel": "管理パネル",
     "call": "電話",

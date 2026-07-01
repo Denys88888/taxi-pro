@@ -49,6 +49,7 @@
     "estimatedFare": "Uppskattat pris",
     "now": "Nu",
     "schedule": "Schemalägg",
+    "pickDateTime": "Pick date & time",
     "addStop": "Lägg till stopp",
     "stop": "Stopp",
     "removeStop": "Ta bort stopp",
@@ -61,6 +62,7 @@
     "tapMapHint": "Tryck på kartan för att välja destination"
   },
   "ride": {
+    "statusScheduled": "Schemalagd",
     "statusSearching": "Söker förare",
     "statusAssigned": "Föraren är på väg",
     "statusArrived": "Föraren har anlänt",
@@ -87,7 +89,6 @@
     "platformFee": "Platform fee",
     "youEarn": "You earn",
     "receipt": "Receipt",
-    "statusScheduled": "Schemalagd",
     "offers": "Förarerbjudanden",
     "noOffers": "Väntar på erbjudanden…",
     "acceptOffer": "Acceptera",
@@ -175,6 +176,7 @@
     "roleDriver": "Driver",
     "roleAdmin": "Admin",
     "phone": "Telefonnummer",
+    "phonePlaceholder": "+1 555 123 4567",
     "uploadAvatar": "Byt foto",
     "adminPanel": "Adminpanel",
     "call": "Ring",

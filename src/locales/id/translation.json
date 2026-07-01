@@ -49,6 +49,7 @@
     "estimatedFare": "Perkiraan tarif",
     "now": "Sekarang",
     "schedule": "Jadwalkan",
+    "pickDateTime": "Pick date & time",
     "addStop": "Tambah perhentian",
     "stop": "Perhentian",
     "removeStop": "Hapus perhentian",
@@ -61,6 +62,7 @@
     "tapMapHint": "Ketuk peta untuk memilih tujuan"
   },
   "ride": {
+    "statusScheduled": "Terjadwal",
     "statusSearching": "Mencari pengemudi",
     "statusAssigned": "Pengemudi dalam perjalanan",
     "statusArrived": "Pengemudi telah tiba",
@@ -87,7 +89,6 @@
     "platformFee": "Platform fee",
     "youEarn": "You earn",
     "receipt": "Receipt",
-    "statusScheduled": "Terjadwal",
     "offers": "Penawaran pengemudi",
     "noOffers": "Menunggu penawaran…",
     "acceptOffer": "Terima",
@@ -175,6 +176,7 @@
     "roleDriver": "Driver",
     "roleAdmin": "Admin",
     "phone": "Nomor telepon",
+    "phonePlaceholder": "+1 555 123 4567",
     "uploadAvatar": "Ubah foto",
     "adminPanel": "Panel admin",
     "call": "Telepon",

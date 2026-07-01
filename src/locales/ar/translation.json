@@ -49,6 +49,7 @@
     "estimatedFare": "الأجرة التقديرية",
     "now": "الآن",
     "schedule": "جدولة",
+    "pickDateTime": "Pick date & time",
     "addStop": "إضافة محطة",
     "stop": "محطة",
     "removeStop": "إزالة المحطة",
@@ -61,6 +62,7 @@
     "tapMapHint": "انقر على الخريطة لتحديد الوجهة"
   },
   "ride": {
+    "statusScheduled": "مجدولة",
     "statusSearching": "البحث عن سائق",
     "statusAssigned": "السائق في الطريق",
     "statusArrived": "وصل السائق",
@@ -87,7 +89,6 @@
     "platformFee": "Platform fee",
     "youEarn": "You earn",
     "receipt": "Receipt",
-    "statusScheduled": "مجدولة",
     "offers": "عروض السائقين",
     "noOffers": "في انتظار العروض…",
     "acceptOffer": "قبول",
@@ -175,6 +176,7 @@
     "roleDriver": "Driver",
     "roleAdmin": "Admin",
     "phone": "رقم الهاتف",
+    "phonePlaceholder": "+1 555 123 4567",
     "uploadAvatar": "تغيير الصورة",
     "adminPanel": "لوحة الإدارة",
     "call": "اتصال",

@@ -49,6 +49,7 @@
     "estimatedFare": "Tahmini ücret",
     "now": "Şimdi",
     "schedule": "Planla",
+    "pickDateTime": "Pick date & time",
     "addStop": "Durak ekle",
     "stop": "Durak",
     "removeStop": "Durağı kaldır",
@@ -61,6 +62,7 @@
     "tapMapHint": "Varış için haritaya dokunun"
   },
   "ride": {
+    "statusScheduled": "Planlandı",
     "statusSearching": "Sürücü aranıyor",
     "statusAssigned": "Sürücü yolda",
     "statusArrived": "Sürücü geldi",
@@ -87,7 +89,6 @@
     "platformFee": "Platform fee",
     "youEarn": "You earn",
     "receipt": "Receipt",
-    "statusScheduled": "Planlandı",
     "offers": "Sürücü teklifleri",
     "noOffers": "Teklifler bekleniyor…",
     "acceptOffer": "Kabul et",
@@ -175,6 +176,7 @@
     "roleDriver": "Driver",
     "roleAdmin": "Admin",
     "phone": "Telefon numarası",
+    "phonePlaceholder": "+1 555 123 4567",
     "uploadAvatar": "Fotoğrafı değiştir",
     "adminPanel": "Yönetici paneli",
     "call": "Ara",

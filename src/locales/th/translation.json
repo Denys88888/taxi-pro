@@ -49,6 +49,7 @@
     "estimatedFare": "ค่าโดยสารโดยประมาณ",
     "now": "ตอนนี้",
     "schedule": "ตั้งเวลา",
+    "pickDateTime": "Pick date & time",
     "addStop": "เพิ่มจุดแวะ",
     "stop": "จุดแวะ",
     "removeStop": "ลบจุดแวะ",
@@ -61,6 +62,7 @@
     "tapMapHint": "แตะแผนที่เพื่อเลือกปลายทาง"
   },
   "ride": {
+    "statusScheduled": "ตั้งเวลาไว้",
     "statusSearching": "กำลังหาคนขับ",
     "statusAssigned": "คนขับกำลังมา",
     "statusArrived": "คนขับมาถึงแล้ว",
@@ -87,7 +89,6 @@
     "platformFee": "Platform fee",
     "youEarn": "You earn",
     "receipt": "Receipt",
-    "statusScheduled": "ตั้งเวลาไว้",
     "offers": "ข้อเสนอจากคนขับ",
     "noOffers": "กำลังรอข้อเสนอ…",
     "acceptOffer": "ยอมรับ",
@@ -175,6 +176,7 @@
     "roleDriver": "Driver",
     "roleAdmin": "Admin",
     "phone": "หมายเลขโทรศัพท์",
+    "phonePlaceholder": "+1 555 123 4567",
     "uploadAvatar": "เปลี่ยนรูป",
     "adminPanel": "แผงผู้ดูแล",
     "call": "โทร",

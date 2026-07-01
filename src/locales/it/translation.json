@@ -49,6 +49,7 @@
     "estimatedFare": "Tariffa stimata",
     "now": "Ora",
     "schedule": "Programma",
+    "pickDateTime": "Pick date & time",
     "addStop": "Aggiungi tappa",
     "stop": "Tappa",
     "removeStop": "Rimuovi tappa",
@@ -61,6 +62,7 @@
     "tapMapHint": "Tocca la mappa per scegliere la destinazione"
   },
   "ride": {
+    "statusScheduled": "Programmata",
     "statusSearching": "Ricerca autista",
     "statusAssigned": "Autista in arrivo",
     "statusArrived": "L’autista è arrivato",
@@ -87,7 +89,6 @@
     "platformFee": "Platform fee",
     "youEarn": "You earn",
     "receipt": "Receipt",
-    "statusScheduled": "Programmata",
     "offers": "Offerte degli autisti",
     "noOffers": "In attesa di offerte…",
     "acceptOffer": "Accetta",
@@ -175,6 +176,7 @@
     "roleDriver": "Driver",
     "roleAdmin": "Admin",
     "phone": "Numero di telefono",
+    "phonePlaceholder": "+1 555 123 4567",
     "uploadAvatar": "Cambia foto",
     "adminPanel": "Pannello admin",
     "call": "Chiama",

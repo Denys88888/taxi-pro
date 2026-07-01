@@ -49,6 +49,7 @@
     "estimatedFare": "Tarif estimé",
     "now": "Maintenant",
     "schedule": "Planifier",
+    "pickDateTime": "Pick date & time",
     "addStop": "Ajouter un arrêt",
     "stop": "Arrêt",
     "removeStop": "Retirer l’arrêt",
@@ -61,6 +62,7 @@
     "tapMapHint": "Touchez la carte pour choisir la destination"
   },
   "ride": {
+    "statusScheduled": "Planifiée",
     "statusSearching": "Recherche d’un chauffeur",
     "statusAssigned": "Chauffeur en route",
     "statusArrived": "Le chauffeur est arrivé",
@@ -87,7 +89,6 @@
     "platformFee": "Platform fee",
     "youEarn": "You earn",
     "receipt": "Receipt",
-    "statusScheduled": "Planifiée",
     "offers": "Offres des chauffeurs",
     "noOffers": "En attente d’offres…",
     "acceptOffer": "Accepter",
@@ -175,6 +176,7 @@
     "roleDriver": "Driver",
     "roleAdmin": "Admin",
     "phone": "Numéro de téléphone",
+    "phonePlaceholder": "+1 555 123 4567",
     "uploadAvatar": "Changer la photo",
     "adminPanel": "Panneau admin",
     "call": "Appeler",

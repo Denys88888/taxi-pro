@@ -49,6 +49,7 @@
     "estimatedFare": "预估费用",
     "now": "现在",
     "schedule": "预约",
+    "pickDateTime": "Pick date & time",
     "addStop": "添加途经点",
     "stop": "途经点",
     "removeStop": "移除途经点",
@@ -61,6 +62,7 @@
     "tapMapHint": "点击地图选择目的地"
   },
   "ride": {
+    "statusScheduled": "已预约",
     "statusSearching": "正在寻找司机",
     "statusAssigned": "司机正在赶来",
     "statusArrived": "司机已到达",
@@ -87,7 +89,6 @@
     "platformFee": "Platform fee",
     "youEarn": "You earn",
     "receipt": "Receipt",
-    "statusScheduled": "已预约",
     "offers": "司机报价",
     "noOffers": "等待司机报价…",
     "acceptOffer": "接受",
@@ -175,6 +176,7 @@
     "roleDriver": "Driver",
     "roleAdmin": "Admin",
     "phone": "电话号码",
+    "phonePlaceholder": "+1 555 123 4567",
     "uploadAvatar": "更换照片",
     "adminPanel": "管理后台",
     "call": "呼叫",

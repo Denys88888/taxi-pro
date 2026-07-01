@@ -49,6 +49,7 @@
     "estimatedFare": "Giá ước tính",
     "now": "Bây giờ",
     "schedule": "Đặt lịch",
+    "pickDateTime": "Pick date & time",
     "addStop": "Thêm điểm dừng",
     "stop": "Điểm dừng",
     "removeStop": "Xóa điểm dừng",
@@ -61,6 +62,7 @@
     "tapMapHint": "Chạm vào bản đồ để chọn điểm đến"
   },
   "ride": {
+    "statusScheduled": "Đã đặt lịch",
     "statusSearching": "Đang tìm tài xế",
     "statusAssigned": "Tài xế đang đến",
     "statusArrived": "Tài xế đã đến",
@@ -87,7 +89,6 @@
     "platformFee": "Platform fee",
     "youEarn": "You earn",
     "receipt": "Receipt",
-    "statusScheduled": "Đã đặt lịch",
     "offers": "Đề nghị của tài xế",
     "noOffers": "Đang chờ đề nghị…",
     "acceptOffer": "Chấp nhận",
@@ -175,6 +176,7 @@
     "roleDriver": "Driver",
     "roleAdmin": "Admin",
     "phone": "Số điện thoại",
+    "phonePlaceholder": "+1 555 123 4567",
     "uploadAvatar": "Đổi ảnh",
     "adminPanel": "Bảng quản trị",
     "call": "Gọi",

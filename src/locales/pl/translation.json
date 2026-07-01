@@ -49,6 +49,7 @@
     "estimatedFare": "Szacowana cena",
     "now": "Teraz",
     "schedule": "Zaplanuj",
+    "pickDateTime": "Pick date & time",
     "addStop": "Dodaj przystanek",
     "stop": "Przystanek",
     "removeStop": "Usuń przystanek",
@@ -61,6 +62,7 @@
     "tapMapHint": "Dotknij mapy, aby wybrać cel"
   },
   "ride": {
+    "statusScheduled": "Zaplanowany",
     "statusSearching": "Szukanie kierowcy",
     "statusAssigned": "Kierowca w drodze",
     "statusArrived": "Kierowca przyjechał",
@@ -87,7 +89,6 @@
     "platformFee": "Platform fee",
     "youEarn": "You earn",
     "receipt": "Receipt",
-    "statusScheduled": "Zaplanowany",
     "offers": "Oferty kierowców",
     "noOffers": "Oczekiwanie na oferty…",
     "acceptOffer": "Akceptuj",
@@ -175,6 +176,7 @@
     "roleDriver": "Driver",
     "roleAdmin": "Admin",
     "phone": "Numer telefonu",
+    "phonePlaceholder": "+1 555 123 4567",
     "uploadAvatar": "Zmień zdjęcie",
     "adminPanel": "Panel admina",
     "call": "Zadzwoń",

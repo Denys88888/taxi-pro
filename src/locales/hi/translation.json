@@ -49,6 +49,7 @@
     "estimatedFare": "अनुमानित किराया",
     "now": "अभी",
     "schedule": "शेड्यूल करें",
+    "pickDateTime": "Pick date & time",
     "addStop": "स्टॉप जोड़ें",
     "stop": "स्टॉप",
     "removeStop": "स्टॉप हटाएँ",
@@ -61,6 +62,7 @@
     "tapMapHint": "गंतव्य चुनने के लिए मानचित्र पर टैप करें"
   },
   "ride": {
+    "statusScheduled": "शेड्यूल्ड",
     "statusSearching": "ड्राइवर खोजा जा रहा है",
     "statusAssigned": "ड्राइवर रास्ते में है",
     "statusArrived": "ड्राइवर पहुँच गया",
@@ -87,7 +89,6 @@
     "platformFee": "Platform fee",
     "youEarn": "You earn",
     "receipt": "Receipt",
-    "statusScheduled": "शेड्यूल्ड",
     "offers": "ड्राइवर ऑफ़र",
     "noOffers": "ऑफ़र की प्रतीक्षा…",
     "acceptOffer": "स्वीकारें",
@@ -175,6 +176,7 @@
     "roleDriver": "Driver",
     "roleAdmin": "Admin",
     "phone": "फ़ोन नंबर",
+    "phonePlaceholder": "+1 555 123 4567",
     "uploadAvatar": "फ़ोटो बदलें",
     "adminPanel": "एडमिन पैनल",
     "call": "कॉल",

@@ -49,6 +49,7 @@
     "estimatedFare": "예상 요금",
     "now": "지금",
     "schedule": "예약",
+    "pickDateTime": "Pick date & time",
     "addStop": "경유지 추가",
     "stop": "경유지",
     "removeStop": "경유지 삭제",
@@ -61,6 +62,7 @@
     "tapMapHint": "지도를 눌러 목적지 선택"
   },
   "ride": {
+    "statusScheduled": "예약됨",
     "statusSearching": "기사님 찾는 중",
     "statusAssigned": "기사님이 오는 중",
     "statusArrived": "기사님이 도착했습니다",
@@ -87,7 +89,6 @@
     "platformFee": "Platform fee",
     "youEarn": "You earn",
     "receipt": "Receipt",
-    "statusScheduled": "예약됨",
     "offers": "기사 제안",
     "noOffers": "제안을 기다리는 중…",
     "acceptOffer": "수락",
@@ -175,6 +176,7 @@
     "roleDriver": "Driver",
     "roleAdmin": "Admin",
     "phone": "전화번호",
+    "phonePlaceholder": "+1 555 123 4567",
     "uploadAvatar": "사진 변경",
     "adminPanel": "관리자 패널",
     "call": "전화",
