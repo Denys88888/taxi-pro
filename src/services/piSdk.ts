@@ -24,8 +24,8 @@ export async function authenticateWithPi(): Promise<PiAuthResult> {
   }
   initPi();
   const onIncompletePaymentFound = (payment: unknown): void => {
-    // A previous payment was left open; log for diagnostics.
-    console.warn('[Pi] incomplete payment found', payment);
+    // A previous payment was left open; surface for diagnostics.
+    console.error('[Pi] incomplete payment found', payment);
   };
   return window.Pi!.authenticate(['username', 'payments'], onIncompletePaymentFound);
 }
