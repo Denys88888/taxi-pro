@@ -11,12 +11,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   </React.StrictMode>
 );
 
-// Register the PWA service worker (public/sw.js), scoped to the app base path.
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    const base = import.meta.env.BASE_URL || '/';
-    navigator.serviceWorker.register(`${base}sw.js`, { scope: base }).catch(() => {
-      /* SW registration is best-effort; the app works without it */
-    });
-  });
-}
+// The service worker is generated and auto-registered by vite-plugin-pwa
+// (registerType: 'autoUpdate'), so no manual registration is needed here.
