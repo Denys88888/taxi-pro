@@ -106,7 +106,13 @@ export function MapView({
         attributionControl={false}
         style={{ height: '100%', width: '100%' }}
       >
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        {/* Explicit HTTPS + crossOrigin so tiles load under Pi Browser's strict
+            WebView CSP / mixed-content rules (OSM sends Access-Control-Allow-Origin:*). */}
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          subdomains={['a', 'b', 'c']}
+          crossOrigin="anonymous"
+        />
         <SizeInvalidator />
         <Recenter center={driver ?? pickup ?? center} />
         {onMapClick && <ClickCapture onClick={onMapClick} />}

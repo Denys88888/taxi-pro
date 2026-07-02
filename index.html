@@ -3,6 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <!-- CSP: explicitly allow OpenStreetMap tiles (img-src), the Nominatim/API/WS
+         endpoints (connect-src) and the Pi SDK (script-src) so the map + network
+         work under a strict WebView (Pi Browser). Kept permissive (https:) to
+         avoid breaking the SPA. -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self' https: data: blob:; img-src 'self' data: blob: https://*.tile.openstreetmap.org https://*.openstreetmap.org https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://sdk.minepi.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://*.tile.openstreetmap.org https://nominatim.openstreetmap.org https://taxi-pro-server.onrender.com wss://taxi-pro-server.onrender.com https: wss:; worker-src 'self' blob:;"
+    />
     <meta name="theme-color" content="#7B3FE4" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
