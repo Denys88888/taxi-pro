@@ -1,5 +1,6 @@
 import { PI_SANDBOX } from '../utils/constants';
 import { api } from './api';
+import { logger } from '../utils/logger';
 import type { PiAuthResult } from '../types/pi';
 
 // Wrapper around the Pi Browser SDK. Outside the Pi Browser `window.Pi` is
@@ -25,7 +26,7 @@ export async function authenticateWithPi(): Promise<PiAuthResult> {
   initPi();
   const onIncompletePaymentFound = (payment: unknown): void => {
     // A previous payment was left open; surface for diagnostics.
-    console.error('[Pi] incomplete payment found', payment);
+    logger.warn('[Pi] incomplete payment found', payment);
   };
   return window.Pi!.authenticate(['username', 'payments'], onIncompletePaymentFound);
 }
