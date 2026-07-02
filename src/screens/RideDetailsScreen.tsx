@@ -12,9 +12,11 @@ import { useToast } from '../hooks/useToast';
 import { usePayments } from '../hooks/usePayments';
 import { wsService } from '../services/wsService';
 import { api } from '../services/api';
-import { chatIdForRide } from '../utils/helpers';
+import { chatIdForRide, haversineKm } from '../utils/helpers';
 import { formatPi, formatDistance, formatDuration, formatDate, maskPhone } from '../utils/formatters';
 import type { GeoPoint, Ride, RideParty, FareOffer } from '../types';
+
+const AVG_SPEED_KMH = 30;
 
 // Ride tracking screen: live map + status, counterpart contact (phone/call),
 // driver offers for negotiable rides, cancel + pay + rate.
@@ -34,6 +36,7 @@ export function RideDetailsScreen() {
   const [rating, setRating] = useState(0);
   const [showReport, setShowReport] = useState(false);
   const [reportText, setReportText] = useState('');
+  const [etaSeconds, setEtaSeconds] = useState<number | null>(null);
 
   const rideId = params.id ?? storeRide?.id ?? '';
 
@@ -64,6 +67,55 @@ export function RideDetailsScreen() {
       offLoc();
     };
   }, [rideId]);
+
+  // Driver: broadcast GPS position every 5 seconds while the ride is active, so
+  // the passenger's map tracks the driver in real time (spec: every 5s).
+  const activeStatus = ride?.status;
+  const iAmDriver = !!ride && ride.driverId === uid;
+  useEffect(() => {
+    if (!iAmDriver || !rideId) return;
+    if (!activeStatus || ['completed', 'cancelled'].includes(activeStatus)) return;
+    if (!('geolocation' in navigator)) return;
+    const tick = () => {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const { latitude: lat, longitude: lng } = pos.coords;
+          setDriverPos({ lat, lng });
+          wsService.send('driver_location', { rideId, lat, lng });
+          api.updateDriverLocation(lat, lng).catch(() => {});
+        },
+        () => {},
+        { enableHighAccuracy: true, maximumAge: 4000, timeout: 5000 }
+      );
+    };
+    tick();
+    const id = setInterval(tick, 5000);
+    return () => clearInterval(id);
+  }, [iAmDriver, rideId, activeStatus]);
+
+  // Live ETA: recompute from the driver's position to the current target
+  // (pickup before start, destination after) whenever the driver moves, then
+  // tick the displayed countdown down every second.
+  const targetPoint =
+    ride && (ride.status === 'in_progress' ? ride.destination : ride.pickup);
+  useEffect(() => {
+    if (!driverPos || !targetPoint || !ride) {
+      setEtaSeconds(null);
+      return;
+    }
+    if (['completed', 'cancelled', 'searching', 'scheduled'].includes(ride.status)) {
+      setEtaSeconds(null);
+      return;
+    }
+    const km = haversineKm(driverPos.lat, driverPos.lng, targetPoint.lat, targetPoint.lng);
+    setEtaSeconds(Math.max(0, Math.round((km / AVG_SPEED_KMH) * 3600)));
+  }, [driverPos, targetPoint?.lat, targetPoint?.lng, ride?.status]);
+
+  useEffect(() => {
+    if (etaSeconds === null) return;
+    const id = setInterval(() => setEtaSeconds((s) => (s === null ? null : Math.max(0, s - 1))), 1000);
+    return () => clearInterval(id);
+  }, [etaSeconds === null]);
 
   if (!ride) {
     return <div className="flex h-full items-center justify-center opacity-60">{t('common.loading')}</div>;
@@ -140,7 +192,14 @@ export function RideDetailsScreen() {
       <div className="-mt-4 flex-1 space-y-4 overflow-y-auto rounded-t-2xl surface p-4 shadow-card">
         <div className="flex items-center justify-between">
           <RideStatusBadge status={ride.status} />
-          <span className="text-lg font-bold">{formatPi(ride.fare)}</span>
+          <div className="flex items-center gap-3">
+            {etaSeconds !== null && (
+              <span className="rounded-full bg-primary/15 px-3 py-1 text-sm font-semibold text-primary">
+                {t('ride.eta')} {Math.floor(etaSeconds / 60)}:{String(etaSeconds % 60).padStart(2, '0')}
+              </span>
+            )}
+            <span className="text-lg font-bold">{formatPi(ride.fare)}</span>
+          </div>
         </div>
 
         {ride.status === 'scheduled' && ride.scheduledAt && (
