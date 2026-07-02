@@ -94,6 +94,21 @@ class WsService {
     this.ws = null;
   }
 
+  // Immediately attempt to reconnect, resetting the backoff. Used when the device
+  // regains network connectivity (the `online` event) so we don't wait out a
+  // pending backoff delay.
+  forceReconnect(): void {
+    if (!this.token || this.manualClose) return;
+    if (this.reconnectTimer) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = null;
+    }
+    this.reconnectAttempt = 0;
+    if (this.ws && this.ws.readyState === WebSocket.OPEN) return;
+    this.ws = null;
+    this.open();
+  }
+
   get connected(): boolean {
     return this.ws?.readyState === WebSocket.OPEN;
   }
