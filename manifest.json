@@ -1,9 +1,10 @@
 {
+  "id": "/taxi-pro/",
   "name": "Taxi Pro",
   "short_name": "TaxiPro",
   "description": "Pi Network ride-hailing",
-  "start_url": "/taxi-pro/",
   "scope": "/taxi-pro/",
+  "start_url": "/taxi-pro/",
   "display": "standalone",
   "orientation": "portrait",
   "theme_color": "#7B3FE4",

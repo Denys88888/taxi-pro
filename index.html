@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#7B3FE4" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <link rel="manifest" href="manifest.json" />
+    <!-- The web manifest link is injected by vite-plugin-pwa (manifest.webmanifest). -->
     <link rel="apple-touch-icon" href="icons/icon-192.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,12 +14,12 @@
     <title>Taxi Pro</title>
     <!-- Pi Network SDK (available only inside the Pi Browser) -->
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-    <script type="module" crossorigin src="/taxi-pro/assets/index-D0juGKVB.js"></script>
+    <script type="module" crossorigin src="/taxi-pro/assets/index-Ccji4OpE.js"></script>
     <link rel="modulepreload" crossorigin href="/taxi-pro/assets/i18n-CiH2TmKk.js">
     <link rel="modulepreload" crossorigin href="/taxi-pro/assets/leaflet-DwslxOfX.js">
     <link rel="modulepreload" crossorigin href="/taxi-pro/assets/vendor-DBelrHdO.js">
     <link rel="stylesheet" crossorigin href="/taxi-pro/assets/index-D-8V8Hrs.css">
-  </head>
+  <link rel="manifest" href="/taxi-pro/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/taxi-pro/registerSW.js"></script></head>
   <body>
     <div id="root"></div>
   </body>
