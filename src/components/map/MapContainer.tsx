@@ -33,10 +33,14 @@ function Recenter({ center }: { center: GeoPoint }) {
   return null;
 }
 
-// Relays map tap coordinates to the parent (tap-to-select destination).
+// Relays map tap AND long-press coordinates to the parent. On touch devices
+// Leaflet fires `contextmenu` for a long-press, so both gestures select a point.
 function ClickCapture({ onClick }: { onClick: (p: GeoPoint) => void }) {
   useMapEvents({
     click(e) {
+      onClick({ lat: e.latlng.lat, lng: e.latlng.lng });
+    },
+    contextmenu(e) {
       onClick({ lat: e.latlng.lat, lng: e.latlng.lng });
     },
   });
@@ -50,6 +54,8 @@ interface Props {
   driver?: GeoPoint | null;
   stops?: GeoPoint[];
   onMapClick?: (p: GeoPoint) => void;
+  // When provided, the destination pin is draggable and reports its new position.
+  onDestinationDrag?: (p: GeoPoint) => void;
   className?: string;
 }
 
@@ -62,6 +68,7 @@ export function MapView({
   driver,
   stops = [],
   onMapClick,
+  onDestinationDrag,
   className,
 }: Props) {
   const route: [number, number][] = [];
@@ -86,7 +93,21 @@ export function MapView({
           <Marker key={`stop-${i}`} position={[s.lat, s.lng]} icon={pin('#FFAB00')} />
         ))}
         {destination && (
-          <Marker position={[destination.lat, destination.lng]} icon={pin('#FF1744')} />
+          <Marker
+            position={[destination.lat, destination.lng]}
+            icon={pin('#FF1744')}
+            draggable={!!onDestinationDrag}
+            eventHandlers={
+              onDestinationDrag
+                ? {
+                    dragend: (e) => {
+                      const ll = e.target.getLatLng();
+                      onDestinationDrag({ lat: ll.lat, lng: ll.lng });
+                    },
+                  }
+                : undefined
+            }
+          />
         )}
         {driver && <Marker position={[driver.lat, driver.lng]} icon={pin('#00C853')} />}
         {route.length >= 2 && (

@@ -80,6 +80,12 @@ export function PassengerHomeScreen() {
     setPendingTap(null);
   };
 
+  // Dragging the destination pin adjusts the drop-off and re-resolves its address.
+  const onDestinationDrag = (p: GeoPoint) => {
+    setDestination(p);
+    reverseGeocode(p).then((address) => setDestination((cur) => (cur ? { ...cur, address } : cur)));
+  };
+
   const order = async (): Promise<void> => {
     if (!isValidCoord(pickup) || !isValidCoord(destination)) return;
     setOrdering(true);
@@ -118,6 +124,7 @@ export function PassengerHomeScreen() {
           destination={destination}
           stops={stops}
           onMapClick={onMapTap}
+          onDestinationDrag={onDestinationDrag}
           className="h-full w-full"
         />
         <div className="pointer-events-none absolute inset-x-0 top-2 flex justify-center">
