@@ -13,7 +13,20 @@
 | 3 | **Latest build renders on the real device** | ✅ Auth screen with the **Lucide Car icon (no emoji)**, purple theme, text-only language selector, "π Login with Pi" (`screenshots/02`) — served locally over `adb reverse` and loaded in the on-device Chromium WebView (same engine as Pi Browser). Confirmed by server-log fetches of the JS bundle + `manifest.webmanifest`. |
 | 4 | App interactive & stable on-device | ✅ no crash; `Login with Pi` handled gracefully when `window.Pi` is absent |
 
-## Bugs / blockers 🐛
+## Bugs found & FIXED 🐛→✅
+
+- **[HIGH] Map not visible ("карту не вижу").** On the device (and Pi Browser),
+  the Leaflet map rendered **blank** on the passenger home / ride / driver screens.
+  **Cause:** Leaflet caches its container size at init; the map mounts during the
+  splash→app transition before the container has its final (%-of-flex) height, so
+  it initializes at height 0 and never repaints. Works on fast desktop, fails on a
+  slower device — which is why it wasn't caught earlier.
+  **Fix:** added a `SizeInvalidator` in `MapView` that calls `map.invalidateSize()`
+  after mount, on short delays, and on resize/orientation change. Applies to every
+  map instance. **Verified on the device — map now renders with OSM tiles**
+  (`screenshots/04-home-map-fixed-on-device.png`).
+
+## Blockers 🚧
 
 1. **[HIGH] Live site serves the OLD build.** The latest build (Lucide icons,
    PWA-via-plugin, robots/sitemap) is **stuck on the GitHub Pages deploy** — the

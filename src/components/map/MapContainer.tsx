@@ -33,6 +33,27 @@ function Recenter({ center }: { center: GeoPoint }) {
   return null;
 }
 
+// Leaflet caches the container size at init. If the map mounts before its
+// container has its final height (splash→app transition, flex/%-height layout
+// settling — common on mobile / Pi Browser), tiles never paint and the map looks
+// blank. Re-measure after mount, after short delays, and on resize.
+function SizeInvalidator() {
+  const map = useMap();
+  useEffect(() => {
+    const fix = () => map.invalidateSize({ animate: false });
+    fix();
+    const timers = [50, 250, 600, 1200].map((ms) => setTimeout(fix, ms));
+    window.addEventListener('resize', fix);
+    window.addEventListener('orientationchange', fix);
+    return () => {
+      timers.forEach(clearTimeout);
+      window.removeEventListener('resize', fix);
+      window.removeEventListener('orientationchange', fix);
+    };
+  }, [map]);
+  return null;
+}
+
 // Relays map tap AND long-press coordinates to the parent. On touch devices
 // Leaflet fires `contextmenu` for a long-press, so both gestures select a point.
 function ClickCapture({ onClick }: { onClick: (p: GeoPoint) => void }) {
@@ -86,6 +107,7 @@ export function MapView({
         style={{ height: '100%', width: '100%' }}
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        <SizeInvalidator />
         <Recenter center={driver ?? pickup ?? center} />
         {onMapClick && <ClickCapture onClick={onMapClick} />}
         {pickup && <Marker position={[pickup.lat, pickup.lng]} icon={pin('#2979FF', true)} />}
