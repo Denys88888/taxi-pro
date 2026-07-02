@@ -32,6 +32,8 @@ export function RideDetailsScreen() {
   const [driverPos, setDriverPos] = useState<GeoPoint | null>(null);
   const [showCancel, setShowCancel] = useState(false);
   const [rating, setRating] = useState(0);
+  const [showReport, setShowReport] = useState(false);
+  const [reportText, setReportText] = useState('');
 
   const rideId = params.id ?? storeRide?.id ?? '';
 
@@ -95,6 +97,19 @@ export function RideDetailsScreen() {
   const pay = async (): Promise<void> => {
     const txid = await payRide(ride.id);
     if (txid) api.getRide(ride.id).then(setRide).catch(() => {});
+  };
+
+  const submitReport = async (): Promise<void> => {
+    const reportedId = isDriver ? ride.passengerId : ride.driverId;
+    if (!reportedId) return;
+    try {
+      await api.createReport(ride.id, reportedId, 'complaint', reportText.trim() || 'No details');
+      addToast('success', t('ride.reportSent'));
+      setShowReport(false);
+      setReportText('');
+    } catch {
+      addToast('error', t('common.error'));
+    }
   };
 
   const acceptOffer = async (offer: FareOffer): Promise<void> => {
@@ -162,6 +177,13 @@ export function RideDetailsScreen() {
                 aria-label={t('ride.messageDriver')}
               >
                 💬
+              </button>
+              <button
+                onClick={() => setShowReport(true)}
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-danger/10 text-danger"
+                aria-label={t('ride.report')}
+              >
+                🚩
               </button>
             </div>
           </Card>
@@ -253,6 +275,24 @@ export function RideDetailsScreen() {
         cancelLabel={t('common.back')}
       >
         {feeApplies ? t('ride.cancelFeeWarning') : t('ride.cancelConfirm')}
+      </Modal>
+
+      <Modal
+        open={showReport}
+        title={t('ride.report')}
+        onClose={() => setShowReport(false)}
+        onConfirm={submitReport}
+        confirmLabel={t('common.submit')}
+        confirmVariant="danger"
+        cancelLabel={t('common.cancel')}
+      >
+        <textarea
+          value={reportText}
+          onChange={(e) => setReportText(e.target.value)}
+          placeholder={t('ride.reportReason')}
+          rows={3}
+          className="w-full rounded-lg border border-[#E0E0E0] dark:border-white/15 bg-transparent px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/40"
+        />
       </Modal>
     </div>
   );

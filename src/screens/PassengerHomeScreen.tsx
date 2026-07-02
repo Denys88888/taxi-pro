@@ -184,7 +184,7 @@ export function PassengerHomeScreen() {
           {stops.length < 5 && (
             <button
               onClick={() => setStops((prev) => [...prev, { lat: center.lat, lng: center.lng }])}
-              className="text-sm font-medium text-primary"
+              className="inline-flex min-h-[40px] items-center px-1 text-sm font-medium text-primary"
             >
               ＋ {t('home.addStop')}
             </button>

@@ -129,6 +129,12 @@ export const api = {
       .post(`/api/payments/${paymentId}/complete`, { piPaymentId, txid })
       .then((r) => r.data),
 
+  // ── Reports ──
+  createReport: (rideId: string, reportedId: string, reason: string, description?: string) =>
+    client
+      .post('/api/reports', { rideId, reportedId, reason, description })
+      .then((r) => r.data),
+
   // ── Push ──
   savePushToken: (token: string, platform = 'web') =>
     client.post('/api/push-token', { token, platform }).then((r) => r.data),

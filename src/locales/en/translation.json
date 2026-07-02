@@ -93,7 +93,10 @@
     "noOffers": "Waiting for driver offers…",
     "acceptOffer": "Accept",
     "scheduledFor": "Scheduled for",
-    "stops": "Stops"
+    "stops": "Stops",
+    "report": "Report a problem",
+    "reportReason": "Describe the issue",
+    "reportSent": "Report submitted"
   },
   "vehicle": {
     "economy": "Economy",
