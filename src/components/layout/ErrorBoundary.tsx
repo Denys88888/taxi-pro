@@ -1,4 +1,5 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
+import { AlertTriangle } from 'lucide-react';
 
 interface State {
   hasError: boolean;
@@ -21,7 +22,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
     if (this.state.hasError) {
       return (
         <div className="flex h-full flex-col items-center justify-center gap-4 p-6 text-center">
-          <div className="text-4xl">⚠️</div>
+          <AlertTriangle size={40} className="text-warning" strokeWidth={1.75} />
           <h3>Something went wrong</h3>
           <p className="text-sm opacity-70">{this.state.message}</p>
           <button

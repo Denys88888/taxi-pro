@@ -15,4 +15,18 @@ export default defineConfig({
   resolve: {
     alias: { '@': path.resolve(__dirname, 'src') },
   },
+  build: {
+    // Split heavy vendors into their own chunks so no single chunk trips the
+    // 500 kB warning and the app shell caches/loads efficiently.
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ['react', 'react-dom'],
+          leaflet: ['leaflet', 'react-leaflet'],
+          i18n: ['i18next', 'react-i18next', 'i18next-browser-languagedetector'],
+          vendor: ['axios', 'zustand', 'date-fns', 'dompurify', 'lucide-react'],
+        },
+      },
+    },
+  },
 });

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Calendar, Star, Phone, MessageCircle, Flag, Share2, Siren } from 'lucide-react';
 import { MapView } from '../components/map/MapContainer';
 import { RideStatusBadge } from '../components/ride/RideStatusBadge';
 import { Button } from '../components/ui/Button';
@@ -203,8 +204,8 @@ export function RideDetailsScreen() {
         </div>
 
         {ride.status === 'scheduled' && ride.scheduledAt && (
-          <Card className="text-sm">
-            🗓 {t('ride.scheduledFor')}: <b>{formatDate(ride.scheduledAt)}</b>
+          <Card className="flex items-center gap-1.5 text-sm">
+            <Calendar size={15} /> {t('ride.scheduledFor')}: <b>{formatDate(ride.scheduledAt)}</b>
           </Card>
         )}
 
@@ -214,8 +215,8 @@ export function RideDetailsScreen() {
             <Avatar name={counterpart.name} src={counterpart.avatar} size={48} />
             <div className="flex-1">
               <p className="font-semibold">{counterpart.name}</p>
-              <p className="text-xs opacity-60">
-                ⭐ {counterpart.rating.toFixed(1)}
+              <p className="flex items-center gap-1 text-xs opacity-60">
+                <Star size={12} className="fill-warning text-warning" /> {counterpart.rating.toFixed(1)}
                 {counterpart.brand ? ` · ${counterpart.brand} ${counterpart.model} · ${counterpart.number}` : ''}
               </p>
               {counterpart.phone && <p className="text-xs opacity-50">{maskPhone(counterpart.phone)}</p>}
@@ -227,7 +228,7 @@ export function RideDetailsScreen() {
                   className="flex h-10 w-10 items-center justify-center rounded-full bg-success/15 text-success"
                   aria-label={t('ride.callDriver')}
                 >
-                  📞
+                  <Phone size={18} />
                 </a>
               )}
               <button
@@ -235,14 +236,14 @@ export function RideDetailsScreen() {
                 className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/15 text-primary"
                 aria-label={t('ride.messageDriver')}
               >
-                💬
+                <MessageCircle size={18} />
               </button>
               <button
                 onClick={() => setShowReport(true)}
                 className="flex h-10 w-10 items-center justify-center rounded-full bg-danger/10 text-danger"
                 aria-label={t('ride.report')}
               >
-                🚩
+                <Flag size={18} />
               </button>
             </div>
           </Card>
@@ -259,8 +260,8 @@ export function RideDetailsScreen() {
               <Card key={o.driverId} className="flex items-center justify-between">
                 <div>
                   <p className="font-semibold">{formatPi(o.amount)}</p>
-                  <p className="text-xs opacity-60">
-                    {o.driverName} · ⭐ {o.driverRating.toFixed(1)}
+                  <p className="flex items-center gap-1 text-xs opacity-60">
+                    {o.driverName} · <Star size={11} className="fill-warning text-warning" /> {o.driverRating.toFixed(1)}
                     {o.etaMin != null ? ` · ${o.etaMin} min` : ''}
                   </p>
                 </div>
@@ -280,10 +281,13 @@ export function RideDetailsScreen() {
         {ride.status === 'completed' && !isDriver && (
           <Card className="space-y-3">
             <p className="text-center font-semibold">{t('ride.rateTitle')}</p>
-            <div className="flex justify-center gap-2 text-3xl">
+            <div className="flex justify-center gap-2">
               {[1, 2, 3, 4, 5].map((n) => (
-                <button key={n} onClick={() => setRating(n)} className="active:scale-90">
-                  {n <= rating ? '⭐' : '☆'}
+                <button key={n} onClick={() => setRating(n)} className="active:scale-90" aria-label={`${n} stars`}>
+                  <Star
+                    size={32}
+                    className={n <= rating ? 'fill-warning text-warning' : 'text-black/20 dark:text-white/20'}
+                  />
                 </button>
               ))}
             </div>
@@ -312,10 +316,10 @@ export function RideDetailsScreen() {
                 addToast('success', t('ride.shareCopied'));
               }}
             >
-              🔗 {t('ride.share')}
+              <Share2 size={16} /> {t('ride.share')}
             </Button>
             <Button variant="danger" onClick={() => addToast('warning', t('ride.sosSent'))}>
-              🆘 {t('ride.sos')}
+              <Siren size={16} /> {t('ride.sos')}
             </Button>
             <Button variant="ghost" className="col-span-2 !text-danger" onClick={() => setShowCancel(true)}>
               {t('ride.cancel')}

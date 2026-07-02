@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { Car } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { LanguageSelector } from '../components/ui/LanguageSelector';
 import { Button } from '../components/ui/Button';
@@ -15,8 +16,8 @@ export function AuthScreen() {
       </div>
 
       <div className="flex flex-1 flex-col items-center justify-center gap-4 px-8 text-center">
-        <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-white/15 text-5xl">
-          🚕
+        <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-white/15">
+          <Car size={48} strokeWidth={1.75} />
         </div>
         <h1 className="text-white">{t('auth.welcome')}</h1>
         <p className="text-white/80">{t('auth.tagline')}</p>

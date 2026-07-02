@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Camera, CreditCard, Clock } from 'lucide-react';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
@@ -78,7 +79,7 @@ export function DriverRegistrationScreen() {
   if (submitted) {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-4 p-8 text-center">
-        <div className="text-5xl">⏳</div>
+        <Clock size={56} className="text-warning" strokeWidth={1.5} />
         <h2>{t('register.pending')}</h2>
         <p className="opacity-70">{t('register.pendingDesc')}</p>
         <Button onClick={back}>{t('common.back')}</Button>
@@ -121,8 +122,9 @@ export function DriverRegistrationScreen() {
             {/* Profile photo — required before a driver can be verified. */}
             <div className="flex items-center gap-3">
               <Avatar name={form.name || user?.name || '?'} src={user?.avatar} size={56} />
-              <label className="cursor-pointer rounded-btn border border-primary px-4 py-2 text-sm font-semibold text-primary">
-                {user?.avatar ? t('profile.uploadAvatar') : `📷 ${t('register.title')}`}
+              <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-btn border border-primary px-4 py-2 text-sm font-semibold text-primary">
+                <Camera size={16} />
+                {user?.avatar ? t('profile.uploadAvatar') : t('register.title')}
                 <input
                   type="file"
                   accept="image/*"
@@ -132,12 +134,12 @@ export function DriverRegistrationScreen() {
               </label>
               {!user?.avatar && <span className="text-xs text-danger">*</span>}
             </div>
-            <label className="flex h-24 cursor-pointer flex-col items-center justify-center rounded-card border-2 border-dashed border-black/15 dark:border-white/15 text-sm opacity-70">
-              📷 {t('register.vehiclePhoto')}
+            <label className="flex h-24 cursor-pointer flex-col items-center justify-center gap-1 rounded-card border-2 border-dashed border-black/15 dark:border-white/15 text-sm opacity-70">
+              <Camera size={20} /> {t('register.vehiclePhoto')}
               <input type="file" accept="image/*" className="hidden" />
             </label>
-            <label className="flex h-24 cursor-pointer flex-col items-center justify-center rounded-card border-2 border-dashed border-black/15 dark:border-white/15 text-sm opacity-70">
-              🪪 {t('register.licensePhoto')}
+            <label className="flex h-24 cursor-pointer flex-col items-center justify-center gap-1 rounded-card border-2 border-dashed border-black/15 dark:border-white/15 text-sm opacity-70">
+              <CreditCard size={20} /> {t('register.licensePhoto')}
               <input type="file" accept="image/*" className="hidden" />
             </label>
           </Card>

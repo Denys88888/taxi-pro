@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { Home, Clock, Wallet, LayoutDashboard, User, type LucideIcon } from 'lucide-react';
 import { useRouter, type ScreenName } from '../../store/useRouter';
 import { useAppStore } from '../../store/useAppStore';
 import { cn } from '../../utils/helpers';
@@ -6,16 +7,16 @@ import { cn } from '../../utils/helpers';
 interface Tab {
   screen: ScreenName;
   labelKey: string;
-  icon: string;
+  icon: LucideIcon;
   roles?: string[];
 }
 
 const TABS: Tab[] = [
-  { screen: 'home', labelKey: 'nav.home', icon: '🏠' },
-  { screen: 'history', labelKey: 'nav.history', icon: '🕑' },
-  { screen: 'earnings', labelKey: 'nav.earnings', icon: '💰', roles: ['driver'] },
-  { screen: 'admin', labelKey: 'nav.admin', icon: '🛠️', roles: ['admin'] },
-  { screen: 'profile', labelKey: 'nav.profile', icon: '👤' },
+  { screen: 'home', labelKey: 'nav.home', icon: Home },
+  { screen: 'history', labelKey: 'nav.history', icon: Clock },
+  { screen: 'earnings', labelKey: 'nav.earnings', icon: Wallet, roles: ['driver'] },
+  { screen: 'admin', labelKey: 'nav.admin', icon: LayoutDashboard, roles: ['admin'] },
+  { screen: 'profile', labelKey: 'nav.profile', icon: User },
 ];
 
 // Persistent bottom tab bar; tabs are filtered by the user's role.
@@ -40,7 +41,7 @@ export function BottomNav() {
               active ? 'text-primary' : 'text-text-light/50 dark:text-text-dark/50'
             )}
           >
-            <span className="text-lg">{tab.icon}</span>
+            <tab.icon size={20} strokeWidth={active ? 2.25 : 1.75} />
             {t(tab.labelKey)}
           </button>
         );

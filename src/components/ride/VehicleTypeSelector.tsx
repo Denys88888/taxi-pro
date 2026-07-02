@@ -28,7 +28,7 @@ export function VehicleTypeSelector({ value, onChange, distanceKm = 0 }: Props) 
                 : 'border-transparent bg-black/5 dark:bg-white/5'
             )}
           >
-            <span className="text-2xl">{o.icon}</span>
+            <o.icon size={26} className={selected ? 'text-primary' : ''} strokeWidth={1.75} />
             <span className="text-sm font-semibold">{t(o.labelKey)}</span>
             <span className="text-xs opacity-70">~{estimate} π</span>
           </button>

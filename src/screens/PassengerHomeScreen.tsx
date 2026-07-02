@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { LocateFixed, Circle, X, Calendar, Coins } from 'lucide-react';
 import { MapView } from '../components/map/MapContainer';
 import { AddressSearch } from '../components/map/AddressSearch';
 import { VehicleTypeSelector } from '../components/ride/VehicleTypeSelector';
@@ -137,7 +138,7 @@ export function PassengerHomeScreen() {
           className="absolute bottom-4 right-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white shadow-fab active:scale-95"
           aria-label={t('home.useMyLocation')}
         >
-          📍
+          <LocateFixed size={22} />
         </button>
       </div>
 
@@ -148,7 +149,7 @@ export function PassengerHomeScreen() {
             label={t('home.from')}
             placeholder={t('home.fromPlaceholder')}
             value={pickup?.address ?? ''}
-            icon="🟢"
+            icon={<Circle size={12} className="fill-success text-success" />}
             near={position}
             countryCodes={country}
             onSelect={setPickup}
@@ -162,7 +163,7 @@ export function PassengerHomeScreen() {
                   label={`${t('home.stop')} ${i + 1}`}
                   placeholder={t('home.stop')}
                   value={s.address ?? ''}
-                  icon="🟠"
+                  icon={<Circle size={12} className="fill-warning text-warning" />}
                   near={position}
                   countryCodes={country}
                   onSelect={(p) => setStops((prev) => prev.map((x, xi) => (xi === i ? p : x)))}
@@ -173,7 +174,7 @@ export function PassengerHomeScreen() {
                 className="mt-6 flex h-9 w-9 items-center justify-center rounded-lg bg-danger/10 text-danger"
                 aria-label={t('home.removeStop')}
               >
-                ✕
+                <X size={16} />
               </button>
             </div>
           ))}
@@ -182,7 +183,7 @@ export function PassengerHomeScreen() {
             label={t('home.to')}
             placeholder={t('home.toPlaceholder')}
             value={destination?.address ?? ''}
-            icon="🔴"
+            icon={<Circle size={12} className="fill-danger text-danger" />}
             near={position}
             countryCodes={country}
             onSelect={setDestination}
@@ -208,9 +209,9 @@ export function PassengerHomeScreen() {
               </button>
               <button
                 onClick={() => setSchedule(true)}
-                className={cn('rounded-lg px-4 py-1.5 text-sm font-medium', schedule && 'bg-surface-light dark:bg-surface-dark text-primary shadow-sm')}
+                className={cn('inline-flex items-center gap-1.5 rounded-lg px-4 py-1.5 text-sm font-medium', schedule && 'bg-surface-light dark:bg-surface-dark text-primary shadow-sm')}
               >
-                🗓 {t('home.schedule')}
+                <Calendar size={15} /> {t('home.schedule')}
               </button>
             </div>
             {schedule && (
@@ -230,7 +231,9 @@ export function PassengerHomeScreen() {
 
           {/* Price negotiation (inDriver-style). */}
           <label className="flex items-center justify-between rounded-card bg-black/5 dark:bg-white/5 px-4 py-3">
-            <span className="text-sm font-medium">💬 {t('home.setYourPrice')}</span>
+            <span className="inline-flex items-center gap-1.5 text-sm font-medium">
+              <Coins size={16} /> {t('home.setYourPrice')}
+            </span>
             <input
               type="checkbox"
               checked={negotiate}

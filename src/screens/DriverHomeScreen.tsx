@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Circle, Check } from 'lucide-react';
 import { MapView } from '../components/map/MapContainer';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
@@ -101,11 +102,12 @@ export function DriverHomeScreen() {
         <button
           onClick={toggleOnline}
           className={cn(
-            'absolute left-4 top-4 rounded-full px-5 py-2.5 text-sm font-semibold text-white shadow-fab',
+            'absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full px-5 py-2.5 text-sm font-semibold text-white shadow-fab',
             online ? 'bg-success' : 'bg-danger'
           )}
         >
-          ● {online ? t('driver.online') : t('driver.offline')}
+          <Circle size={10} className="fill-white text-white" />
+          {online ? t('driver.online') : t('driver.offline')}
         </button>
       </div>
 
@@ -131,11 +133,20 @@ export function DriverHomeScreen() {
           <Card key={ride.id} className="space-y-2">
             <div className="flex items-start justify-between">
               <div className="min-w-0 flex-1 text-sm">
-                <p className="truncate">🟢 {ride.pickup.address ?? 'Pickup'}</p>
+                <p className="flex items-center gap-1.5 truncate">
+                  <Circle size={10} className="shrink-0 fill-success text-success" />
+                  {ride.pickup.address ?? 'Pickup'}
+                </p>
                 {ride.stops?.map((s, i) => (
-                  <p key={i} className="truncate opacity-70">🟠 {s.address ?? `Stop ${i + 1}`}</p>
+                  <p key={i} className="flex items-center gap-1.5 truncate opacity-70">
+                    <Circle size={10} className="shrink-0 fill-warning text-warning" />
+                    {s.address ?? `Stop ${i + 1}`}
+                  </p>
                 ))}
-                <p className="truncate opacity-70">🔴 {ride.destination.address ?? 'Destination'}</p>
+                <p className="flex items-center gap-1.5 truncate opacity-70">
+                  <Circle size={10} className="shrink-0 fill-danger text-danger" />
+                  {ride.destination.address ?? 'Destination'}
+                </p>
               </div>
               <span className="ml-2 text-right">
                 <span className="block font-bold">{formatPi(ride.fare)}</span>
@@ -148,7 +159,9 @@ export function DriverHomeScreen() {
 
             {ride.negotiable ? (
               offered[ride.id] ? (
-                <p className="text-center text-sm text-success">✓ {t('driver.offerSent')}</p>
+                <p className="flex items-center justify-center gap-1 text-center text-sm text-success">
+                  <Check size={15} /> {t('driver.offerSent')}
+                </p>
               ) : (
                 <div className="flex items-center gap-2">
                   <div className="flex flex-1 items-center gap-1 rounded-lg border border-[#E0E0E0] dark:border-white/15 px-3 py-2">

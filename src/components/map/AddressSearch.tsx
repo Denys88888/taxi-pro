@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Input } from '../ui/Input';
 import { searchAddress, type AddressResult } from '../../services/mapService';
 import type { GeoPoint } from '../../types';
@@ -7,7 +7,7 @@ interface Props {
   label: string;
   placeholder: string;
   value: string;
-  icon?: string;
+  icon?: ReactNode;
   near?: GeoPoint | null;
   countryCodes?: string;
   onSelect: (point: GeoPoint) => void;

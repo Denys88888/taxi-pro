@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Camera, Star, LayoutDashboard, Car } from 'lucide-react';
 import { Card } from '../components/ui/Card';
 import { Avatar } from '../components/ui/Avatar';
 import { Badge } from '../components/ui/Badge';
@@ -68,8 +69,8 @@ export function ProfileScreen() {
         <Card className="flex items-center gap-4">
           <button onClick={() => fileRef.current?.click()} className="relative" aria-label={t('profile.uploadAvatar')}>
             <Avatar name={user.name} src={user.avatar} size={64} />
-            <span className="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-white">
-              📷
+            <span className="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-white">
+              <Camera size={13} />
             </span>
           </button>
           <input
@@ -83,8 +84,8 @@ export function ProfileScreen() {
             <p className="text-lg font-semibold">{user.name}</p>
             <div className="mt-1 flex items-center gap-2">
               <Badge tone="primary">{t(`profile.${roleKey}`)}</Badge>
-              <span className="text-sm opacity-60">
-                ⭐ {user.rating.toFixed(1)} ({user.ratingCount})
+              <span className="flex items-center gap-1 text-sm opacity-60">
+                <Star size={14} className="fill-warning text-warning" /> {user.rating.toFixed(1)} ({user.ratingCount})
               </span>
             </div>
             {user.phone && <p className="mt-1 text-xs opacity-50">{maskPhone(user.phone)}</p>}
@@ -117,13 +118,13 @@ export function ProfileScreen() {
 
         {user.role === 'admin' && (
           <Button variant="outline" fullWidth onClick={() => navigate('admin')}>
-            🛠️ {t('profile.adminPanel')}
+            <LayoutDashboard size={18} /> {t('profile.adminPanel')}
           </Button>
         )}
 
         {user.role === 'passenger' && (
           <Button variant="outline" fullWidth onClick={() => navigate('register')}>
-            🚗 {t('driver.register')}
+            <Car size={18} /> {t('driver.register')}
           </Button>
         )}
 

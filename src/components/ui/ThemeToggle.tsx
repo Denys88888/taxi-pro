@@ -1,12 +1,13 @@
+import { Sun, Moon, Monitor, type LucideIcon } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useTranslation } from 'react-i18next';
 import type { Theme } from '../../types';
 import { cn } from '../../utils/helpers';
 
-const OPTIONS: { value: Theme; labelKey: string; icon: string }[] = [
-  { value: 'light', labelKey: 'profile.themeLight', icon: '☀️' },
-  { value: 'dark', labelKey: 'profile.themeDark', icon: '🌙' },
-  { value: 'auto', labelKey: 'profile.themeAuto', icon: '🅰️' },
+const OPTIONS: { value: Theme; labelKey: string; icon: LucideIcon }[] = [
+  { value: 'light', labelKey: 'profile.themeLight', icon: Sun },
+  { value: 'dark', labelKey: 'profile.themeDark', icon: Moon },
+  { value: 'auto', labelKey: 'profile.themeAuto', icon: Monitor },
 ];
 
 // Segmented light / dark / auto control.
@@ -20,13 +21,13 @@ export function ThemeToggle() {
           key={o.value}
           onClick={() => setTheme(o.value)}
           className={cn(
-            'rounded-lg px-3 py-1.5 text-sm font-medium transition',
+            'inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition',
             theme === o.value
               ? 'bg-surface-light dark:bg-surface-dark shadow-sm text-primary'
               : 'text-text-light/60 dark:text-text-dark/60'
           )}
         >
-          <span className="mr-1">{o.icon}</span>
+          <o.icon size={15} strokeWidth={2} />
           {t(o.labelKey)}
         </button>
       ))}

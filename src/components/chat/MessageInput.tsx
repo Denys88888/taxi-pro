@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Send } from 'lucide-react';
 
 interface Props {
   onSend: (text: string) => void;
@@ -32,7 +33,7 @@ export function MessageInput({ onSend, placeholder }: Props) {
         className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white active:scale-95"
         aria-label={t('chat.send')}
       >
-        ➤
+        <Send size={18} />
       </button>
     </div>
   );
