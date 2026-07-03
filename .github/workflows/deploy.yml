@@ -5,8 +5,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# Official GitHub Pages deployment (upload artifact + deploy). Avoids the
-# branch-based "pages build and deployment" (Jekyll) step entirely.
+# The app moved to https://denys88888.github.io/ (repo denys88888.github.io).
+# This Pages site now only publishes a redirect stub so the old
+# /taxi-pro/ URL keeps working.
 permissions:
   contents: read
   pages: write
@@ -17,36 +18,31 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-
-      - name: Install & build
-        env:
-          VITE_API_URL: https://taxi-pro-server.onrender.com
-          VITE_WS_URL: wss://taxi-pro-server.onrender.com
-          VITE_PI_SANDBOX: 'true'
-        run: |
-          npm ci
-          npm run build
-
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./dist
-
-  deploy:
-    needs: build
+  redirect:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Create redirect page
+        run: |
+          mkdir -p dist
+          cat > dist/index.html <<'HTML'
+          <!doctype html>
+          <html lang="en">
+            <head>
+              <meta charset="UTF-8" />
+              <title>Taxi Pro</title>
+              <script>window.location.replace('https://denys88888.github.io/');</script>
+              <meta http-equiv="refresh" content="0;url=https://denys88888.github.io/" />
+            </head>
+            <body>Moved to <a href="https://denys88888.github.io/">denys88888.github.io</a></body>
+          </html>
+          HTML
+          cp dist/index.html dist/404.html
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
       - id: deployment
         uses: actions/deploy-pages@v4
