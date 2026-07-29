@@ -136,7 +136,8 @@
     "offerYourPrice": "Fiyat teklif et",
     "submitOffer": "Gönder",
     "offerSent": "Teklif gönderildi",
-    "negotiable": "Pazarlık"
+    "negotiable": "Pazarlık",
+    "rideTaken": "Yolculuk başka bir sürücü tarafından alındı"
   },
   "earnings": {
     "title": "Kazanç",

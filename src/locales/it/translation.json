@@ -136,7 +136,8 @@
     "offerYourPrice": "Proponi il prezzo",
     "submitOffer": "Invia",
     "offerSent": "Offerta inviata",
-    "negotiable": "Trattabile"
+    "negotiable": "Trattabile",
+    "rideTaken": "La corsa è stata accettata da un altro autista"
   },
   "earnings": {
     "title": "Guadagni",

@@ -136,7 +136,8 @@
     "offerYourPrice": "Offer your price",
     "submitOffer": "Send offer",
     "offerSent": "Offer sent",
-    "negotiable": "Negotiable"
+    "negotiable": "Negotiable",
+    "rideTaken": "Ride was taken by another driver"
   },
   "earnings": {
     "title": "Earnings",

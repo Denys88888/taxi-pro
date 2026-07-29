@@ -136,7 +136,8 @@
     "offerYourPrice": "เสนอราคาของคุณ",
     "submitOffer": "ส่ง",
     "offerSent": "ส่งข้อเสนอแล้ว",
-    "negotiable": "ต่อรองได้"
+    "negotiable": "ต่อรองได้",
+    "rideTaken": "มีคนขับคนอื่นรับงานนี้แล้ว"
   },
   "earnings": {
     "title": "รายได้",

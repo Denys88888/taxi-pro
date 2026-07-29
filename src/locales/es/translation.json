@@ -136,7 +136,8 @@
     "offerYourPrice": "Ofrece tu precio",
     "submitOffer": "Enviar",
     "offerSent": "Oferta enviada",
-    "negotiable": "Negociable"
+    "negotiable": "Negociable",
+    "rideTaken": "El viaje fue tomado por otro conductor"
   },
   "earnings": {
     "title": "Ganancias",

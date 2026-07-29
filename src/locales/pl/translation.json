@@ -136,7 +136,8 @@
     "offerYourPrice": "Zaproponuj cenę",
     "submitOffer": "Wyślij",
     "offerSent": "Oferta wysłana",
-    "negotiable": "Negocjacja"
+    "negotiable": "Negocjacja",
+    "rideTaken": "Przejazd został przyjęty przez innego kierowcę"
   },
   "earnings": {
     "title": "Zarobki",

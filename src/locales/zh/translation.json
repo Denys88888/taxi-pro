@@ -136,7 +136,8 @@
     "offerYourPrice": "出价",
     "submitOffer": "发送",
     "offerSent": "报价已发送",
-    "negotiable": "可议价"
+    "negotiable": "可议价",
+    "rideTaken": "该行程已被其他司机接单"
   },
   "earnings": {
     "title": "收入",

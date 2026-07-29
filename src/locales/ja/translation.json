@@ -136,7 +136,8 @@
     "offerYourPrice": "料金を提示",
     "submitOffer": "送信",
     "offerSent": "提示を送信しました",
-    "negotiable": "交渉可"
+    "negotiable": "交渉可",
+    "rideTaken": "他のドライバーにより受注されました"
   },
   "earnings": {
     "title": "収益",

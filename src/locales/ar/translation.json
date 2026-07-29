@@ -136,7 +136,8 @@
     "offerYourPrice": "اعرض سعرك",
     "submitOffer": "إرسال",
     "offerSent": "تم إرسال العرض",
-    "negotiable": "قابل للتفاوض"
+    "negotiable": "قابل للتفاوض",
+    "rideTaken": "تم أخذ الرحلة من قبل سائق آخر"
   },
   "earnings": {
     "title": "الأرباح",

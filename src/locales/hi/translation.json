@@ -136,7 +136,8 @@
     "offerYourPrice": "अपनी कीमत बताएँ",
     "submitOffer": "भेजें",
     "offerSent": "ऑफ़र भेजा गया",
-    "negotiable": "मोलभाव"
+    "negotiable": "मोलभाव",
+    "rideTaken": "यात्रा किसी अन्य चालक ने ले ली"
   },
   "earnings": {
     "title": "कमाई",

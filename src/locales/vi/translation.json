@@ -136,7 +136,8 @@
     "offerYourPrice": "Đưa ra giá",
     "submitOffer": "Gửi",
     "offerSent": "Đã gửi đề nghị",
-    "negotiable": "Thương lượng"
+    "negotiable": "Thương lượng",
+    "rideTaken": "Chuyến đi đã được tài xế khác nhận"
   },
   "earnings": {
     "title": "Thu nhập",

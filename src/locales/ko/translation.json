@@ -136,7 +136,8 @@
     "offerYourPrice": "가격 제안",
     "submitOffer": "보내기",
     "offerSent": "제안을 보냈습니다",
-    "negotiable": "흥정 가능"
+    "negotiable": "흥정 가능",
+    "rideTaken": "다른 운전자가 이미 수락했습니다"
   },
   "earnings": {
     "title": "수입",

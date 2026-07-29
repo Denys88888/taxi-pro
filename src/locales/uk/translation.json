@@ -136,7 +136,8 @@
     "offerYourPrice": "Запропонувати ціну",
     "submitOffer": "Надіслати",
     "offerSent": "Пропозицію надіслано",
-    "negotiable": "Торг"
+    "negotiable": "Торг",
+    "rideTaken": "Замовлення вже взяв інший водій"
   },
   "earnings": {
     "title": "Дохід",

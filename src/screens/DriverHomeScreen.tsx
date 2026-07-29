@@ -24,11 +24,12 @@ export function DriverHomeScreen() {
   const [online, setOnline] = useState(false);
   const [requests, setRequests] = useState<Ride[]>([]);
   const [sortByPrice, setSortByPrice] = useState(false);
+  const [accepting, setAccepting] = useState<string | null>(null);
+  const [offerInputs, setOfferInputs] = useState<Record<string, string>>({});
+  const [offered, setOffered] = useState<Record<string, boolean>>({});
 
   // Keep the screen on while the driver is online so GPS and WebSocket stay alive.
   useWakeLock(online);
-  const [offerInputs, setOfferInputs] = useState<Record<string, string>>({});
-  const [offered, setOffered] = useState<Record<string, boolean>>({});
 
   const center: GeoPoint = position ?? { lat: 52.2297, lng: 21.0122 };
 
@@ -40,13 +41,26 @@ export function DriverHomeScreen() {
     const offTaken = wsService.on('ride_status_update', (msg) => {
       if (msg.status && msg.status !== 'searching') {
         setRequests((prev) => prev.filter((r) => r.id !== String(msg.rideId)));
+        // Server confirmed THIS driver got the ride — safe to navigate now.
+        if (msg.status === 'assigned' && accepting === String(msg.rideId)) {
+          setAccepting(null);
+          navigate('ride', { id: String(msg.rideId) });
+        }
+      }
+    });
+    // Another driver was faster — stay on the list and show a toast.
+    const offError = wsService.on('error', (msg) => {
+      if ((msg.code === 'TAKEN' || msg.code === 'NO_RIDE') && accepting) {
+        setAccepting(null);
+        addToast('warning', t('driver.rideTaken'));
       }
     });
     return () => {
       offAvail();
       offTaken();
+      offError();
     };
-  }, []);
+  }, [accepting, navigate, addToast, t]);
 
   const toggleOnline = async (): Promise<void> => {
     try {
@@ -71,9 +85,9 @@ export function DriverHomeScreen() {
   };
 
   const accept = (ride: Ride): void => {
-    wsService.send('ride_accept', { rideId: ride.id });
+    setAccepting(ride.id);
     setRequests((prev) => prev.filter((r) => r.id !== ride.id));
-    navigate('ride', { id: ride.id });
+    wsService.send('ride_accept', { rideId: ride.id });
   };
 
   // Bid on a negotiable ride (counter-offer with the driver's own price).
@@ -189,7 +203,13 @@ export function DriverHomeScreen() {
               )
             ) : (
               <div className="flex justify-end">
-                <Button variant="success" onClick={() => accept(ride)} className="px-5 py-2">
+                <Button
+                  variant="success"
+                  loading={accepting === ride.id}
+                  disabled={accepting !== null}
+                  onClick={() => accept(ride)}
+                  className="px-5 py-2"
+                >
                   {t('driver.accept')}
                 </Button>
               </div>

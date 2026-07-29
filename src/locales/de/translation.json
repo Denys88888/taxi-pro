@@ -136,7 +136,8 @@
     "offerYourPrice": "Preis anbieten",
     "submitOffer": "Senden",
     "offerSent": "Angebot gesendet",
-    "negotiable": "Verhandelbar"
+    "negotiable": "Verhandelbar",
+    "rideTaken": "Fahrt wurde von einem anderen Fahrer angenommen"
   },
   "earnings": {
     "title": "Einnahmen",

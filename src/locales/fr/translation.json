@@ -136,7 +136,8 @@
     "offerYourPrice": "Proposez votre prix",
     "submitOffer": "Envoyer",
     "offerSent": "Offre envoyée",
-    "negotiable": "Négociable"
+    "negotiable": "Négociable",
+    "rideTaken": "La course a été acceptée par un autre chauffeur"
   },
   "earnings": {
     "title": "Gains",

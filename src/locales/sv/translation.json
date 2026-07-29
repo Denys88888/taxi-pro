@@ -136,7 +136,8 @@
     "offerYourPrice": "Erbjud ditt pris",
     "submitOffer": "Skicka",
     "offerSent": "Erbjudande skickat",
-    "negotiable": "Förhandlingsbar"
+    "negotiable": "Förhandlingsbar",
+    "rideTaken": "Resan togs av en annan förare"
   },
   "earnings": {
     "title": "Intäkter",
