@@ -1,7 +1,7 @@
 import { PI_SANDBOX } from '../utils/constants';
 import { api } from './api';
 import { logger } from '../utils/logger';
-import type { PiAuthResult } from '../types/pi';
+import type { PiAuthResult, PiPayment } from '../types/pi';
 
 // Wrapper around the Pi Browser SDK. Outside the Pi Browser `window.Pi` is
 // undefined, so every entry point guards for it and surfaces a clear error.
@@ -24,9 +24,21 @@ export async function authenticateWithPi(): Promise<PiAuthResult> {
     throw new Error('Pi SDK unavailable — please open this app in the Pi Browser.');
   }
   initPi();
-  const onIncompletePaymentFound = (payment: unknown): void => {
-    // A previous payment was left open; surface for diagnostics.
+  const onIncompletePaymentFound = (payment: PiPayment): void => {
+    // Pi SDK blocks all future createPayment calls until this is resolved.
+    // Try to complete via our internal paymentId (happy path) or cancel
+    // via the Pi identifier directly (unknown/stale payment).
     logger.warn('[Pi] incomplete payment found', payment);
+    const internalId = payment.metadata?.paymentId as string | undefined;
+    if (internalId) {
+      api.cancelIncompletePayment(internalId, payment.identifier).catch((e) =>
+        logger.warn('[Pi] cancel incomplete payment failed', e)
+      );
+    } else {
+      api.cancelUnknownPiPayment(payment.identifier).catch((e) =>
+        logger.warn('[Pi] cancel unknown Pi payment failed', e)
+      );
+    }
   };
   return window.Pi!.authenticate(['username', 'payments'], onIncompletePaymentFound);
 }

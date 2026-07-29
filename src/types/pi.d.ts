@@ -19,11 +19,16 @@ export interface PiPaymentCallbacks {
   onError: (error: Error, payment?: unknown) => void;
 }
 
+export interface PiPayment {
+  identifier: string;
+  metadata?: Record<string, unknown> | null;
+}
+
 export interface PiSDK {
   init(config: { version: string; sandbox?: boolean }): void;
   authenticate(
     scopes: string[],
-    onIncompletePaymentFound: (payment: unknown) => void
+    onIncompletePaymentFound: (payment: PiPayment) => void
   ): Promise<PiAuthResult>;
   createPayment(data: PiPaymentData, callbacks: PiPaymentCallbacks): void;
 }
