@@ -183,7 +183,10 @@
     "uploadAvatar": "更换照片",
     "adminPanel": "管理后台",
     "call": "呼叫",
-    "saved": "已保存"
+    "saved": "已保存",
+    "privacyPolicy": "隐私政策",
+    "termsOfService": "服务条款",
+    "legal": "法律"
   },
   "history": {
     "title": "行程记录",

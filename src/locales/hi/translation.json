@@ -183,7 +183,10 @@
     "uploadAvatar": "फ़ोटो बदलें",
     "adminPanel": "एडमिन पैनल",
     "call": "कॉल",
-    "saved": "सहेजा गया"
+    "saved": "सहेजा गया",
+    "privacyPolicy": "गोपनीयता नीति",
+    "termsOfService": "सेवा की शर्तें",
+    "legal": "कानूनी"
   },
   "history": {
     "title": "यात्रा इतिहास",

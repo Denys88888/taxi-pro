@@ -183,7 +183,10 @@
     "uploadAvatar": "Đổi ảnh",
     "adminPanel": "Bảng quản trị",
     "call": "Gọi",
-    "saved": "Đã lưu"
+    "saved": "Đã lưu",
+    "privacyPolicy": "Chính sách quyền riêng tư",
+    "termsOfService": "Điều khoản dịch vụ",
+    "legal": "Pháp lý"
   },
   "history": {
     "title": "Lịch sử chuyến đi",

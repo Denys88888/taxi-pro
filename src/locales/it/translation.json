@@ -183,7 +183,10 @@
     "uploadAvatar": "Cambia foto",
     "adminPanel": "Pannello admin",
     "call": "Chiama",
-    "saved": "Salvato"
+    "saved": "Salvato",
+    "privacyPolicy": "Informativa sulla privacy",
+    "termsOfService": "Termini di servizio",
+    "legal": "Legale"
   },
   "history": {
     "title": "Cronologia corse",

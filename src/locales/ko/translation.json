@@ -183,7 +183,10 @@
     "uploadAvatar": "사진 변경",
     "adminPanel": "관리자 패널",
     "call": "전화",
-    "saved": "저장됨"
+    "saved": "저장됨",
+    "privacyPolicy": "개인정보처리방침",
+    "termsOfService": "서비스 약관",
+    "legal": "법적 정보"
   },
   "history": {
     "title": "운행 기록",

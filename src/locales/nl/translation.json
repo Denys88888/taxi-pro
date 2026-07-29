@@ -183,7 +183,10 @@
     "uploadAvatar": "Foto wijzigen",
     "adminPanel": "Beheerderspaneel",
     "call": "Bellen",
-    "saved": "Opgeslagen"
+    "saved": "Opgeslagen",
+    "privacyPolicy": "Privacybeleid",
+    "termsOfService": "Servicevoorwaarden",
+    "legal": "Juridisch"
   },
   "history": {
     "title": "Ritgeschiedenis",

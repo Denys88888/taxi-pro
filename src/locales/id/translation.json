@@ -183,7 +183,10 @@
     "uploadAvatar": "Ubah foto",
     "adminPanel": "Panel admin",
     "call": "Telepon",
-    "saved": "Tersimpan"
+    "saved": "Tersimpan",
+    "privacyPolicy": "Kebijakan Privasi",
+    "termsOfService": "Syarat Layanan",
+    "legal": "Hukum"
   },
   "history": {
     "title": "Riwayat perjalanan",

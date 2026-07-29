@@ -183,7 +183,10 @@
     "uploadAvatar": "Zmień zdjęcie",
     "adminPanel": "Panel admina",
     "call": "Zadzwoń",
-    "saved": "Zapisano"
+    "saved": "Zapisano",
+    "privacyPolicy": "Polityka prywatności",
+    "termsOfService": "Warunki użytkowania",
+    "legal": "Informacje prawne"
   },
   "history": {
     "title": "Historia przejazdów",

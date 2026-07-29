@@ -183,7 +183,10 @@
     "uploadAvatar": "Byt foto",
     "adminPanel": "Adminpanel",
     "call": "Ring",
-    "saved": "Sparad"
+    "saved": "Sparad",
+    "privacyPolicy": "Integritetspolicy",
+    "termsOfService": "Användarvillkor",
+    "legal": "Juridiskt"
   },
   "history": {
     "title": "Reshistorik",

@@ -183,7 +183,10 @@
     "uploadAvatar": "تغيير الصورة",
     "adminPanel": "لوحة الإدارة",
     "call": "اتصال",
-    "saved": "تم الحفظ"
+    "saved": "تم الحفظ",
+    "privacyPolicy": "سياسة الخصوصية",
+    "termsOfService": "شروط الخدمة",
+    "legal": "قانوني"
   },
   "history": {
     "title": "سجل الرحلات",

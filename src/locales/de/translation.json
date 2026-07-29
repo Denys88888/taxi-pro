@@ -183,7 +183,10 @@
     "uploadAvatar": "Foto ändern",
     "adminPanel": "Admin-Bereich",
     "call": "Anrufen",
-    "saved": "Gespeichert"
+    "saved": "Gespeichert",
+    "privacyPolicy": "Datenschutzrichtlinie",
+    "termsOfService": "Nutzungsbedingungen",
+    "legal": "Rechtliches"
   },
   "history": {
     "title": "Fahrtverlauf",

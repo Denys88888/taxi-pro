@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Camera, Star, LayoutDashboard, Car } from 'lucide-react';
+import { Camera, Star, LayoutDashboard, Car, FileText, Shield } from 'lucide-react';
 import { Card } from '../components/ui/Card';
 import { Avatar } from '../components/ui/Avatar';
 import { Badge } from '../components/ui/Badge';
@@ -131,6 +131,26 @@ export function ProfileScreen() {
         <Button variant="ghost" fullWidth className="!text-danger" onClick={logout}>
           {t('auth.logout')}
         </Button>
+
+        <Card className="space-y-2">
+          <p className="text-xs font-medium opacity-50 uppercase tracking-wide">{t('profile.legal')}</p>
+          <a
+            href="https://denys88888.github.io/privacy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 text-sm text-primary underline-offset-2 hover:underline"
+          >
+            <Shield size={15} /> {t('profile.privacyPolicy')}
+          </a>
+          <a
+            href="https://denys88888.github.io/terms"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 text-sm text-primary underline-offset-2 hover:underline"
+          >
+            <FileText size={15} /> {t('profile.termsOfService')}
+          </a>
+        </Card>
 
         {health && (
           <p className="text-center text-xs opacity-40">

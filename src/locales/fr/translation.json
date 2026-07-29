@@ -183,7 +183,10 @@
     "uploadAvatar": "Changer la photo",
     "adminPanel": "Panneau admin",
     "call": "Appeler",
-    "saved": "Enregistré"
+    "saved": "Enregistré",
+    "privacyPolicy": "Politique de confidentialité",
+    "termsOfService": "Conditions d'utilisation",
+    "legal": "Mentions légales"
   },
   "history": {
     "title": "Historique des courses",

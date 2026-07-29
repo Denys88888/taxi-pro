@@ -183,7 +183,10 @@
     "uploadAvatar": "写真を変更",
     "adminPanel": "管理パネル",
     "call": "電話",
-    "saved": "保存しました"
+    "saved": "保存しました",
+    "privacyPolicy": "プライバシーポリシー",
+    "termsOfService": "利用規約",
+    "legal": "法的情報"
   },
   "history": {
     "title": "乗車履歴",

@@ -183,7 +183,10 @@
     "uploadAvatar": "Fotoğrafı değiştir",
     "adminPanel": "Yönetici paneli",
     "call": "Ara",
-    "saved": "Kaydedildi"
+    "saved": "Kaydedildi",
+    "privacyPolicy": "Gizlilik Politikası",
+    "termsOfService": "Kullanım Koşulları",
+    "legal": "Yasal"
   },
   "history": {
     "title": "Yolculuk geçmişi",

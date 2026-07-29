@@ -183,7 +183,10 @@
     "uploadAvatar": "Change photo",
     "adminPanel": "Admin panel",
     "call": "Call",
-    "saved": "Saved"
+    "saved": "Saved",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "legal": "Legal"
   },
   "history": {
     "title": "Ride history",

@@ -183,7 +183,10 @@
     "uploadAvatar": "Cambiar foto",
     "adminPanel": "Panel de admin",
     "call": "Llamar",
-    "saved": "Guardado"
+    "saved": "Guardado",
+    "privacyPolicy": "Política de privacidad",
+    "termsOfService": "Términos de servicio",
+    "legal": "Legal"
   },
   "history": {
     "title": "Historial de viajes",
