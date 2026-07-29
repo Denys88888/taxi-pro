@@ -6,6 +6,7 @@ import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { useGeolocation } from '../hooks/useGeolocation';
 import { useToast } from '../hooks/useToast';
+import { useWakeLock } from '../hooks/useWakeLock';
 import { useRouter } from '../store/useRouter';
 import { wsService } from '../services/wsService';
 import { api } from '../services/api';
@@ -23,6 +24,9 @@ export function DriverHomeScreen() {
   const [online, setOnline] = useState(false);
   const [requests, setRequests] = useState<Ride[]>([]);
   const [sortByPrice, setSortByPrice] = useState(false);
+
+  // Keep the screen on while the driver is online so GPS and WebSocket stay alive.
+  useWakeLock(online);
   const [offerInputs, setOfferInputs] = useState<Record<string, string>>({});
   const [offered, setOffered] = useState<Record<string, boolean>>({});
 

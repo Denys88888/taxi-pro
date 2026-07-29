@@ -11,6 +11,7 @@ import { useRouter } from '../store/useRouter';
 import { useAppStore } from '../store/useAppStore';
 import { useToast } from '../hooks/useToast';
 import { usePayments } from '../hooks/usePayments';
+import { useWakeLock } from '../hooks/useWakeLock';
 import { wsService } from '../services/wsService';
 import { api } from '../services/api';
 import { chatIdForRide, haversineKm } from '../utils/helpers';
@@ -124,6 +125,10 @@ export function RideDetailsScreen() {
 
   const isDriver = ride.driverId === uid;
   const counterpart: RideParty | null | undefined = isDriver ? ride.passenger : ride.driver;
+
+  // Driver: keep the screen on for the full duration of an active ride.
+  const rideActive = !!ride && !['completed', 'cancelled'].includes(ride.status);
+  useWakeLock(isDriver && rideActive);
   const feeApplies = ride.status === 'arrived' || ride.status === 'in_progress';
 
   const doCancel = async (): Promise<void> => {
